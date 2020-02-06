@@ -35,13 +35,13 @@ public class HivMetadata extends ProgramsMetadata {
   public Concept getHivViralLoadConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.hivViralLoadConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   public Concept getCriteriaForArtStart() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.criteriaForArtStartUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=5096
@@ -49,14 +49,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.returnVisitDateForArvDrugConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=6123
   public Concept getDateOfHivDiagnosisConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.dateOfHIVDiagnosis");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1190
@@ -64,41 +64,41 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.historicalStartDateConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1255
   public Concept getARVPlanConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.arvPlanConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1088
   public Concept getRegimeConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.regimeUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
   // person_attribute_type_id=24
   public PersonAttributeType getPersonAttributeType() {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.personAttributeType24uuid");
-    return Metadata.getPersonAttributeType(uuid);
+    return getPersonAttributeType(uuid);
   }
 
   public Concept getRestartConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.restartConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1707
   public Concept getAbandoned() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.abandonedConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Second line ARV concepts
@@ -107,7 +107,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.AZT_3TC_ABC_EFV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 6327
@@ -115,7 +115,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.D4T_3TC_ABC_EFV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 6326
@@ -123,7 +123,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.AZT_3TC_ABC_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 6325
@@ -131,56 +131,56 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.D4T_3TC_ABC_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 6109
   public Concept getAztDdiLpvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.AZT_DDI_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 1315
   public Concept getTdf3tcEfvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.TDF_3TC_EFV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 1314
   public Concept getAzt3tcLpvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.AZT_3TC_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 1313
   public Concept getAbc3tcEfvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.ABC_3TC_EFV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 1312
   public Concept getAbc3tcNvpConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.ABC_3TC_NVP_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // 1311
   public Concept getAbc3tcLpvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.ABC_3TC_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   //
   public Concept getTdf3tcLpvConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.TDF_3TC_LPV_ConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept id 6306
@@ -188,7 +188,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.acceptContactConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept id 1066
@@ -196,35 +196,35 @@ public class HivMetadata extends ProgramsMetadata {
   public Concept getNoConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.noConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   public Concept getDataInicioProfilaxiaIsoniazidaConcept() {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.DataInicioProfilaxiaIsoniazidaConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   public Concept getDataFinalizacaoProfilaxiaIsoniazidaConcept() {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.DataFimProfilaxiaIsoniazidaConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=6122
   public Concept getIsoniazidUsageConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.isoniazidUseConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1695
   public Concept getCD4AbsoluteOBSConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.cd4AbsoluteOBSUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=6314
@@ -232,35 +232,35 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.coucelingActivityTypeUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=5356
   public Concept getcurrentWhoHivStageConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.currentWhoHivStageUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1205
   public Concept getWho2AdultStageConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.who2AdultStageUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1206
   public Concept getWho3AdultStageConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.who3AdultStageUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1207
   public Concept getWho4AdultStageConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.who4AdultStageUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1366
@@ -268,90 +268,90 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.patientHasDiedConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1981
   public Concept getTypeOfVisitConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.typeOfVisit");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2003
   public Concept getPatientFoundConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.patientFound");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1065
   public Concept getPatientFoundYesConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.yesConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2160
   public Concept getBuscaConcept() {
     final String uuid = Context.getAdministrationService().getGlobalProperty("eptsreports.busca");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 6254
   public Concept getSecondAttemptConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.secondAttempt");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 6255
   public Concept getThirdAttemptConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.thirdAttempt");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2016
   public Concept getDefaultingMotiveConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.defaultingMotive");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2158
   public Concept getReportOfVisitSupportConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.reportOfVisitSupport");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2157
   public Concept getPatientHadDifficultyConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.patientHadDifficulty");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1272
   public Concept getPatientFoundForwardedConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.patientFoundForwarded");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2037
   public Concept getWhoGaveInformationConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.whoGaveInformation");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 2180
   public Concept getCardDeliveryDateConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.cardDeliveryDate");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1709
@@ -359,14 +359,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.suspendedTreatmentConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 6269
   private Concept getActiveOnProgramConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.activeOnProgramConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1126
@@ -374,237 +374,237 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.urogenitalExamFindingsConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1115
   public Concept getNormalConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.normalConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1116
   public Concept getAbnormalConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.abnormalConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1399
   public Concept getSecretionsConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.secretionsConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1400
   public Concept getCondylomasConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.condylomasConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id = 1602
   public Concept getUlcersConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.ulcersConcept");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=5488
   public Concept getAdherenceCoucelingConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.adherenceCounselingUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=5497
   public Concept getCD4AbsoluteConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.cd4AbsolutoUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=730
   public Concept getCD4PercentConcept() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.cd4PercentUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=1714
   public Concept getAdherence() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.poorAdherenceUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // concept_id=2015
   public Concept getAdverseReaction() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.adverseReactionUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6292
   public Concept getNeutropenia() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.neutropenia");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6293
   public Concept getPancreatitis() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.pancreatitis");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6294
   public Concept getHepatotoxicity() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.hepatotoxicity");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6295
   public Concept getPsychologicalChanges() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.psychologicalChanges");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6296
   public Concept getMyopathy() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.myopathy");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6297
   public Concept getSkinAllergy() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.skinAllergy");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6298
   public Concept getLipodystrophy() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.lipodystrophy");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6299
   public Concept getLacticAcidosis() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.lacticAcidosis");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 821
   public Concept getPeripheralNeuropathy() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.peripheralNeuropathy");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 16
   public Concept getDiarrhea() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.diarrhea");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 1406
   public Concept getOtherDiagnosis() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.otherDiagnosis");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23724 GAAC
   public Concept getGaac() {
     final String uuid = Context.getAdministrationService().getGlobalProperty("eptsreports.gaac");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23725 AF
   public Concept getFamilyApproach() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.familyApproach");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23726 CA
   public Concept getAccessionClubs() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.accessionClubs");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23727 PU
   public Concept getSingleStop() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.singleStop");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23729 FR
   public Concept getRapidFlow() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.rapidFlow");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23730 DT
   public Concept getQuarterlyDispensation() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.quarterlyDispensation");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23731 DC
   public Concept getCommunityDispensation() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.communityDispensation");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23732 Other Model
   public Concept getAnotherModel() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.anotherModel");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 1256 Start Drugs
   public Concept getStartDrugs() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.startDrugs");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 1257 Continue Regimen
   public Concept getContinueRegimen() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.continueRegimen");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23808 Pre-ART Start Date
   public Concept getPreArtStartDate() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.preArtStartDate");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23866 Date of ART Pickup
   public Concept getArtDatePickup() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.preArtPickupDate");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6300 Date of ART Pickup
@@ -612,34 +612,34 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.typeOfPatientTransferredFrom");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6273 patient state
   public Concept getStateOfStayOfArtPatient() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.stateOfStayArtPatient");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2031 REASON PATIENT NOT FOUND BY ACTIVIST
   public Concept getReasonPatientNotFound() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.reasonPatientNotFound");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2027 PATIENT IS DEAD
   public Concept getPatientIsDead() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.patientIsdead");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6276 Date of ART Pickup
   public Concept getArtStatus() {
     final String uuid = Context.getAdministrationService().getGlobalProperty("eptsreports.art");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 1706 TRANSFERRED OUT TO ANOTHER FACILITY
@@ -647,7 +647,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.transferOutToAnotherFacilityConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23722 APPLICATION FOR LABORATORY RESEARCH
@@ -655,7 +655,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.applicationForLaboratoryResearch");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 1305 HIV VIRAL LOAD, QUALITATIVE
@@ -663,14 +663,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.viralLoadQualitativeConceptUuid");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23863 AUTO TRANSFER
   public Concept getAutoTransfer() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.autoTransfer");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6272 STATE OF STAY PRIOR ART PATIENT
@@ -678,7 +678,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.stateOfStayPriorArtPatient");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23944 REASON PATIENT NOT FOUND BY ACTIVIST (2and Visit)
@@ -686,7 +686,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.reasonPatientNotFoundByActivistSecondVisit");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23945 REASON PATIENT NOT FOUND BY ACTIVIST (3rd Visit)
@@ -694,14 +694,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.reasonPatientNotFoundByActivistThirdVisit");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2005 PATIENT FORGOT VISIT DATE
   public Concept getPatientForgotVisitDate() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.patientForgotVisitDate");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2006 PATIENT IS BEDRIDDEN AT HOME
@@ -709,7 +709,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.patientIsBedriddenAtHome");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2007 DISTANCE OR MONEY FOR TRANSPORT IS TO MUCH FOR PATIENT
@@ -717,7 +717,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.distanceOrMoneyForTransportIsToMuchForPatient");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2010 PATIENT IS DISSATISFIED WITH DAY HOSPITAL SERVICES
@@ -725,21 +725,21 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.patientIsDissatisfiedWithDayHospitalServices");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23915 FEAR OF THE PROVIDER
   public Concept getFearOfTheProvider() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.fearOfTheProvider");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23821 Data da colheita concept id
   public Concept getSampleDateCollectionConceptId() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.sampleDateCollection");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 6246 Data de requisicao de testes de laboratório concept id
@@ -747,7 +747,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.dateApplicationTestLaboratory");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 23946 Absence of Health Provider in Health Unit
@@ -755,7 +755,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.absenceOfHealthProviderInHealthUnit");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2013 PATIENT IS TREATING HIV WITH TRADITIONAL MEDICINE
@@ -763,7 +763,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.patientIsTreatingHivWithTradittionalMedicine");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Concept 2017 OTHER REASON WHY PATIENT MISSED VISIT
@@ -771,7 +771,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.otherReasonWhyPatientMissedVisit");
-    return Metadata.getConcept(uuid);
+    return getConcept(uuid);
   }
 
   // Encounter types
@@ -780,7 +780,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.sTarvAdultoSeguimentoEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounterType_id = 9
@@ -788,7 +788,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.sTarvPediatriaSeguimentoEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounterType_id= 21
@@ -796,7 +796,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.buscaActivaEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounterType_id = 5
@@ -804,7 +804,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.sTarvAdultoInitialAEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounterType_id = 7
@@ -812,14 +812,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.sTarvPediatriaInicialAEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounterType_id = 18
   public EncounterType getARVPharmaciaEncounterType() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty(this.gpSTarvFarmaciaEncounterTypeUuid);
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type_id = 29
@@ -827,7 +827,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.evaluationAndPrepForARTEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type 13
@@ -835,14 +835,14 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.misauLaboratorioEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type 51
   public EncounterType getFSREncounterType() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.fsrEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter type 34
@@ -850,7 +850,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.apssPrevencaoPositivaInicialInicialEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter type 35
@@ -858,7 +858,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.apssPrevencaoPositivaSeguimentoEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   /**
@@ -870,7 +870,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.visitaApoioReintegracaoParteA");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   /**
@@ -882,7 +882,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.visitaApoioReintegracaoParteB");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type_id = 1
@@ -890,7 +890,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.adultInitialBEncounterType");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type_id = 3
@@ -898,7 +898,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.pediatriaInitialBEncounterType");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type_id = 19
@@ -906,7 +906,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.artAconselhamentoEncounterType");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type_id = 24
@@ -914,7 +914,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.artAconselhamentoSeguimentoEncounterType");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type = 52
@@ -922,49 +922,48 @@ public class HivMetadata extends ProgramsMetadata {
     final String uuid =
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.masterCardDrugPickupEncounterTypeUuid");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
 
   // encounter_type = 53
   public EncounterType getMasterCardEncounterType() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.masterCardEncounterType");
-    return Metadata.getEncounterType(uuid);
+    return getEncounterType(uuid);
   }
   // Programs
 
   // program_id=2
   public Program getARTProgram() {
     final String uuid = Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgram(uuid);
+    return getProgram(uuid);
   }
 
   public Program getPtvEtvProgram() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty(this.gpPtvEtvProgramUuid);
-    return ProgramsMetadata.getProgram(uuid);
+    return getProgram(uuid);
   }
 
   // program_id=1
   public Program getHIVCareProgram() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.hivCareProgramUuid");
-    return ProgramsMetadata.getProgram(uuid);
+    return getProgram(uuid);
   }
 
   // Identifier types
   public PatientIdentifierType getNidServiceTarvIdentifierType() {
     final String uuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.nidServicoTarvUuid");
-    return Metadata.getPatientIdentifierType(uuid);
+    return getPatientIdentifierType(uuid);
   }
 
   // Program Workflow States
   public ProgramWorkflowState getTransferredOutToAnotherHealthFacilityWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(
-        artProgramUuid, "2", "TRANSFERRED OUT TO ANOTHER FACILITY");
+    return getProgramWorkflowState(artProgramUuid, "2", "TRANSFERRED OUT TO ANOTHER FACILITY");
   }
 
   public ProgramWorkflowState getTransferredFromOtherHealthFacilityWorkflowState() {
@@ -976,7 +975,7 @@ public class HivMetadata extends ProgramsMetadata {
     final String transferFromOtherUuid =
         Context.getAdministrationService()
             .getGlobalProperty(this.gpTransferFromOtherFacilityConceptUuid);
-    return ProgramsMetadata.getProgramWorkflowState(artProgramUuid, "2", transferFromOtherUuid);
+    return getProgramWorkflowState(artProgramUuid, "2", transferFromOtherUuid);
   }
 
   public ProgramWorkflowState getArtCareTransferredFromOtherHealthFacilityWorkflowState() {
@@ -1029,25 +1028,25 @@ public class HivMetadata extends ProgramsMetadata {
   public ProgramWorkflowState getSuspendedTreatmentWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(artProgramUuid, "2", "SUSPEND TREATMENT");
+    return getProgramWorkflowState(artProgramUuid, "2", "SUSPEND TREATMENT");
   }
 
   public ProgramWorkflowState getAbandonedWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(artProgramUuid, "2", "ABANDONED");
+    return getProgramWorkflowState(artProgramUuid, "2", "ABANDONED");
   }
 
   public ProgramWorkflowState getPatientHasDiedWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(artProgramUuid, "2", "PATIENT HAS DIED");
+    return getProgramWorkflowState(artProgramUuid, "2", "PATIENT HAS DIED");
   }
 
   public ProgramWorkflowState getPatientIsBreastfeedingWorkflowState() {
     final String ptvProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpPtvEtvProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(ptvProgramUuid, "5", "GAVE BIRTH");
+    return getProgramWorkflowState(ptvProgramUuid, "5", "GAVE BIRTH");
   }
 
   public ProgramWorkflowState getArtCareDeadWorkflowState() {
@@ -1059,79 +1058,75 @@ public class HivMetadata extends ProgramsMetadata {
   public ProgramWorkflowState getPateintActiveArtWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(
-        artProgramUuid, "2", "c50d6bdc-8a79-43ae-ab45-abbaa6b45e7d");
+    return getProgramWorkflowState(artProgramUuid, "2", "c50d6bdc-8a79-43ae-ab45-abbaa6b45e7d");
   }
 
   public ProgramWorkflowState getPateintTransferedFromOtherFacilityWorkflowState() {
     final String artProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpArtProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(
-        artProgramUuid, "2", "TRANSFER FROM OTHER FACILITY");
+    return getProgramWorkflowState(artProgramUuid, "2", "TRANSFER FROM OTHER FACILITY");
   }
 
   public ProgramWorkflowState getPateintPregnantWorkflowState() {
     final String ptvProgramUuid =
         Context.getAdministrationService().getGlobalProperty(this.gpPtvEtvProgramUuid);
-    return ProgramsMetadata.getProgramWorkflowState(ptvProgramUuid, "5", "PREGNANT");
+    return getProgramWorkflowState(ptvProgramUuid, "5", "PREGNANT");
   }
 
   public ProgramWorkflowState getPateintActiveOnHIVCareProgramtWorkflowState() {
     final String hivCareProgramUuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.hivCareProgramUuid");
-    return ProgramsMetadata.getProgramWorkflowState(hivCareProgramUuid, "1", "ACTIVE ON PROGRAM");
+    return getProgramWorkflowState(hivCareProgramUuid, "1", "ACTIVE ON PROGRAM");
   }
 
   public ProgramWorkflowState getPateintTransferedFromOtherFacilityHIVCareWorkflowState() {
     final String hivCareProgramUuid =
         Context.getAdministrationService().getGlobalProperty("eptsreports.hivCareProgramUuid");
-    return ProgramsMetadata.getProgramWorkflowState(
-        hivCareProgramUuid, "1", "TRANSFER FROM OTHER FACILITY");
+    return getProgramWorkflowState(hivCareProgramUuid, "1", "TRANSFER FROM OTHER FACILITY");
   }
 
   // Concept 5356
   public Concept getCurrentWHOHIVStageConcept() {
-    return Metadata.getConcept(
+    return getConcept(
         Context.getAdministrationService()
             .getGlobalProperty("eptsreports.currentWHOHIVStageConceptUuid"));
   }
 
   public ProgramWorkflow getPreArtWorkflow() {
-    return ProgramsMetadata.getProgramWorkflow(this.getHIVCareProgram().getUuid(), "1");
+    return getProgramWorkflow(this.getHIVCareProgram().getUuid(), "1");
   }
 
   private ProgramWorkflowState getActiveOnProgramWorkflowState(
       final Program program, final ProgramWorkflow programWorkflow) {
     final Concept activeOnProgram = this.getActiveOnProgramConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         program.getUuid(), programWorkflow.getUuid(), activeOnProgram.getUuid());
   }
 
   private ProgramWorkflowState getAbandonedWorkflowState(
       final Program program, final ProgramWorkflow programWorkflow) {
     final Concept abandoned = this.getAbandoned();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         program.getUuid(), programWorkflow.getUuid(), abandoned.getUuid());
   }
 
   private ProgramWorkflowState getDeadWorkflowState(
       final Program program, final ProgramWorkflow programWorkflow) {
     final Concept dead = this.getPatientHasDiedConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
-        program.getUuid(), programWorkflow.getUuid(), dead.getUuid());
+    return getProgramWorkflowState(program.getUuid(), programWorkflow.getUuid(), dead.getUuid());
   }
 
   private ProgramWorkflowState getTransferredOutToAnotherHealthFacilityWorkflowState(
       final Program program, final ProgramWorkflow programWorkflow) {
     final Concept transferOutToAnotherFacility = this.getTransferOutToAnotherFacilityConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         program.getUuid(), programWorkflow.getUuid(), transferOutToAnotherFacility.getUuid());
   }
 
   private ProgramWorkflowState getTransferredFromOtherHealthFacilityWorkflowState(
       final Program program, final ProgramWorkflow programWorkflow) {
     final Concept transferFromOtherFacility = this.getTransferFromOtherFacilityConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         program.getUuid(), programWorkflow.getUuid(), transferFromOtherFacility.getUuid());
   }
 
@@ -1139,7 +1134,7 @@ public class HivMetadata extends ProgramsMetadata {
     final Program hivCareProgram = this.getHIVCareProgram();
     final ProgramWorkflow workflow = this.getPreArtWorkflow();
     final Concept startDrugs = this.getStartDrugsConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         hivCareProgram.getUuid(), workflow.getUuid(), startDrugs.getUuid());
   }
 
@@ -1147,12 +1142,12 @@ public class HivMetadata extends ProgramsMetadata {
     final Program artProgram = this.getARTProgram();
     final ProgramWorkflow workflow = this.getArtWorkflow();
     final Concept suspendedTreatment = this.getSuspendedTreatmentConcept();
-    return ProgramsMetadata.getProgramWorkflowState(
+    return getProgramWorkflowState(
         artProgram.getUuid(), workflow.getUuid(), suspendedTreatment.getUuid());
   }
 
   private ProgramWorkflow getArtWorkflow() {
-    return ProgramsMetadata.getProgramWorkflow(this.getARTProgram().getUuid(), "2");
+    return getProgramWorkflow(this.getARTProgram().getUuid(), "2");
   }
 
   public ProgramWorkflowState getArtTransferredOutToAnotherHealthFacilityWorkflowState() {
