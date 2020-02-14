@@ -9,7 +9,12 @@ import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
+<<<<<<< HEAD
 import org.openmrs.module.eptsreports.reporting.library.cohorts.MQCohortQueries;
+=======
+import org.openmrs.module.eptsreports.reporting.library.cohorts.TxRTTCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.TxTbPrevCohortQueries;
+>>>>>>> REPORT-120: Fix Find Patients Transferred Out query.
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
@@ -20,8 +25,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 /** @author Stélio Moiane */
 public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
+<<<<<<< HEAD
   //  @Autowired private MQCohortQueries mqCohortQueries;
   @Autowired private MQCohortQueries mQCategory13Section1CohortQueries;
+=======
+  @Autowired private TxRTTCohortQueries txRTTCohortQueries;
+  @Autowired private TxTbPrevCohortQueries txTbPrevCohortQueries;
+>>>>>>> REPORT-120: Fix Find Patients Transferred Out query.
 
   @Test
   public void shouldFindPatientsNewlyEnrolledInART() throws EvaluationException {
@@ -32,8 +42,12 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
     final Date revisionDate = DateUtil.getDateTime(2020, 10, 20);
 
     final CohortDefinition txNewCompositionCohort =
+<<<<<<< HEAD
         this.mQCategory13Section1CohortQueries
             .findAdultInTheSecondLineWhoStartedARTDuring14MonthsBeforeRevisionDateAnd11MonthsBeforeRevisionDateCategory12Line65ColumnDNumerator();
+=======
+        this.txTbPrevCohortQueries.findPatientsTransferredOut();
+>>>>>>> REPORT-120: Fix Find Patients Transferred Out query.
 
     final Map<Parameter, Object> parameters = new HashMap<>();
 
@@ -48,6 +62,7 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
     final EvaluatedCohort evaluateCohortDefinition =
         this.evaluateCohortDefinition(txNewCompositionCohort, parameters);
 
+    System.out.println(evaluateCohortDefinition.getMemberIds().size());
     assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
     //    System.out.println(evaluateCohortDefinition.size());
     //        System.out.println(evaluateCohortDefinition.getMemberIds());
