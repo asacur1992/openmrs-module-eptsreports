@@ -115,16 +115,10 @@ public class ResumoMensalCohortQueries {
     cd.addSearch("A2III", map(getPatientsWithTransferFromOtherHF(), "locationList=${location}"));
     cd.addSearch("A2IV",map(getPatientsWithTransferFrom(),"locationList=${location}"));
     cd.addSearch("A2V",map(getAllPatientsWithPreArtDateTransferredInFromWithBoundaries(),"startDate=${startDate},endDate=${endDate},location=${location}"));
+    cd.addSearch("A2VI",map(getAllPatientsRegisteredAsTransferredInProgramEnrolmentWithBoundaries(),"startDate=${startDate},endDate=${endDate},location=${location}"));
 
 
-    //Removes the limitation of having the first clinical consultation on the same Pre-ART Start Date.
-    /*cd.addSearch(
-        "A2II",
-        map(
-            getPatientsWithFirstClinicalConsultationOnTheSameDateAsPreArtStartDate(),
-            "endDate=${endDate},location=${location}"));*/
-
-    cd.setCompositionString("(A2I AND A2II) AND NOT A2III");
+    cd.setCompositionString("(A2I AND A2II) AND NOT (A2III AND A2IV AND A2V AND A2VI)");
 
     return cd;
   }
@@ -172,6 +166,26 @@ public class ResumoMensalCohortQueries {
     return scd;
   }
 
+
+
+  /**
+   * Get patients registered as "Transferred-in" Program Enrollment":
+   *
+   * @return CohortDefinition
+   */
+  private CohortDefinition
+  getAllPatientsRegisteredAsTransferredInProgramEnrolmentWithBoundaries() {
+    SqlCohortDefinition scd = new SqlCohortDefinition();
+    scd.setName("Get patients registered as Transferred-In in Program Enrollment");
+    scd.addParameter(new Parameter("location","Location",Location.class));
+    scd.addParameter(new Parameter("startDate","Start Date",Date.class));
+    scd.addParameter(new Parameter("endDate","End Date",Date.class));
+    scd.setQuery(
+            ResumoMensalQueries.getAllPatientsRegisteredAsTransferredInProgramEnrolmentWithBoundaries(
+                    hivMetadata.getTransferredFromOtherHealthFacilityWorkflowState().getProgramWorkflowStateId(),
+                    hivMetadata.getHIVCareProgram().getProgramId()));
+    return scd;
+  }
 
 
 

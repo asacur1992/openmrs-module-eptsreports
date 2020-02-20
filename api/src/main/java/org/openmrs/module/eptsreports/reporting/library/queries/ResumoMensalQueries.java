@@ -58,7 +58,7 @@ public class ResumoMensalQueries {
 
 
   /**
-   * All patients with encounter type 53, and Pre-ART Start Date that falls between startDate and
+   * All patients Enrolle in Pre-Art or Registered In Clinical Process Opening
    * enddate
    *
    * @return String
@@ -69,6 +69,20 @@ public class ResumoMensalQueries {
             "SELECT patient_id , encounter_datetime as enrollment_date from encounter where encounter_type in (%d,%d) and location_id =:location AND encounter_datetime BETWEEN :startDate AND :endDate order by enrollment_date asc) results GROUP BY results.patient_id";
     return String.format(query,programId, encounterType1, encounterType2);
   }
+
+
+
+    /**
+     * All patients Enrolle in Pre-Art or Registered In Clinical Process Opening
+     * enddate
+     *
+     * @return String
+     */
+    public static String getAllPatientsRegisteredAsTransferredInProgramEnrolmentWithBoundaries(
+            int stateId,  int programId) {
+        String query = "SELECT p.patient_id FROM patient p INNER JOIN patient_program pp ON p.patient_id = pp.patient_id INNER JOIN patient_state ps ON ps.patient_program_id = pp.program_id WHERE p.voided=0 AND ps.state=%d AND pp.program_id = %d AND pp.location_id=:location pp.date_enrolled BETWEEN :startDate AND :endDate";
+        return String.format(query,stateId, programId);
+    }
 
 
 
