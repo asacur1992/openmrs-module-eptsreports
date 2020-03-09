@@ -706,6 +706,26 @@ public class ResumoMensalCohortQueries {
   }
 
   /**
+   * Patient with TB Screening
+   *
+   * @return
+   */
+  private CohortDefinition getPatientWithTBScreening() {
+    SqlCohortDefinition cd = new SqlCohortDefinition();
+    cd.setName("Patients with tb screening");
+    cd.addParameter(new Parameter("startDate", "After Date", Date.class));
+    cd.addParameter(new Parameter("endDate", "Before Date", Date.class));
+    cd.addParameter(new Parameter("location", "location", Location.class));
+    cd.setQuery(
+        ResumoMensalQueries.getPatientsWithTBScreening(
+            hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
+            tbMetadata.getHasTbSymptomsConcept().getConceptId(),
+            hivMetadata.getPatientFoundYesConcept().getConceptId(),
+            hivMetadata.getNoConcept().getConceptId()));
+    return cd;
+  }
+
+  /**
    * get patients who have viral load test done
    *
    * @return CohortDefinition
@@ -897,8 +917,7 @@ public class ResumoMensalCohortQueries {
         ResumoMensalQueries.getPatientsForF2ForExclusionFromMainQuery(
             hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
             tbMetadata.getHasTbSymptomsConcept().getConceptId(),
-            hivMetadata.getYesConcept().getConceptId(),
-            hivMetadata.getNoConcept().getConceptId(),
+            hivMetadata.getPatientFoundYesConcept().getConceptId(),
             tbMetadata.getTBTreatmentPlanConcept().getConceptId()));
 
     CompositionCohortDefinition cd = new CompositionCohortDefinition();
@@ -910,8 +929,7 @@ public class ResumoMensalCohortQueries {
     cd.addSearch(
         "F2F",
         map(
-            getPatientsWithCodedObsAndAnswers(
-                tbMetadata.getHasTbSymptomsConcept(), hivMetadata.getYesConcept()),
+            getPatientWithTBScreening(),
             "startDate=${startDate},endDate=${endDate},location=${location}"));
     cd.addSearch(
         "F2x",

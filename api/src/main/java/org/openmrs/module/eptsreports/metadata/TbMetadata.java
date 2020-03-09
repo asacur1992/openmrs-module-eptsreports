@@ -103,7 +103,11 @@ public class TbMetadata extends ProgramsMetadata {
     return getConcept(uuid);
   }
 
-  // concept_id=23758
+  /**
+   * concept_id=23758
+   *
+   * @return
+   */
   public Concept getHasTbSymptomsConcept() {
     String uuid =
         Context.getAdministrationService()

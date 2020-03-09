@@ -972,8 +972,11 @@ public class HivMetadata extends ProgramsMetadata {
     return getConcept(uuid);
   }
 
-  // Encounter types
-  // encounterType_id = 6
+  /**
+   * Encounter types encounterType_id = 6
+   *
+   * @return
+   */
   public EncounterType getAdultoSeguimentoEncounterType() {
     String uuid =
         Context.getAdministrationService()
