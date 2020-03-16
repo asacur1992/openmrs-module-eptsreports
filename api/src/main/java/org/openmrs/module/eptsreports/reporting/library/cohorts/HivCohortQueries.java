@@ -482,7 +482,7 @@ public class HivCohortQueries {
             hivMetadata.getYesConcept().getConceptId(),
             hivMetadata.getTBTreatmentPlanConcept().getConceptId(),
             hivMetadata.getStartDrugs().getConceptId(),
-            hivMetadata.getContinueRegimenConcept().getConceptId()));
+            hivMetadata.getContinueRegimen().getConceptId()));
 
     return cd;
   }

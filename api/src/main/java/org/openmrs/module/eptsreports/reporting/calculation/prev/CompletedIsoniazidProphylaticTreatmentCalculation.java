@@ -47,7 +47,7 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
 
   private static final int TREATMENT_BEGIN_PERIOD_OFFSET = -6;
 
-  private static final int NUMBER_ISONIAZID_USAGE_TO_CONSIDER_COMPLETED = 5;
+  private static final int NUMBER_ISONIAZID_USAGE_TO_CONSIDER_COMPLETED = 6;
 
   private static final int MONTHS_TO_CHECK_FOR_ISONIAZID_USAGE = 7;
 
@@ -101,7 +101,7 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
               false,
               beginPeriodStartDate,
               beginPeriodEndDate,
-              consultationEncounterTypes,
+              null,
               cohort,
               context);
       CalculationResultMap startDrugsObservations =
@@ -123,7 +123,6 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
               false,
               completionPeriodStartDate,
               completionPeriodEndDate,
-              consultationEncounterTypes,
               cohort,
               context);
       CalculationResultMap completedDrugsObservations =
@@ -140,7 +139,7 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
       CalculationResultMap isoniazidUsageObservationsList =
           ePTSCalculationService.allObservations(
               hivMetadata.getIsoniazidUsageConcept(),
-              Arrays.asList(hivMetadata.getYesConcept(), hivMetadata.getContinueRegimenConcept()),
+              hivMetadata.getYesConcept(),
               consultationEncounterTypes,
               location,
               cohort,
@@ -157,10 +156,12 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
             EptsCalculationUtils.resultForPatient(completedDrugsObservations, patientId);
         /**
          * If We can't find a startDate from Ficha de Seguimento (adults and children) / Ficha
-         * Resumo or Ficha Clinica-MasterCard, we can't do the calculations. -Just move to the next
-         * patient.
+         * Resumo or Ficha Clinica-MasterCard, just move to the next patient. OR If We can't find an
+         * endDate from Ficha de Seguimento (adults and children) / Ficha Resumo or Ficha
+         * Clinica-MasterCard, just move to the next patient
          */
-        if (startProfilaxiaObs == null && startDrugsObs == null) {
+        if ((startProfilaxiaObs == null && startDrugsObs == null)
+            || (endProfilaxiaObs == null && endDrugsObs == null)) {
           continue;
         }
         Date startDate =
@@ -173,12 +174,23 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
                 endProfilaxiaObs,
                 endDrugsObs,
                 Priority.MAX); // Gets the most recent complete drugs date using both sources
-
-        int yesAnswers =
-            calculateNumberOfYesAnswers(isoniazidUsageObservationsList, patientId, startDate);
-        if (getProfilaxiaDuration(startDate, endDate) >= MINIMUM_DURATION_IN_DAYS
-            || yesAnswers >= NUMBER_ISONIAZID_USAGE_TO_CONSIDER_COMPLETED) {
-          map.put(patientId, new BooleanResult(true, this));
+        boolean inconsistent =
+            (startDate != null && endDate != null && startDate.compareTo(endDate) > 0)
+                || (startDate == null && endDate != null);
+        if (!inconsistent && startDate != null) {
+          boolean completed = startDate != null && endDate != null;
+          if (completed) {
+            int profilaxiaDuration =
+                Days.daysIn(new Interval(startDate.getTime(), endDate.getTime())).getDays();
+            if (profilaxiaDuration >= MINIMUM_DURATION_IN_DAYS) {
+              map.put(patientId, new BooleanResult(true, this));
+            }
+          }
+          int yesAnswers =
+              calculateNumberOfYesAnswers(isoniazidUsageObservationsList, patientId, startDate);
+          if (yesAnswers >= NUMBER_ISONIAZID_USAGE_TO_CONSIDER_COMPLETED) {
+            map.put(patientId, new BooleanResult(true, this));
+          }
         }
       }
       return map;
@@ -197,7 +209,7 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
     Date isoniazidUsageEndDate = getIsoniazidUsageEndDate(startDate);
     for (Obs obs : isoniazidUsageObservations) {
       Date date = obs.getObsDatetime();
-      if (date.compareTo(startDate) > 0 && date.compareTo(isoniazidUsageEndDate) <= 0) {
+      if (date.compareTo(startDate) >= 0 && date.compareTo(isoniazidUsageEndDate) <= 0) {
         count++;
       }
     }
@@ -218,43 +230,19 @@ public class CompletedIsoniazidProphylaticTreatmentCalculation extends AbstractP
     return null;
   }
   /**
-   * @param seguimentoOrFichaResumoDate The start drugs or end drugs Obs from Ficha de Seguimento
-   *     (adults and children) or Ficha Resumo
-   * @param fichaClinicaMasterCardDate The start drugs or end drugs Obs from from Ficha
-   *     Clinica-MasterCard
+   * @param a The start drugs or end drugs Obs from Ficha de Seguimento (adults and children) or
+   *     Ficha Resumo
+   * @param b The start drugs or end drugs Obs from from Ficha Clinica-MasterCard
    * @param priority MIN to retrieve the start drugs date, MAX to retrieve the end drugs date
    * @return The earliest or most recent date according to the priority parameter
    */
-  private Date getMinOrMaxObsDate(
-      Obs seguimentoOrFichaResumoDate, Obs fichaClinicaMasterCardDate, Priority priority) {
-    if (seguimentoOrFichaResumoDate == null && fichaClinicaMasterCardDate == null) {
-      return null;
-    }
-    if (seguimentoOrFichaResumoDate != null && fichaClinicaMasterCardDate != null) {
+  private Date getMinOrMaxObsDate(Obs a, Obs b, Priority priority) {
+    if (a != null && b != null) {
 
-      List<Date> dates =
-          Arrays.asList(
-              getDateFromObs(seguimentoOrFichaResumoDate),
-              fichaClinicaMasterCardDate.getObsDatetime());
+      List<Date> dates = Arrays.asList(getDateFromObs(a), b.getObsDatetime());
       return (priority == Priority.MIN) ? Collections.min(dates) : Collections.max(dates);
     } else {
-      return (getDateFromObs(seguimentoOrFichaResumoDate) != null)
-          ? getDateFromObs(seguimentoOrFichaResumoDate)
-          : fichaClinicaMasterCardDate.getObsDatetime();
-    }
-  }
-  /**
-   * Calculate the interval in days between two dates
-   *
-   * @param startDate
-   * @param endDate
-   * @return the interval, 0 otherwise
-   */
-  private int getProfilaxiaDuration(Date startDate, Date endDate) {
-    if (startDate != null && endDate != null) {
-      return Days.daysIn(new Interval(startDate.getTime(), endDate.getTime())).getDays();
-    } else {
-      return 0;
+      return (getDateFromObs(a) != null) ? getDateFromObs(a) : b.getObsDatetime();
     }
   }
 }

@@ -334,7 +334,6 @@ public class EPTSCalculationService {
       boolean sortByDatetime,
       Date valueDateTimeOnOrAfter,
       Date valueDateTimeOnOrBefore,
-      List<EncounterType> encounterTypeList,
       Collection<Integer> cohort,
       PatientCalculationContext context) {
     JembiObsDefinition definition = new JembiObsDefinition("JembiObsDefinition");
@@ -402,7 +401,7 @@ public class EPTSCalculationService {
 
   public CalculationResultMap allObservations(
       Concept question,
-      List<Concept> answers,
+      Concept answer,
       List<EncounterType> encounterTypes,
       Location location,
       Collection<Integer> cohort,
@@ -411,7 +410,7 @@ public class EPTSCalculationService {
     definition.setName("all obs");
     definition.setEncounterTypeList(encounterTypes);
     definition.setQuestion(question);
-    definition.setValueCodedList(answers);
+    definition.setValueCodedList(Arrays.asList(answer));
     definition.setLocationList(Arrays.asList(location));
     definition.setWhich(TimeQualifier.ANY);
     return EptsCalculationUtils.evaluateWithReporting(definition, cohort, null, null, context);
