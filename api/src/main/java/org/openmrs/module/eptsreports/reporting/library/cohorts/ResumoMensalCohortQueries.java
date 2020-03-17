@@ -80,7 +80,7 @@ public class ResumoMensalCohortQueries {
         "A1II",
         map(
             getNumberOfPatientsTransferredInFromOtherHealthFacilitiesDuringCurrentMonthA1(),
-            "onOrBefore=${startDate},location=${location}"));
+            "onOrBefore=${startDate-1d},location=${location}"));
     cd.addSearch(
         "A1III",
         map(
