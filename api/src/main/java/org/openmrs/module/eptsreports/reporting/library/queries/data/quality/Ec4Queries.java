@@ -134,6 +134,7 @@ public class Ec4Queries {
             + "			inner join location l on l.location_id = e.location_id "
             + "	where 	p.voided = 0 and e.voided = 0 and e.encounter_type in ("
             + childFollowUp
+<<<<<<< HEAD
             + ","
             + adultFollowUp
             + ")and e.location_id IN (:location) "
@@ -158,6 +159,47 @@ public class Ec4Queries {
             + "				seguimento.encounter_datetime>deadFichaClinica.death_date "
             + "			) "
             + "GROUP BY pe.person_id; ";
+=======
+            + ") "
+            + " AND pg.location_id IN(:location) "
+            + " AND e.location_id IN(:location) AND e.voided=0 "
+            + " AND ps.start_date IS NOT NULL AND ps.end_date IS NULL "
+            + " AND e.encounter_datetime > ps.start_date "
+            + " UNION "
+            + " SELECT p.patient_id AS patient_id, pe.death_date AS death_date, l.name AS location_name "
+            + " FROM patient p "
+            + " INNER JOIN encounter e ON p.patient_id=e.patient_id AND e.location_id IN(:location) AND e.voided=0 "
+            + " INNER JOIN location l ON e.location_id=l.location_id "
+            + " INNER JOIN person pe ON p.patient_id=pe.person_id AND pe.voided=0 "
+            + " WHERE p.voided = 0 "
+            + " AND e.encounter_type IN( "
+            + adultFollowUp
+            + ","
+            + childFollowUp
+            + ") "
+            + " AND pe.death_date IS NOT NULL "
+            + " AND e.encounter_datetime > pe.death_date "
+            + ") dd "
+            + " INNER JOIN patient_identifier pi ON dd.patient_id=pi.patient_id "
+            + " INNER JOIN person pe ON dd.patient_id=pe.person_id "
+            + " INNER JOIN person_name pn ON dd.patient_id=pn.person_id "
+            + " INNER JOIN patient_program pg ON dd.patient_id=pg.patient_id "
+            + " INNER JOIN patient_state ps ON pg.patient_program_id=ps.patient_program_id "
+            + " INNER JOIN encounter e ON dd.patient_id=e.patient_id "
+            + " WHERE "
+            + " pg.program_id="
+            + programId
+            + " AND e.voided=0 "
+            + " AND e.encounter_type IN("
+            + adultFollowUp
+            + ","
+            + childFollowUp
+            + ") "
+            + " AND pg.location_id IN(:location)"
+            + " AND ps.start_date IS NOT NULL AND ps.end_date IS NULL "
+            + " AND e.encounter_datetime > dd.death_date "
+            + " GROUP BY dd.patient_id";
+>>>>>>> Change Data Quality Report(Fix EC1 until EC20) and Remove EC20 To Data Quality Report.
     return query;
   }
 }
