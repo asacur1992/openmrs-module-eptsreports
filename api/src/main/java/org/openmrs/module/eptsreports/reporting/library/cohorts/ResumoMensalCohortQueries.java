@@ -611,12 +611,12 @@ public class ResumoMensalCohortQueries {
     CohortDefinition transferredIn = getTransferredInPatients(true);
     CohortDefinition transferredOut = getPatientsTransferredOutB5();
     CohortDefinition suspended = getPatientsWhoSuspendedTreatmentB6(false);
-    CohortDefinition patientsArt = getPatientsWhoStartedArtByEndOfPreviousMonthB10();
+    CohortDefinition patientsArt = genericCohortQueries.getStartedArtBeforeDate(false);
     CohortDefinition died = getPatientsWhoDied(false);
 
     String encounterWithCodedObsMappings = "onOrBefore=${startDate-1},locationList=${location}";
 
-    cd.addSearch("B10", map(patientsArt, "startDate=${startDate-1},location=${location}"));
+    cd.addSearch("B10", map(patientsArt, "onOrBefore=${startDate-1},location=${location}"));
     cd.addSearch(
         "B2A",
         map(
