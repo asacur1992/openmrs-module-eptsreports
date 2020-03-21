@@ -1,5 +1,5 @@
 /** */
-package org.openmrs.module.eptsreports.reporting.library.queries;
+package org.openmrs.module.eptsreports.reporting.library.queries.listings;
 
 /** @author Stélio Moiane */
 public interface ExpectedPatientQueries {
@@ -9,7 +9,8 @@ public interface ExpectedPatientQueries {
         "SELECT p.patient_id, pi.identifier, CONCAT(pn.given_name, ' ', COALESCE(pn.middle_name, ''))name, pn.family_name, pe.gender, (YEAR(:endDate) - YEAR(pe.birthdate)) age, \n"
             + "	start_art.art_start_date, expected.expected_date, scheduled_follow_up.scheduled_followup_date, scheduled_pick_up.scheduled_pick_up_date, follow_up_before.followup_date, \n"
             + "	pick_up.pick_up_date, last_viral_load_request.last_viral_load_request_date, last_viral_load_result_date.viral_load_result_value,\n"
-            + "	gaac_model.mds_gaac, af_model.mds_af, ca_model.mds_ca, pu_model.mds_pu, fr_model.mds_fr, dt_model.mds_dt, dc_model.mds_dc, ds_model.mds_ds, patient_contact.patient_contact, confident.confident_contact FROM patient p\n"
+            + "	gaac_model.mds_gaac, af_model.mds_af, ca_model.mds_ca, pu_model.mds_pu, fr_model.mds_fr, dt_model.mds_dt, dc_model.mds_dc, ds_model.mds_ds, patient_contact.patient_contact, \n"
+            + "	confident.confident_contact, patient_sector.sector FROM patient p\n"
             + "	INNER JOIN patient_identifier pi ON p.patient_id = pi.patient_id\n"
             + "	INNER JOIN person_name pn ON pn.person_id = p.patient_id\n"
             + "	INNER JOIN person pe ON pe.person_id = p.patient_id\n"
@@ -294,8 +295,24 @@ public interface ExpectedPatientQueries {
             + "	\n"
             + "	)confident ON confident.patient_id = p.patient_id\n"
             + "\n"
+            + "	LEFT JOIN (\n"
+            + "		SELECT last_sector.patient_id, last_sector.max_sector, CASE o.value_coded\n"
+            + "														WHEN 1414 THEN 'TB'\n"
+            + "														WHEN 1987 THEN 'SAAJ'\n"
+            + "														WHEN 1985 THEN 'CPN/G'\n"
+            + "														WHEN 1872 THEN 'CCR/L'\n"
+            + "														ELSE 'CLINICA' END AS sector FROM (\n"
+            + "			SELECT o.person_id patient_id, MAX(o.obs_datetime) max_sector FROM obs o\n"
+            + "				INNER JOIN encounter e ON e.encounter_id = o.encounter_id\n"
+            + "				WHERE o.voided = 0 AND e.voided = 0 AND o.concept_id = 23783\n"
+            + "				AND e.encounter_type = 53 AND o.obs_datetime <= :endDate\n"
+            + "					GROUP BY o.person_id\n"
+            + "		)last_sector\n"
+            + "		INNER JOIN obs o ON o.person_id = last_sector.patient_id AND last_sector.max_sector = o.obs_datetime\n"
+            + "			AND o.voided = 0 AND o.concept_id = 23783\n"
+            + "		 		GROUP BY last_sector.patient_id\n"
+            + "	)patient_sector ON patient_sector.patient_id = p.patient_id\n"
             + "WHERE p.voided = 0 AND pi.voided = 0 AND pi.identifier_type = 2 AND pn.voided = 0 AND pe.voided = 0\n"
-            + "	GROUP BY p.patient_id\n"
-            + "	ORDER BY pi.identifier ";
+            + "	GROUP BY p.patient_id ORDER BY pi.identifier ";
   }
 }
