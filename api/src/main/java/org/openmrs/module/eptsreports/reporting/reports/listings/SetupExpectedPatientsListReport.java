@@ -1,10 +1,10 @@
-package org.openmrs.module.eptsreports.reporting.reports;
+package org.openmrs.module.eptsreports.reporting.reports.listings;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.ExpectedPatientsListDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.listings.ExpectedPatientsListDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -68,7 +68,7 @@ public class SetupExpectedPatientsListReport extends EptsDataExportManager {
           createXlsReportDesign(
               reportDefinition,
               "EXPECTED_PATIENTS_REPORT.xls",
-              "Lista de Pacientes Eperados",
+              "Lista de Pacientes Esperados",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
