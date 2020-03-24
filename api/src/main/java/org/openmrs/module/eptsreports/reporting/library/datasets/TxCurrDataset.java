@@ -87,20 +87,17 @@ public class TxCurrDataset extends BaseDataSet {
     dataSetDefinition.addDimension(
         "arvdispenseless3months",
         EptsReportUtils.map(
-            this.txCurrDimensions.findPatientsOnArtOnArvDispenseForLessThan3Months(),
-            "startDate=${startDate},endDate=${endDate},location=${location}"));
+            this.txCurrDimensions.findPatientsOnArtOnArvDispenseForLessThan3Months(), mappings));
 
     dataSetDefinition.addDimension(
         "arvdispensefor3and5months",
         EptsReportUtils.map(
-            this.txCurrDimensions.findPatientsOnArtOnArvDispenseBetween3And5Months(),
-            "startDate=${startDate},endDate=${endDate},location=${location}"));
+            this.txCurrDimensions.findPatientsOnArtOnArvDispenseBetween3And5Months(), mappings));
 
     dataSetDefinition.addDimension(
         "arvdispensefor6andmoremonths",
         EptsReportUtils.map(
-            this.txCurrDimensions.findPatientsOnArtOnArvDispenseFor6OrMoreMonths(),
-            "startDate=${startDate},endDate=${endDate},location=${location}"));
+            this.txCurrDimensions.findPatientsOnArtOnArvDispenseFor6OrMoreMonths(), mappings));
 
     dataSetDefinition.addDimension(
         "homosexual",
@@ -180,22 +177,25 @@ public class TxCurrDataset extends BaseDataSet {
     this.addColums(dataSetDefinition, "", txCurrIndicator, UNKNOWN);
 
     dataSetDefinition.addColumn(
-        "MSM",
+        "C-MSM",
         "Homosexual",
         EptsReportUtils.map(txCurrIndicator, mappings),
         "homosexual=homosexual");
 
     dataSetDefinition.addColumn(
-        "PWID",
+        "C-PWID",
         "Drugs User",
         EptsReportUtils.map(txCurrIndicator, mappings),
         "drug-user=drug-user");
 
     dataSetDefinition.addColumn(
-        "PRI", "Prisioners", EptsReportUtils.map(txCurrIndicator, mappings), "prisioner=prisioner");
+        "C-PRI",
+        "Prisioners",
+        EptsReportUtils.map(txCurrIndicator, mappings),
+        "prisioner=prisioner");
 
     dataSetDefinition.addColumn(
-        "FSW",
+        "C-FSW",
         "Sex Worker",
         EptsReportUtils.map(txCurrIndicator, mappings),
         "sex-worker=sex-worker");

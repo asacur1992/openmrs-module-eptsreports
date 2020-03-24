@@ -15,7 +15,7 @@ package org.openmrs.module.eptsreports.reporting.library.datasets;
 
 import java.util.Arrays;
 import java.util.List;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.TbPrevCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.TxTbPrevCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.AgeDimensionCohortInterface;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.EptsCommonDimension;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
@@ -31,7 +31,7 @@ public class TbPrevDataset extends BaseDataSet {
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
-  @Autowired private TbPrevCohortQueries tbPrevCohortQueries;
+  @Autowired private TxTbPrevCohortQueries txTbPrevCohortQueries;
 
   @Autowired private EptsCommonDimension eptsCommonDimension;
 
@@ -49,79 +49,117 @@ public class TbPrevDataset extends BaseDataSet {
         "age",
         EptsReportUtils.map(
             eptsCommonDimension.age(ageDimensionCohort), "effectiveDate=${endDate}"));
+
     dsd.addDimension(
         "art-status",
-        EptsReportUtils.map(
-            eptsCommonDimension.getArtStatusDimension(),
-            "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}"));
-    dsd.addColumn(
-        "NUM-TOTAL",
-        "Numerator Total",
-        EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
-                "Numerator Total",
-                EptsReportUtils.map(
-                    tbPrevCohortQueries.getNumerator(),
-                    "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}")),
-            mappings),
-        "");
+        EptsReportUtils.map(eptsCommonDimension.getTbPrevArtStatusDimension(), mappings));
+
     dsd.addColumn(
         "DEN-TOTAL",
         "Denominator Total",
         EptsReportUtils.map(
             eptsGeneralIndicator.getIndicator(
                 "Denominator Total",
-                EptsReportUtils.map(
-                    tbPrevCohortQueries.getDenominator(),
-                    "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}")),
+                EptsReportUtils.map(txTbPrevCohortQueries.findTbPrevTotalDenominator(), mappings)),
             mappings),
         "");
-    addRow(
-        dsd,
-        "R01",
-        "Numerator Disaggregations",
-        EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
-                "Numerator Disaggregations",
-                EptsReportUtils.map(
-                    tbPrevCohortQueries.getNumerator(),
-                    "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}")),
-            mappings),
-        getColumns());
+
     addRow(
         dsd,
         "R02",
-        "Denominator Disaggregations",
+        "Denominator",
         EptsReportUtils.map(
             eptsGeneralIndicator.getIndicator(
                 "Denominator Disaggregations",
-                EptsReportUtils.map(
-                    tbPrevCohortQueries.getDenominator(),
-                    "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}")),
+                EptsReportUtils.map(txTbPrevCohortQueries.findTbPrevTotalDenominator(), mappings)),
             mappings),
         getColumns());
+
+    dsd.addColumn(
+        "NUM-TOTAL",
+        "Numerador Total",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "Denominator Total",
+                EptsReportUtils.map(txTbPrevCohortQueries.findTbPrevTotalNumerator(), mappings)),
+            mappings),
+        "");
+
+    addRow(
+        dsd,
+        "R01",
+        "Numerator",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "Numerator Disaggregations",
+                EptsReportUtils.map(txTbPrevCohortQueries.findTbPrevTotalNumerator(), mappings)),
+            mappings),
+        getColumns());
+
     return dsd;
   }
 
   public List<ColumnParameters> getColumns() {
     return Arrays.asList(
         new ColumnParameters(
-            "PM0-14", "PM0-14", "art-status=previously-on-art|gender=M|age=<15", "01"),
+            "PM0-14",
+            "Previously enrolled on ART / <15 anos - Masculino",
+            "art-status=previously-on-art|gender=M|age=<15",
+            "01"),
         new ColumnParameters(
-            "PM15+", "PM15+", "art-status=previously-on-art|gender=M|age=15+", "02"),
+            "PM15+",
+            "Previously enrolled on ART / 15+ anos - Masculino",
+            "art-status=previously-on-art|gender=M|age=15+",
+            "02"),
         new ColumnParameters(
-            "PMUNK", "PMUNK", "art-status=previously-on-art|gender=M|age=UK", "03"),
+            "PMUNK",
+            "Previously enrolled on ART / Unknown age - Masculino",
+            "art-status=previously-on-art|gender=M|age=UK",
+            "03"),
         new ColumnParameters(
-            "PF0-14", "PF0-14", "art-status=previously-on-art|gender=F|age=<15", "04"),
+            "PF0-14",
+            "Previously enrolled on ART / <15 anos - Feminino",
+            "art-status=previously-on-art|gender=F|age=<15",
+            "04"),
         new ColumnParameters(
-            "PF15+", "PF15+", "art-status=previously-on-art|gender=F|age=15+", "05"),
+            "PF15+",
+            "Previously enrolled on ART / 15+ anos - Feminino",
+            "art-status=previously-on-art|gender=F|age=15+",
+            "05"),
         new ColumnParameters(
-            "PFUNK", "PFUNK", "art-status=previously-on-art|gender=F|age=UK", "06"),
-        new ColumnParameters("NM0-14", "NM0-14", "art-status=new-on-art|gender=M|age=<15", "07"),
-        new ColumnParameters("NM15+", "NM15+", "art-status=new-on-art|gender=M|age=15+", "08"),
-        new ColumnParameters("NMUNK", "NMUNK", "art-status=new-on-art|gender=M|age=UK", "09"),
-        new ColumnParameters("NF0-14", "NF0-14", "art-status=new-on-art|gender=F|age=<15", "10"),
-        new ColumnParameters("NF15+", "NF15+", "art-status=new-on-art|gender=F|age=15+", "11"),
-        new ColumnParameters("NFUNK", "NFUNK", "art-status=new-on-art|gender=F|age=UK", "12"));
+            "PFUNK",
+            "Previously enrolled on ART / Unknown age - Feminino",
+            "art-status=previously-on-art|gender=F|age=UK",
+            "06"),
+        new ColumnParameters(
+            "NM0-14",
+            "Newly enrolled on ART / <15 anos - Masculino",
+            "art-status=new-on-art|gender=M|age=<15",
+            "07"),
+        new ColumnParameters(
+            "NM15+",
+            "Newly enrolled on ART / 15+ anos - Masculino",
+            "art-status=new-on-art|gender=M|age=15+",
+            "08"),
+        new ColumnParameters(
+            "NMUNK",
+            "Newly enrolled on ART / Unknown age - Masculino",
+            "art-status=new-on-art|gender=M|age=UK",
+            "09"),
+        new ColumnParameters(
+            "NF0-14",
+            "Newly enrolled on ART / <15 anos - Feminino",
+            "art-status=new-on-art|gender=F|age=<15",
+            "10"),
+        new ColumnParameters(
+            "NF15+",
+            "Newly enrolled on ART / 15+ anos - Feminino",
+            "art-status=new-on-art|gender=F|age=15+",
+            "11"),
+        new ColumnParameters(
+            "NFUNK",
+            "Newly enrolled on ART /Unknown age - Feminino",
+            "art-status=new-on-art|gender=F|age=UK",
+            "12"));
   }
 }
