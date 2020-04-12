@@ -48,6 +48,9 @@ public class EptsReportsActivator extends BaseModuleActivator {
   @Override
   public void willStop() {
     log.debug("Stopping EPTS Reports Module");
+
+    reportsInitializer.removeEptsReportsGlobalProperties();
+
     try {
       reportsInitializer.purgeReports();
       log.debug("EPTS Reports purged");
