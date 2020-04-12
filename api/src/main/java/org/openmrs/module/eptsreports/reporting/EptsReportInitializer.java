@@ -14,8 +14,10 @@
 
 package org.openmrs.module.eptsreports.reporting;
 
+import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.GlobalProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsReportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -51,5 +53,13 @@ public class EptsReportInitializer {
       EptsReportUtils.purgeReportDefinition(reportManager);
       log.info("Report " + reportManager.getName() + " removed from database.");
     }
+  }
+
+  public void removeEptsReportsGlobalProperties() {
+    List<GlobalProperty> eptsreports =
+        Context.getAdministrationService().getGlobalPropertiesByPrefix("eptsreports");
+    Context.getAdministrationService().purgeGlobalProperties(eptsreports);
+
+    log.info("Removing all eptsreports global properties from database.");
   }
 }
