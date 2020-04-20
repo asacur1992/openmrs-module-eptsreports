@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsWhoStartedTPIDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsWhoStartedARTDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -16,23 +16,23 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
+public class SetupPatientsWhoStartedARTList extends EptsDataExportManager {
 
-  @Autowired private PatientsWhoStartedTPIDataset patientsWhoStartedTPIDataset;
+  @Autowired private PatientsWhoStartedARTDataset patientsWhoStartedARTDataset;
 
   @Override
   public String getUuid() {
-    return "ca0e7a74-190e-494d-b722-077d3b6017ef";
+    return "ddce6fc7-8536-4d0d-8511-eb6be33976ca";
   }
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES QUE INICIARAM PROFILAXIA COM ISONIAZIDA (TPI) - v1.9.0";
+    return "LISTA DE PACIENTES QUE INICIARAM TARV - v1.9.0";
   }
 
   @Override
   public String getDescription() {
-    return "This report provides the list of patients who started TPI";
+    return "This report provides the list of patients who started ART";
   }
 
   @Override
@@ -42,12 +42,12 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.patientsWhoStartedTPIDataset.getParameters());
+    reportDefinition.setParameters(this.patientsWhoStartedARTDataset.getParameters());
     reportDefinition.addDataSetDefinition(
-        "TPI",
+        "ART",
         Mapped.mapStraightThrough(
-            this.patientsWhoStartedTPIDataset.constructPatientsWhoStartedTPIDataset(
-                this.patientsWhoStartedTPIDataset.getParameters())));
+            this.patientsWhoStartedARTDataset.constructPatientsWhoStartedARTDataset(
+                this.patientsWhoStartedARTDataset.getParameters())));
 
     return reportDefinition;
   }
@@ -59,12 +59,12 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PATIENTS_WHO_STARTED_TPI_LIST_REPORT.xls",
-              "LISTA DE PACIENTES QUE INICIARAM TPI",
+              "PATIENTS_WHO_STARTED_ART_LIST_REPORT.xls",
+              "LISTA DE PACIENTES QUE INICIARAM TARV",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:4,dataset:TPI");
+      props.put("repeatingSections", "sheet:1,row:7,dataset:ART");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {
@@ -81,6 +81,6 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "4db0fac8-70cd-4b86-9dd2-14407d7b75ce";
+    return "55b1dcbf-e093-4fa9-b738-4ad68573a65b";
   }
 }

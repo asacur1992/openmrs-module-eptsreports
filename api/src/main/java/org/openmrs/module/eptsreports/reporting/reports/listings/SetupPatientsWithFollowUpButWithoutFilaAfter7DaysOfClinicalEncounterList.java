@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsWhoStartedTPIDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -16,23 +16,26 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
+public class SetupPatientsWithFollowUpButWithoutFilaAfter7DaysOfClinicalEncounterList
+    extends EptsDataExportManager {
 
-  @Autowired private PatientsWhoStartedTPIDataset patientsWhoStartedTPIDataset;
+  @Autowired
+  private PatientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset
+      patientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset;
 
   @Override
   public String getUuid() {
-    return "ca0e7a74-190e-494d-b722-077d3b6017ef";
+    return "43becb60-e8b7-40a2-973e-695fda887d41";
   }
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES QUE INICIARAM PROFILAXIA COM ISONIAZIDA (TPI) - v1.9.0";
+    return "LISTA DE PACIENTES COM SEGUIMENTO SEM FILA 7 DIAS DEPOIS DA CONSULTA CLINICA - v1.9.0";
   }
 
   @Override
   public String getDescription() {
-    return "This report provides the list of patients who started TPI";
+    return "This report provides the list of patients with follow up but without FILA 7 days after clinical encounter";
   }
 
   @Override
@@ -42,12 +45,15 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.patientsWhoStartedTPIDataset.getParameters());
+    reportDefinition.setParameters(
+        this.patientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset.getParameters());
     reportDefinition.addDataSetDefinition(
-        "TPI",
+        "PWWF",
         Mapped.mapStraightThrough(
-            this.patientsWhoStartedTPIDataset.constructPatientsWhoStartedTPIDataset(
-                this.patientsWhoStartedTPIDataset.getParameters())));
+            this.patientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset
+                .constructPatientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset(
+                    this.patientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDataset
+                        .getParameters())));
 
     return reportDefinition;
   }
@@ -59,12 +65,12 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PATIENTS_WHO_STARTED_TPI_LIST_REPORT.xls",
-              "LISTA DE PACIENTES QUE INICIARAM TPI",
+              "PATIENTS_WITH_FOLLOW_UP_BUT_WITHOUT_FILA_7_DAYS_AFTER_CLINICAL_ENCOUNTER.xls",
+              "LISTA DE PACIENTES COM SEGUIMENTO SEM FILA 7 DIAS DEPOIS DA CONSULTA CLINICA",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:4,dataset:TPI");
+      props.put("repeatingSections", "sheet:1,row:5,dataset:PWWF");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {
@@ -81,6 +87,6 @@ public class SetupPatientsWhoStartedTPIList extends EptsDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "4db0fac8-70cd-4b86-9dd2-14407d7b75ce";
+    return "33f74d83-8347-470e-8f1d-b3517c522dbd";
   }
 }

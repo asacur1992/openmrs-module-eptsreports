@@ -26,7 +26,7 @@ public class SetupExpectedPatientsListReport extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ESPERADOS";
+    return "LISTA DE PACIENTES ESPERADOS - v1.9.0 ";
   }
 
   @Override
@@ -36,16 +36,16 @@ public class SetupExpectedPatientsListReport extends EptsDataExportManager {
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setUuid(getUuid());
-    reportDefinition.setName(getName());
-    reportDefinition.setDescription(getDescription());
-    reportDefinition.setParameters(expectedPatientsListDataset.getParameters());
+    final ReportDefinition reportDefinition = new ReportDefinition();
+    reportDefinition.setUuid(this.getUuid());
+    reportDefinition.setName(this.getName());
+    reportDefinition.setDescription(this.getDescription());
+    reportDefinition.setParameters(this.expectedPatientsListDataset.getParameters());
     reportDefinition.addDataSetDefinition(
         "EPL",
         Mapped.mapStraightThrough(
-            expectedPatientsListDataset.constructExpectedPatientsListDataset(
-                expectedPatientsListDataset.getParameters())));
+            this.expectedPatientsListDataset.constructExpectedPatientsListDataset(
+                this.expectedPatientsListDataset.getParameters())));
 
     return reportDefinition;
   }
@@ -61,21 +61,21 @@ public class SetupExpectedPatientsListReport extends EptsDataExportManager {
   }
 
   @Override
-  public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
+  public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
     ReportDesign reportDesign = null;
     try {
       reportDesign =
-          createXlsReportDesign(
+          this.createXlsReportDesign(
               reportDefinition,
               "EXPECTED_PATIENTS_REPORT.xls",
               "Lista de Pacientes Esperados",
-              getExcelDesignUuid(),
+              this.getExcelDesignUuid(),
               null);
-      Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:7,dataset:EPL");
+      final Properties props = new Properties();
+      props.put("repeatingSections", "sheet:1,row:11,dataset:EPL");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new ReportingException(e.toString());
     }
 
