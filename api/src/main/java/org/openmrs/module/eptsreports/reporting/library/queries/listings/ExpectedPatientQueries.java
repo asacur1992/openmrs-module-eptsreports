@@ -68,7 +68,6 @@ public interface ExpectedPatientQueries {
             + "                INNER JOIN encounter e ON e.encounter_id = o.encounter_id\n"
             + "                    WHERE o.concept_id = 1410 AND e.encounter_type IN(6,9) \n"
             + "                    AND o.voided = 0 AND e.voided = 0 AND e.location_id = :location\n"
-            + "                    AND o.value_datetime BETWEEN :startDate AND :endDate\n"
             + "                        GROUP BY o.person_id\n"
             + "\n"
             + "            UNION\n"
@@ -77,7 +76,6 @@ public interface ExpectedPatientQueries {
             + "                INNER JOIN encounter e ON e.encounter_id = o.encounter_id\n"
             + "                    WHERE o.concept_id = 5096 AND e.encounter_type = 18 \n"
             + "                    AND o.voided = 0 AND e.voided = 0 AND e.location_id = :location\n"
-            + "                    AND o.value_datetime BETWEEN :startDate AND :endDate\n"
             + "                        GROUP BY o.person_id\n"
             + "            UNION\n"
             + "\n"
@@ -85,10 +83,9 @@ public interface ExpectedPatientQueries {
             + "                INNER JOIN encounter e ON e.encounter_id = o.encounter_id\n"
             + "                    WHERE o.concept_id = 23866 AND e.encounter_type = 52 \n"
             + "                    AND o.voided = 0 AND e.voided = 0 AND e.location_id = :location\n"
-            + "                    AND (o.value_datetime + INTERVAL 28 DAY) BETWEEN :startDate AND :endDate\n"
             + "                        GROUP BY o.person_id\n"
             + "\n"
-            + "            )max_expected GROUP BY max_expected.patient_id\n"
+            + "            )max_expected WHERE max_expected.expected_date BETWEEN :startDate AND :endDate GROUP BY max_expected.patient_id\n"
             + "	)expected ON expected.patient_id = p.patient_id\n"
             + "\n"
             + "	LEFT JOIN (\n"
@@ -358,6 +355,8 @@ public interface ExpectedPatientQueries {
             + "		)last_sector_value ON last_sector_value.patient_id = last_sector.patient_id AND last_sector.max_sector = last_sector_value.obs_datetime GROUP BY last_sector.patient_id\n"
             + "	)patient_sector ON patient_sector.patient_id = p.patient_id\n"
             + "WHERE p.voided = 0 AND pi.voided = 0 AND pi.identifier_type = 2 AND pn.voided = 0 AND pe.voided = 0\n"
-            + "	GROUP BY p.patient_id ORDER BY pi.identifier";
+            + "	GROUP BY p.patient_id\n"
+            + "	ORDER BY pi.identifier;\n"
+            + "";
   }
 }

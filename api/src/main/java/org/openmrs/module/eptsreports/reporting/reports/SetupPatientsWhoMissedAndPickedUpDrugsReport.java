@@ -1,12 +1,14 @@
-/** */
-package org.openmrs.module.eptsreports.reporting.reports.listings;
+package org.openmrs.module.eptsreports.reporting.reports;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsWhoAreSecondLineDataset;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PatientsWhoMissedAndPickedUpDrugsDataset;
+import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
+import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -16,23 +18,30 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class SetupPatientsWhoAreOnSecondLineList extends EptsDataExportManager {
+public class SetupPatientsWhoMissedAndPickedUpDrugsReport extends EptsDataExportManager {
 
-  @Autowired private PatientsWhoAreSecondLineDataset patientsWhoAreSecondLineDataset;
+  @Autowired private GenericCohortQueries genericCohortQueries;
+
+  @Autowired private PatientsWhoMissedAndPickedUpDrugsDataset dataset;
+
+  @Override
+  public String getExcelDesignUuid() {
+    return "3ff8bb9d-bc2a-420e-ab6f-8ceaab0b8b2a";
+  }
 
   @Override
   public String getUuid() {
-    return "a7987c6e-ea6f-4447-bafc-5dfc376690f7";
+    return "150197f6-f3f8-4557-9c09-1969d0aa4cee";
   }
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES QUE ESTÃO NA SEGUNDA LINHA - v1.9.0";
+    return "Relatorio de Faltosos ao Levantamento de ARV";
   }
 
   @Override
   public String getDescription() {
-    return "This report provides the list of patients who are on ART second line";
+    return "Sao pacientes marcados para levantamento de ARV e que sao faltosos";
   }
 
   @Override
@@ -42,14 +51,24 @@ public class SetupPatientsWhoAreOnSecondLineList extends EptsDataExportManager {
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.patientsWhoAreSecondLineDataset.getParameters());
+    reportDefinition.setParameters(this.dataset.getParameters());
+
     reportDefinition.addDataSetDefinition(
-        "PSL",
-        Mapped.mapStraightThrough(
-            this.patientsWhoAreSecondLineDataset.constructPatientsWhoAreSecondLineDataset(
-                this.patientsWhoAreSecondLineDataset.getParameters())));
+        "PMPD",
+        Mapped.mapStraightThrough(this.dataset.constructPatientsWhoMissedAndPickedUpDrugs()));
+
+    reportDefinition.setBaseCohortDefinition(
+        EptsReportUtils.map(
+            this.genericCohortQueries.generalSql(
+                "baseCohortQuery", BaseQueries.getBaseCohortQuery()),
+            "endDate=${endDate},location=${location}"));
 
     return reportDefinition;
+  }
+
+  @Override
+  public String getVersion() {
+    return "1.0-SNAPSHOT";
   }
 
   @Override
@@ -59,12 +78,11 @@ public class SetupPatientsWhoAreOnSecondLineList extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PATIENTS_WHO_ARE_ON_SECOND_LINE_LIST_REPORT.xls",
-              "LISTA DE PACIENTES QUE ESTÃO NA SEGUNDA LINHA",
+              "PATIENTS_WHO_MISSED_ART_PICK_UP_REPORT.xls",
+              "FALTOSOS AO LEVANTAMENTO",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:3,dataset:PSL");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {
@@ -72,15 +90,5 @@ public class SetupPatientsWhoAreOnSecondLineList extends EptsDataExportManager {
     }
 
     return Arrays.asList(reportDesign);
-  }
-
-  @Override
-  public String getVersion() {
-    return "1.0-SNAPSHOT";
-  }
-
-  @Override
-  public String getExcelDesignUuid() {
-    return "a7488250-f6be-4903-be9b-a65037c2a581";
   }
 }
