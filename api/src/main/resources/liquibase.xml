@@ -26,4 +26,18 @@
 
 	</changeSet>
 
+	<!-- eSaude Release 3.2.0 -->
+	<changeSet author="icap-mozambique"
+		id="esaude_reporting_list_encounter_or_pickup_same_date_20200813">
+
+		<sqlFile
+			path="scripts/reporting_list_encounter_pick_art_same_date_design_20200813.sql"
+			encoding="UTF-8" />
+
+		<sqlFile
+			path="scripts/reporting_list_encounter_pick_art_same_date_template_20200813.sql"
+			encoding="UTF-8" />
+
+	</changeSet>
+
 </databaseChangeLog>
