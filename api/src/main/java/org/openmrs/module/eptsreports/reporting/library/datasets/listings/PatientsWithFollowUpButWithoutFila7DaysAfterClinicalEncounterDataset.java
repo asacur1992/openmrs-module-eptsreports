@@ -20,7 +20,7 @@ public class PatientsWithFollowUpButWithoutFila7DaysAfterClinicalEncounterDatase
     final SqlDataSetDefinition dataSetDefinition = new SqlDataSetDefinition();
 
     dataSetDefinition.setName(
-        "PATIENTS WITH FOLLOW UP BUT WITHOUT FILA 7 DAYS AFTER CLINICAL ENCOUNTE");
+        "PATIENTS WITH FOLLOW UP BUT WITHOUT FILA 7 DAYS AFTER CLINICAL ENCOUNTER");
     dataSetDefinition.addParameters(parameters);
     dataSetDefinition.setSqlQuery(
         PatientsWithFollowUpButWithoutFila7DaysAfterClinicalEnconterQueries.QUERY

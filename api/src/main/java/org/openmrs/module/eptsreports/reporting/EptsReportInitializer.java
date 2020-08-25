@@ -55,16 +55,26 @@ public class EptsReportInitializer {
     ReportUtil.updateGlobalProperty(
         ReportingConstants.GLOBAL_PROPERTY_DATA_EVALUATION_BATCH_SIZE, "-1");
 
-    this.setUpKeyPopMisauEncoder();
+    this.setUpExcelEncoder(
+        "eb02a0d7-64dd-48e7-bdab-a30e9e4e56d2",
+        "83157bb7-ef92-4df3-b106-f5ec535cbc63",
+        "KEY_POP_MISAU_INDICATORS.xls");
+
+    this.setUpExcelEncoder(
+        "7e0a2ab8-f088-48b4-8d52-1ea88214bfed",
+        "fd9dc991-1c88-47bb-985f-47c47e54f60e",
+        "PATIENTS_WHO_HAVE_ENCOUNTERS_OR_DRUG_PICKUP_IN_THE_SAME_DATE.xls");
   }
 
-  private void setUpKeyPopMisauEncoder() {
+  private void setUpExcelEncoder(
+      final String reportDefinitionUuid,
+      final String reportResourceUuid,
+      final String reportTemplateName) {
+
     final ReportService reportService = Context.getService(ReportService.class);
-    final ReportDesign reportDesign =
-        reportService.getReportDesignByUuid("eb02a0d7-64dd-48e7-bdab-a30e9e4e56d2");
-    final ReportDesignResource resource =
-        reportDesign.getResourceByUuid("83157bb7-ef92-4df3-b106-f5ec535cbc63");
-    resource.setName("KEY_POP_MISAU_INDICATORS.xls");
+    final ReportDesign reportDesign = reportService.getReportDesignByUuid(reportDefinitionUuid);
+    final ReportDesignResource resource = reportDesign.getResourceByUuid(reportResourceUuid);
+    resource.setName(reportTemplateName);
 
     final InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resource.getName());
     try {
