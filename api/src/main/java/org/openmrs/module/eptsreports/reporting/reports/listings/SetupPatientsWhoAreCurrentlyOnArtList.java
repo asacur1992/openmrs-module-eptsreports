@@ -27,7 +27,7 @@ public class SetupPatientsWhoAreCurrentlyOnArtList extends EptsDataExportManager
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ACTUALMENTE EM TARV";
+    return "LISTA DE PACIENTES ACTUALMENTE EM TARV - 1.9.0";
   }
 
   @Override
