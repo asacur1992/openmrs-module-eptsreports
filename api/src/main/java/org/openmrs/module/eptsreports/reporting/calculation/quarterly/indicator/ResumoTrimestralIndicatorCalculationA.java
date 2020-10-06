@@ -10,35 +10,34 @@ import org.openmrs.module.eptsreports.reporting.calculation.quarterly.query.Resu
 import org.openmrs.module.reporting.evaluation.EvaluationContext;
 
 public abstract class ResumoTrimestralIndicatorCalculationA
-    extends ResumoTrimestralMonthPeriodCalculation {
+        extends ResumoTrimestralMonthPeriodCalculation {
 
-  @Override
-  public CalculationResultMap evaluate(
-      Map<String, Object> parameterValues, EvaluationContext context) {
+	@Override
+	public CalculationResultMap evaluate(
+	        Map<String, Object> parameterValues, EvaluationContext context) {
 
-    CalculationResultMap resultMap = new CalculationResultMap();
+		CalculationResultMap resultMap = new CalculationResultMap();
 
-    CalculationResultMap evaluated = super.evaluate(parameterValues, context);
-    MonthlyDateRange monthlExecutionPeriod =
-        (MonthlyDateRange) evaluated.get(MONTHLY_EXCUTION_PERIOD).getValue();
+		CalculationResultMap evaluated = super.evaluate(parameterValues, context);
+		MonthlyDateRange monthlExecutionPeriod = (MonthlyDateRange) evaluated.get(MONTHLY_EXCUTION_PERIOD).getValue();
 
-    if (monthlExecutionPeriod != null) {
+		if (monthlExecutionPeriod != null) {
 
-      List<Integer> patientIds =
-          ResumoTrimestralQueries.findPatientsWhoAreNewlyEnrolledOnART(
-              context, monthlExecutionPeriod);
+			List<Integer> patientIds = ResumoTrimestralQueries.findPatientsWhoAreNewlyEnrolledOnART(
+			        context, monthlExecutionPeriod);
 
-      List<Integer> exclusions =
-          ResumoTrimestralQueries.findPatientsWhoWhereMarkedAsTransferreInByMinTransferredDate(
-              context, monthlExecutionPeriod);
-      patientIds.removeAll(exclusions);
+			List<Integer> exclusions = ResumoTrimestralQueries
+			        .findPatientsWhoWhereMarkedAsTransferreInByMinTransferredDate(
+			                context, monthlExecutionPeriod);
 
-      patientIds.retainAll(ResumoTrimestralQueries.getBaseCohort(context, monthlExecutionPeriod));
-      for (Integer patientId : patientIds) {
-        resultMap.put(patientId, new BooleanResult(Boolean.TRUE, this));
-      }
-    }
+			patientIds.removeAll(exclusions);
 
-    return resultMap;
-  }
+			patientIds.retainAll(ResumoTrimestralQueries.getBaseCohort(context, monthlExecutionPeriod));
+			for (Integer patientId : patientIds) {
+				resultMap.put(patientId, new BooleanResult(Boolean.TRUE, this));
+			}
+		}
+
+		return resultMap;
+	}
 }

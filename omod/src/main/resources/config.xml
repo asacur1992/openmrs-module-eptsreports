@@ -1376,7 +1376,7 @@
 			UUID for the Viral load qualitative concept
 		</description>
 	</globalProperty>
-	
+
 	<!--42 -->
 	<globalProperty>
 		<property>eptsreports.pulmonaryTBConceptUuid</property>
@@ -1385,7 +1385,7 @@
 			UUID for the PULMONARY TB concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1763 -->
 	<globalProperty>
 		<property>eptsreports.feverLastingMoreThan3Weeks</property>
@@ -1394,25 +1394,27 @@
 			UUID for the FEVER LASTING MORE THAN 3 WEEKS concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1764 -->
 	<globalProperty>
 		<property>eptsreports.weightLossOfMoreThan3KgInLastMonth</property>
 		<defaultValue>e1de6a12-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-			UUID for the WEIGHT LOSS OF MORE THAN 3 KG IN LAST MONTH concept
+			UUID for the WEIGHT LOSS OF MORE THAN 3 KG IN LAST MONTH
+			concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1762 -->
 	<globalProperty>
 		<property>eptsreports.nightsweatsLastingMoreThan3Weeks</property>
 		<defaultValue>e1de66e8-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-			UUID for the NIGHTSWEATS LASTING MORE THAN 3 WEEKS concept
+			UUID for the NIGHTSWEATS LASTING MORE THAN 3 WEEKS
+			concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1760 -->
 	<globalProperty>
 		<property>eptsreports.coughLastingMoreThan3Weeks</property>
@@ -1421,7 +1423,7 @@
 			UUID for the COUGH LASTING MORE THAN 3 WEEKS concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23760 -->
 	<globalProperty>
 		<property>eptsreports.asthenia</property>
@@ -1430,7 +1432,7 @@
 			UUID for the ASTHENIA concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1765 -->
 	<globalProperty>
 		<property>eptsreports.cohabitantBeingTreatedForTB</property>
@@ -1439,7 +1441,7 @@
 			UUID for the COHABITANT BEING TREATED FOR TB concept
 		</description>
 	</globalProperty>
-	
+
 	<!--161 -->
 	<globalProperty>
 		<property>eptsreports.lymphadenopathy</property>
@@ -1448,7 +1450,7 @@
 			UUID for the LYMPHADENOPATHY concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23723 -->
 	<globalProperty>
 		<property>eptsreports.tbGenexpertTest</property>
@@ -1457,7 +1459,7 @@
 			UUID for the TB GENEXPERT TEST concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23774 -->
 	<globalProperty>
 		<property>eptsreports.cultureTest</property>
@@ -1466,8 +1468,8 @@
 			UUID for the CULTURE TEST concept
 		</description>
 	</globalProperty>
-	
-	
+
+
 	<!--23951 -->
 	<globalProperty>
 		<property>eptsreports.tbLam</property>
@@ -1476,8 +1478,8 @@
 			UUID for the TB LAM concept
 		</description>
 	</globalProperty>
-	
-	
+
+
 	<!--23863 -->
 	<globalProperty>
 		<property>eptsreports.autoTransfer</property>
@@ -1486,7 +1488,7 @@
 			UUID for the AUTO TRANSFER concept
 		</description>
 	</globalProperty>
-	
+
 	<!--6272 -->
 	<globalProperty>
 		<property>eptsreports.stateOfStayPriorArtPatient</property>
@@ -1495,7 +1497,7 @@
 			UUID for the STATE OF STAY PRIOR ART PATIENT concept
 		</description>
 	</globalProperty>
-	
+
 	<!--1766 -->
 	<globalProperty>
 		<property>eptsreports.tbObservations</property>
@@ -1504,8 +1506,8 @@
 			UUID for the TB OBSERVATIONS concept
 		</description>
 	</globalProperty>
-	
-	
+
+
 	<!--307 -->
 	<globalProperty>
 		<property>eptsreports.sputumForAcidFastBacilli</property>
@@ -1514,25 +1516,29 @@
 			UUID for the SPUTUM FOR ACID FAST BACILLI concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23944 -->
 	<globalProperty>
-		<property>eptsreports.reasonPatientNotFoundByActivistSecondVisit</property>
+		<property>eptsreports.reasonPatientNotFoundByActivistSecondVisit
+		</property>
 		<defaultValue>1ca778cc-509f-4ca3-ad97-f719e36f7b05</defaultValue>
 		<description>
-			UUID for the REASON PATIENT NOT FOUND BY ACTIVIST (2and Visit) concept
+			UUID for the REASON PATIENT NOT FOUND BY ACTIVIST (2and
+			Visit) concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23945 -->
 	<globalProperty>
-		<property>eptsreports.reasonPatientNotFoundByActivistThirdVisit</property>
+		<property>eptsreports.reasonPatientNotFoundByActivistThirdVisit
+		</property>
 		<defaultValue>15906fed-6dd3-4e4c-bb8b-21ba5ff96011</defaultValue>
 		<description>
-			UUID for the REASON PATIENT NOT FOUND BY ACTIVIST (3rd Visit) concept
+			UUID for the REASON PATIENT NOT FOUND BY ACTIVIST (3rd
+			Visit) concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2005 -->
 	<globalProperty>
 		<property>eptsreports.patientForgotVisitDate</property>
@@ -1541,7 +1547,7 @@
 			UUID for the PATIENT FORGOT VISIT DATE concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2006 -->
 	<globalProperty>
 		<property>eptsreports.patientIsBedriddenAtHome</property>
@@ -1550,25 +1556,29 @@
 			UUID for the PATIENT IS BEDRIDDEN AT HOME concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2007 -->
 	<globalProperty>
-		<property>eptsreports.distanceOrMoneyForTransportIsToMuchForPatient</property>
+		<property>eptsreports.distanceOrMoneyForTransportIsToMuchForPatient
+		</property>
 		<defaultValue>e1e076f4-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-			UUID for the DISTANCE OR MONEY FOR TRANSPORT IS TO MUCH FOR PATIENT concept
+			UUID for the DISTANCE OR MONEY FOR TRANSPORT IS TO MUCH
+			FOR PATIENT concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2010 -->
 	<globalProperty>
-		<property>eptsreports.patientIsDissatisfiedWithDayHospitalServices</property>
+		<property>eptsreports.patientIsDissatisfiedWithDayHospitalServices
+		</property>
 		<defaultValue>e1e079e2-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-			UUID for the PATIENT IS DISSATISFIED WITH DAY HOSPITAL SERVICES concept
+			UUID for the PATIENT IS DISSATISFIED WITH DAY HOSPITAL
+			SERVICES concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23915 -->
 	<globalProperty>
 		<property>eptsreports.fearOfTheProvider</property>
@@ -1577,44 +1587,44 @@
 			UUID for the FEAR OF THE PROVIDER concept
 		</description>
 	</globalProperty>
-	
+
 	<!--23946 -->
 	<globalProperty>
 		<property>eptsreports.absenceOfHealthProviderInHealthUnit</property>
 		<defaultValue>558a66da-4900-4313-a02d-4ebb4f9948df</defaultValue>
 		<description>
-			UUID for the Absence of Health Provider in Health Unit concept
+			UUID for the Absence of Health Provider in Health Unit
+			concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2013 -->
 	<globalProperty>
-		<property>eptsreports.patientIsTreatingHivWithTradittionalMedicine</property>
+		<property>eptsreports.patientIsTreatingHivWithTradittionalMedicine
+		</property>
 		<defaultValue>e1e07cda-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-				UUID for the PATIENT IS TREATING HIV WITH TRADITIONAL MEDICINE concept
+			UUID for the PATIENT IS TREATING HIV WITH TRADITIONAL MEDICINE concept
 		</description>
 	</globalProperty>
-	
+
 	<!--2017 -->
 	<globalProperty>
 		<property>eptsreports.otherReasonWhyPatientMissedVisit</property>
 		<defaultValue>e1e080cc-1d5f-11e0-b929-000c29ad1d07</defaultValue>
 		<description>
-				UUID for the OTHER REASON WHY PATIENT MISSED VISIT concept
+			UUID for the OTHER REASON WHY PATIENT MISSED VISIT concept
 		</description>
 	</globalProperty>
-	
-		<!--person_attribute_type_id 24 -->
+
+	<!--person_attribute_type_id 24 -->
 	<globalProperty>
 		<property>eptsreports.personAttributeType24uuid</property>
 		<defaultValue>c89c90eb-5b03-4899-ab9f-06fecd123511</defaultValue>
 		<description>
-				UUID for person_attribute_type_id 24
+			UUID for person_attribute_type_id 24
 		</description>
 	</globalProperty>
-	
-	
 
 	<!-- <dwr> <allow> <create creator="new" javascript="DWRFormEntryService"> 
 		<param name="class" value="org.openmrs.module.@MODULE_ID@.web.DWRFormEntryService"/> 
