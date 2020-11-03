@@ -40,4 +40,16 @@
 
 	</changeSet>
 
+	<!-- eSaude Release_20202109 -->
+	<changeSet author="icap-mozambique"
+		id="epts_metadata_for_release320_21092020">
+
+		<sqlFile path="scripts/EPTSMetadataForRelease320_21092020.sql"
+			encoding="UTF-8" />
+
+		<sqlFile path="scripts/Person_Attribute_Types_21092020.sql"
+			encoding="UTF-8" />
+
+	</changeSet>
+
 </databaseChangeLog>

@@ -18,82 +18,87 @@ import org.springframework.stereotype.Component;
 @Component
 public class TxMLPatientsWhoAreTransferedOutCalculation extends BaseFghCalculation {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public CalculationResultMap evaluate(
-	        Map<String, Object> parameterValues, EvaluationContext context) {
-		CalculationResultMap resultMap = new CalculationResultMap();
-		HivMetadata hivMetadata = Context.getRegisteredComponents(HivMetadata.class).get(0);
-		CalculationResultMap numerator = Context
-		        .getRegisteredComponents(TxMLPatientsWhoMissedNextApointmentCalculation.class)
-		        .get(0)
-		        .evaluate(parameterValues, context);
+  @SuppressWarnings("unchecked")
+  @Override
+  public CalculationResultMap evaluate(
+      Map<String, Object> parameterValues, EvaluationContext context) {
+    CalculationResultMap resultMap = new CalculationResultMap();
+    HivMetadata hivMetadata = Context.getRegisteredComponents(HivMetadata.class).get(0);
+    CalculationResultMap numerator =
+        Context.getRegisteredComponents(TxMLPatientsWhoMissedNextApointmentCalculation.class)
+            .get(0)
+            .evaluate(parameterValues, context);
 
-		QueryDisaggregationProcessor queryDisaggregation = Context
-		        .getRegisteredComponents(QueryDisaggregationProcessor.class).get(0);
+    QueryDisaggregationProcessor queryDisaggregation =
+        Context.getRegisteredComponents(QueryDisaggregationProcessor.class).get(0);
 
-		Map<Integer, Date> transferedOutByProgram = queryDisaggregation
-		        .findMapMaxPatientStateDateByProgramAndPatientStateAndEndDate(
-		                context,
-		                hivMetadata.getARTProgram(),
-		                hivMetadata.getTransferredOutToAnotherHealthFacilityWorkflowState());
+    Map<Integer, Date> transferedOutByProgram =
+        queryDisaggregation.findMapMaxPatientStateDateByProgramAndPatientStateAndEndDate(
+            context,
+            hivMetadata.getARTProgram(),
+            hivMetadata.getTransferredOutToAnotherHealthFacilityWorkflowState());
 
-		Map<Integer, Date> transferrdOutInFichaClinica = queryDisaggregation
-		        .findMapMaxEncounterDatetimeByEncountersAndQuestionsAndAnswerAndEndOfReportingPeriod(
-		                context,
-		                hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-		                Arrays.asList(
-		                        hivMetadata.getStateOfStayPriorArtPatient().getConceptId(),
-		                        hivMetadata.getStateOfStayOfArtPatient().getConceptId()),
-		                hivMetadata.getTransferOutToAnotherFacilityConcept());
+    Map<Integer, Date> transferrdOutInFichaClinica =
+        queryDisaggregation
+            .findMapMaxEncounterDatetimeByEncountersAndQuestionsAndAnswerAndEndOfReportingPeriod(
+                context,
+                hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
+                Arrays.asList(
+                    hivMetadata.getStateOfStayPriorArtPatient().getConceptId(),
+                    hivMetadata.getStateOfStayOfArtPatient().getConceptId()),
+                hivMetadata.getTransferOutToAnotherFacilityConcept());
 
-		Map<Integer, Date> transferredOutInFichaResumo = queryDisaggregation
-		        .findMapMaxObsDatetimeByEncountersAndQuestionsAndAnswerAndEndOfReportingPeriod(
-		                context,
-		                hivMetadata.getMasterCardEncounterType().getEncounterTypeId(),
-		                Arrays.asList(
-		                        hivMetadata.getStateOfStayPriorArtPatient().getConceptId(),
-		                        hivMetadata.getStateOfStayOfArtPatient().getConceptId()),
-		                hivMetadata.getTransferOutToAnotherFacilityConcept());
+    Map<Integer, Date> transferredOutInFichaResumo =
+        queryDisaggregation
+            .findMapMaxObsDatetimeByEncountersAndQuestionsAndAnswerAndEndOfReportingPeriod(
+                context,
+                hivMetadata.getMasterCardEncounterType().getEncounterTypeId(),
+                Arrays.asList(
+                    hivMetadata.getStateOfStayPriorArtPatient().getConceptId(),
+                    hivMetadata.getStateOfStayOfArtPatient().getConceptId()),
+                hivMetadata.getTransferOutToAnotherFacilityConcept());
 
-		Map<Integer, Date> transferredOutInHomeVisitForm = queryDisaggregation
-		        .findMapMaxObsDatetimeByEncounterAndQuestionsAndAnswersInPeriod(
-		                context,
-		                hivMetadata.getBuscaActivaEncounterType(),
-		                Arrays.asList(hivMetadata.getDefaultingMotiveConcept().getConceptId()),
-		                Arrays.asList(
-		                        hivMetadata.getTransferOutToAnotherFacilityConcept().getConceptId(),
-		                        hivMetadata.getAutoTransfer().getConceptId()));
+    Map<Integer, Date> transferredOutInHomeVisitForm =
+        queryDisaggregation.findMapMaxObsDatetimeByEncounterAndQuestionsAndAnswersInPeriod(
+            context,
+            hivMetadata.getBuscaActivaEncounterType(),
+            Arrays.asList(hivMetadata.getDefaultingMotiveConcept().getConceptId()),
+            Arrays.asList(
+                hivMetadata.getTransferOutToAnotherFacilityConcept().getConceptId(),
+                hivMetadata.getAutoTransfer().getConceptId()));
 
-		transferredOutInHomeVisitForm = TxMLPatientCalculation.excludeEarlyHomeVisitDatesFromNextExpectedDateNumerator(
-		        numerator, transferredOutInHomeVisitForm);
+    transferredOutInHomeVisitForm =
+        TxMLPatientCalculation.excludeEarlyHomeVisitDatesFromNextExpectedDateNumerator(
+            numerator, transferredOutInHomeVisitForm);
 
-		Map<Integer, Date> maxResultFromAllSources = CalculationProcessorUtils.getMaxMapDateByPatient(
-		        transferedOutByProgram,
-		        transferredOutInHomeVisitForm,
-		        transferrdOutInFichaClinica,
-		        transferredOutInFichaResumo);
+    Map<Integer, Date> maxResultFromAllSources =
+        CalculationProcessorUtils.getMaxMapDateByPatient(
+            transferedOutByProgram,
+            transferredOutInHomeVisitForm,
+            transferrdOutInFichaClinica,
+            transferredOutInFichaResumo);
 
-		// Excluir todos pacientes com consulta ou levantamento apos terem sido marcados
-		// como transferidos para
-		CalculationResultMap possiblePatientsToExclude = Context
-		        .getRegisteredComponents(MaxLastDateFromFilaSeguimentoRecepcaoCalculation.class)
-		        .get(0)
-		        .evaluate(parameterValues, context);
-		CalculationResultMap deadExclusion = Context.getRegisteredComponents(TxMLPatientsWhoAreDeadCalculation.class)
-		        .get(0)
-		        .evaluate(parameterValues, context);
+    // Excluir todos pacientes com consulta ou levantamento apos terem sido marcados
+    // como transferidos para
+    CalculationResultMap possiblePatientsToExclude =
+        Context.getRegisteredComponents(MaxLastDateFromFilaSeguimentoRecepcaoCalculation.class)
+            .get(0)
+            .evaluate(parameterValues, context);
+    CalculationResultMap deadExclusion =
+        Context.getRegisteredComponents(TxMLPatientsWhoAreDeadCalculation.class)
+            .get(0)
+            .evaluate(parameterValues, context);
 
-		for (Integer patientId : maxResultFromAllSources.keySet()) {
-			Date candidateDate = maxResultFromAllSources.get(patientId);
+    for (Integer patientId : maxResultFromAllSources.keySet()) {
+      Date candidateDate = maxResultFromAllSources.get(patientId);
 
-			if (!(TxMLPatientDisagregationProcessor.hasPatientsFromOtherDisaggregationToExclude(
-			        patientId, deadExclusion)
-			        || TxMLPatientDisagregationProcessor.hasDatesGreatherThanEvaluatedDateToExclude(
-			                patientId, candidateDate, possiblePatientsToExclude))) {
-				resultMap.put(patientId, new BooleanResult(Boolean.TRUE, this));
-			}
-		}
-		return resultMap;
-	}
+      if (!(TxMLPatientDisagregationProcessor.hasPatientsFromOtherDisaggregationToExclude(
+              patientId, deadExclusion)
+          || TxMLPatientDisagregationProcessor.hasDatesGreatherThanEvaluatedDateToExclude(
+              patientId, candidateDate, possiblePatientsToExclude))) {
+        resultMap.put(patientId, new BooleanResult(Boolean.TRUE, this));
+      }
+    }
+    return resultMap;
+  }
 }
