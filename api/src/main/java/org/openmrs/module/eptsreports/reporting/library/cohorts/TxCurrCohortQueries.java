@@ -14,8 +14,6 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 import java.util.Arrays;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
-import org.openmrs.Location;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.metadata.HivMetadata;
 import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispense6OrMoreMonthsCalculation;
 import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation;
@@ -27,7 +25,6 @@ import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +58,9 @@ public class TxCurrCohortQueries {
       final String cohortName, final boolean currentSpec) {
 
     final int abandonmentDays =
-        currentSpec ? CURRENT_SPEC_ABANDONMENT_DAYS : OLD_SPEC_ABANDONMENT_DAYS;
+        currentSpec
+            ? TxCurrCohortQueries.CURRENT_SPEC_ABANDONMENT_DAYS
+            : TxCurrCohortQueries.OLD_SPEC_ABANDONMENT_DAYS;
     final CompositionCohortDefinition txCurrComposition = new CompositionCohortDefinition();
     txCurrComposition.setName(cohortName);
 
@@ -348,7 +347,7 @@ public class TxCurrCohortQueries {
             ',');
     definition.setQuery(
         String.format(
-            HAS_NEXT_APPOINTMENT_QUERY,
+            TxCurrCohortQueries.HAS_NEXT_APPOINTMENT_QUERY,
             this.hivMetadata.getReturnVisitDateForArvDrugConcept().getConceptId(),
             encounterTypes));
     definition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
@@ -373,7 +372,7 @@ public class TxCurrCohortQueries {
             ',');
     definition.setQuery(
         String.format(
-            HAS_NEXT_APPOINTMENT_QUERY,
+            TxCurrCohortQueries.HAS_NEXT_APPOINTMENT_QUERY,
             this.hivMetadata.getReturnVisitDateConcept().getConceptId(),
             encounterTypes));
     definition.addParameter(new Parameter("onOrBefore", "onOrBefore", Date.class));
@@ -395,12 +394,12 @@ public class TxCurrCohortQueries {
   }
 
   public CohortDefinition getPatientsOnArtOnArvDispenseForLessThan3Months() {
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients On Art On ARV Dispensation less than 3 months");
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
 
-    String mapping = "endDate=${endDate},location=${location}";
+    final String mapping = "endDate=${endDate},location=${location}";
     cd.addSearch(
         "patientsWhoAreActiveOnART",
         EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mapping));
@@ -414,12 +413,12 @@ public class TxCurrCohortQueries {
   }
 
   public CohortDefinition getPatientsOnArtOnArvDispenseBetween3And5Months() {
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients On Art On ARV Dispensation Between 3 and 5 Months");
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
 
-    String mapping = "endDate=${endDate},location=${location}";
+    final String mapping = "endDate=${endDate},location=${location}";
 
     cd.addSearch(
         "patientsWhoAreActiveOnART",
@@ -435,12 +434,12 @@ public class TxCurrCohortQueries {
   }
 
   public CohortDefinition getPatientsOnArtOnArvDispenseFor6OrMoreMonths() {
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients On Art On ARV Dispensation For 6 Or More Months");
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
 
-    String mapping = "endDate=${endDate},location=${location}";
+    final String mapping = "endDate=${endDate},location=${location}";
 
     cd.addSearch(
         "patientsWhoAreActiveOnART",
@@ -457,7 +456,7 @@ public class TxCurrCohortQueries {
 
   @DocumentedDefinition(value = "patientsOnArtOnArvDispenseForLessThan3Months")
   private CohortDefinition getPatientsOnArtOnArvDispenseForLessThan3MonthsCalculation() {
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "patientsOnArtOnArvDispenseForLessThan3Months",
             Context.getRegisteredComponents(
@@ -472,7 +471,7 @@ public class TxCurrCohortQueries {
 
   @DocumentedDefinition(value = "patientsOnArtOnArvDispenseBetween3And5Months")
   private CohortDefinition getPatientsOnArtOnArvDispenseBetween3And5MonthsCalculation() {
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "patientsOnArtOnArvDispenseBetween3And5Months",
             Context.getRegisteredComponents(
@@ -487,7 +486,7 @@ public class TxCurrCohortQueries {
 
   @DocumentedDefinition(value = "patientsOnArtOnArvDispenseFor6OrMoreMonths")
   private CohortDefinition getPatientsOnArtOnArvDispenseFor6OrMoreMonthsCalculation() {
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "patientsOnArtOnArvDispenseFor6OrMoreMonths",
             Context.getRegisteredComponents(

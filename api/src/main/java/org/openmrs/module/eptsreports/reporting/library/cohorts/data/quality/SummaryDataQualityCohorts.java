@@ -2,7 +2,6 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts.data.quality;
 
 import java.util.Date;
 import java.util.List;
-import org.openmrs.Location;
 import org.openmrs.module.eptsreports.metadata.HivMetadata;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.data.quality.SummaryQueries;
@@ -10,17 +9,16 @@ import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SummaryDataQualityCohorts {
 
-  private HivMetadata hivMetadata;
+  private final HivMetadata hivMetadata;
 
   @Autowired
-  public SummaryDataQualityCohorts(HivMetadata hivMetadata) {
+  public SummaryDataQualityCohorts(final HivMetadata hivMetadata) {
     this.hivMetadata = hivMetadata;
   }
 
@@ -31,7 +29,7 @@ public class SummaryDataQualityCohorts {
    */
   public CohortDefinition getPregnantMalePatients() {
 
-    SqlCohortDefinition pCd = new SqlCohortDefinition();
+    final SqlCohortDefinition pCd = new SqlCohortDefinition();
 
     pCd.setName("Pregnant patients recorded in the system and are male ");
     pCd.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -40,13 +38,13 @@ public class SummaryDataQualityCohorts {
 
     pCd.setQuery(
         SummaryQueries.getPregnantPatients(
-            hivMetadata.getPregnantConcept().getConceptId(),
-            hivMetadata.getYesConcept().getConceptId(),
-            hivMetadata.getNumberOfWeeksPregnant().getConceptId(),
-            hivMetadata.getPregnancyDueDate().getConceptId(),
-            hivMetadata.getARVAdultInitialEncounterType().getEncounterTypeId(),
-            hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-            hivMetadata.getPtvEtvProgram().getProgramId()));
+            this.hivMetadata.getPregnantConcept().getConceptId(),
+            this.hivMetadata.getYesConcept().getConceptId(),
+            this.hivMetadata.getNumberOfWeeksPregnant().getConceptId(),
+            this.hivMetadata.getPregnancyDueDate().getConceptId(),
+            this.hivMetadata.getARVAdultInitialEncounterType().getEncounterTypeId(),
+            this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
+            this.hivMetadata.getPtvEtvProgram().getProgramId()));
     return pCd;
   }
 
@@ -56,22 +54,22 @@ public class SummaryDataQualityCohorts {
    * @return Cohort Definition
    */
   public CohortDefinition getBreastfeedingMalePatients() {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Get male breastfeeding patients recorded in the system");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.setQuery(
         SummaryQueries.getBreastfeedingMalePatients(
-            hivMetadata.getPriorDeliveryDateConcept().getConceptId(),
-            hivMetadata.getCriteriaForArtStart().getConceptId(),
-            hivMetadata.getBreastfeeding().getConceptId(),
-            hivMetadata.getBreastfeeding().getConceptId(),
-            hivMetadata.getYesConcept().getConceptId(),
-            hivMetadata.getPtvEtvProgram().getProgramId(),
-            hivMetadata.getPatientIsBreastfeedingWorkflowState().getProgramWorkflowStateId(),
-            hivMetadata.getARVAdultInitialEncounterType().getEncounterTypeId(),
-            hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId()));
+            this.hivMetadata.getPriorDeliveryDateConcept().getConceptId(),
+            this.hivMetadata.getCriteriaForArtStart().getConceptId(),
+            this.hivMetadata.getBreastfeeding().getConceptId(),
+            this.hivMetadata.getBreastfeeding().getConceptId(),
+            this.hivMetadata.getYesConcept().getConceptId(),
+            this.hivMetadata.getPtvEtvProgram().getProgramId(),
+            this.hivMetadata.getPatientIsBreastfeedingWorkflowState().getProgramWorkflowStateId(),
+            this.hivMetadata.getARVAdultInitialEncounterType().getEncounterTypeId(),
+            this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId()));
 
     return cd;
   }
@@ -82,13 +80,15 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getQualityDataReportBaseCohort() {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patient States");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Facilities", Location.class, List.class, null));
-    cd.addParameter(EptsReportUtils.getProgramConfigurableParameter(hivMetadata.getARTProgram()));
-    cd.setQuery(BaseQueries.getBaseQueryForDataQuality(hivMetadata.getARTProgram().getProgramId()));
+    cd.addParameter(
+        EptsReportUtils.getProgramConfigurableParameter(this.hivMetadata.getARTProgram()));
+    cd.setQuery(
+        BaseQueries.getBaseQueryForDataQuality(this.hivMetadata.getARTProgram().getProgramId()));
     return cd;
   }
 
@@ -98,8 +98,8 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getPatientsWithStatesAndEncounters(
-      int programId, int stateId, List<Integer> encounterList) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+      final int programId, final int stateId, final List<Integer> encounterList) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patients who have state that is before an encounter");
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.setQuery(
@@ -109,7 +109,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getPatientsWithStatesAndEncountersEC10() {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patients who have state that is before an encounter");
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -124,13 +124,13 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getPatientsWithStatesAndEncountersEC11(
-      int programId,
-      int stateId,
-      int labEncounterType,
-      int fsrLabEncounterType,
-      int sampleCollectionDateConceptId,
-      int requestLaboratoryDateConceptId) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+      final int programId,
+      final int stateId,
+      final int labEncounterType,
+      final int fsrLabEncounterType,
+      final int sampleCollectionDateConceptId,
+      final int requestLaboratoryDateConceptId) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patients who have state that is before an encounter - EC11");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -152,16 +152,16 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getPatientsWithStatesAndEncountersEC4(
-      int programId,
-      int stateId,
-      int adultFollowUp,
-      int childFollowUp,
-      int fichaResumo,
-      int stateOfStayPriorArtPatient,
-      int stateOfStayOfArtPatient,
-      int patientHasDiedConcept,
-      List<Integer> encounterList) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+      final int programId,
+      final int stateId,
+      final int adultFollowUp,
+      final int childFollowUp,
+      final int fichaResumo,
+      final int stateOfStayPriorArtPatient,
+      final int stateOfStayOfArtPatient,
+      final int patientHasDiedConcept,
+      final List<Integer> encounterList) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patients who have state that is before an encounter");
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -185,8 +185,8 @@ public class SummaryDataQualityCohorts {
    *
    * @return CohortDefinition
    */
-  public CohortDefinition getPatientsWhoseBirthdateIsBeforeYear(int year) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+  public CohortDefinition getPatientsWhoseBirthdateIsBeforeYear(final int year) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("EC12");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -202,7 +202,7 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getPatientsWithNegativeAge() {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
@@ -216,8 +216,8 @@ public class SummaryDataQualityCohorts {
    *
    * @return CohortDefinition
    */
-  public CohortDefinition getPatientsWithAgeHigherThanXyears(int years) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+  public CohortDefinition getPatientsWithAgeHigherThanXyears(final int years) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
@@ -228,7 +228,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getCountPatientsWithExceptionConsultation() {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
 
     cd.setName(
         "The value of a date field registered on any form, with the exception of consultation date, is before 1985 ");
@@ -245,8 +245,8 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getPatientsWhoseBirthDatesAreAfterEncounterDate(
-      List<Integer> encounterList) {
-    SqlCohortDefinition cd = new SqlCohortDefinition();
+      final List<Integer> encounterList) {
+    final SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("The patient’s date of birth is after any drug pick up date");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -262,19 +262,19 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getDeadOrDeceasedPatientsHavingEncountersAfter(
-      int programId, int stateId, List<Integer> encounterList) {
-    SqlCohortDefinition sql = new SqlCohortDefinition();
+      final int programId, final int stateId, final List<Integer> encounterList) {
+    final SqlCohortDefinition sql = new SqlCohortDefinition();
     sql.setName("Deceased and have encounters after deceased date");
     sql.addParameter(new Parameter("location", "Location", Location.class));
     sql.setQuery(SummaryQueries.getPatientsMarkedAsDeceasedAndHaveAnEncounter(encounterList));
 
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Dead or deceased patients");
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.addSearch(
         "dead",
         EptsReportUtils.map(
-            getPatientsWithStatesAndEncounters(programId, stateId, encounterList),
+            this.getPatientsWithStatesAndEncounters(programId, stateId, encounterList),
             "location=${location}"));
     cd.addSearch("deceased", EptsReportUtils.map(sql, "location=${location}"));
     cd.setCompositionString("dead OR deceased");
@@ -282,7 +282,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getDeadOrDeceasedPatientsHavingEncountersAfterEC3() {
-    SqlCohortDefinition sql = new SqlCohortDefinition();
+    final SqlCohortDefinition sql = new SqlCohortDefinition();
     sql.setName("Deceased and have encounters after deceased date");
     sql.addParameter(new Parameter("location", "Location", Location.class));
     sql.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -298,16 +298,16 @@ public class SummaryDataQualityCohorts {
    * @return CohortDefinition
    */
   public CohortDefinition getDeadOrDeceasedPatientsHavingEncountersAfterEC4(
-      int programId,
-      int stateId,
-      int adultFollowUp,
-      int childFollowUp,
-      int fichaResumo,
-      int stateOfStayPriorArtPatient,
-      int stateOfStayOfArtPatient,
-      int patientHasDiedConcept,
-      List<Integer> encounterList) {
-    SqlCohortDefinition sql = new SqlCohortDefinition();
+      final int programId,
+      final int stateId,
+      final int adultFollowUp,
+      final int childFollowUp,
+      final int fichaResumo,
+      final int stateOfStayPriorArtPatient,
+      final int stateOfStayOfArtPatient,
+      final int patientHasDiedConcept,
+      final List<Integer> encounterList) {
+    final SqlCohortDefinition sql = new SqlCohortDefinition();
     sql.setName("Deceased and have encounters after deceased date");
     sql.addParameter(new Parameter("location", "Location", Location.class));
     sql.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -323,7 +323,7 @@ public class SummaryDataQualityCohorts {
             stateOfStayOfArtPatient,
             patientHasDiedConcept));
 
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Dead or deceased patients");
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -331,7 +331,7 @@ public class SummaryDataQualityCohorts {
     cd.addSearch(
         "dead",
         EptsReportUtils.map(
-            getPatientsWithStatesAndEncountersEC4(
+            this.getPatientsWithStatesAndEncountersEC4(
                 programId,
                 stateId,
                 adultFollowUp,
@@ -356,8 +356,8 @@ public class SummaryDataQualityCohorts {
    * @param encounterList
    * @return
    */
-  public CohortDefinition getPatientsWhoseEncounterIsBefore1985(List<Integer> encounterList) {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+  public CohortDefinition getPatientsWhoseEncounterIsBefore1985(final List<Integer> encounterList) {
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
     sqlCohortDefinition.setName("patients whose date of drug pick up is before 1985");
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     sqlCohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -369,7 +369,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getPatientsWhoseEncounterIsBeforeEC18() {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
 
     sqlCohortDefinition.setName("patients whose date of drug pick up is before 1985");
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
@@ -382,7 +382,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getPatientsSexNotDefinedEC21() {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
 
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     sqlCohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -396,7 +396,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getPatientsSexNotDefinedEC22() {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
 
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     sqlCohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -410,7 +410,7 @@ public class SummaryDataQualityCohorts {
   }
 
   public CohortDefinition getPatientsWhoseEncounterIsBeforeEC17() {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     sqlCohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
     sqlCohortDefinition.addParameter(new Parameter("location", "Location", Location.class));
@@ -429,13 +429,13 @@ public class SummaryDataQualityCohorts {
    * @return
    */
   public CohortDefinition getPatientsWhoseEncounterIsBefore1985EC19(
-      int programId,
-      int labEncounterType,
-      int FSREncounterType,
-      int masterCardEncounterType,
-      int adultoSeguimentoEncounterType,
-      int aRVPediatriaSeguimentoEncounterType) {
-    SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
+      final int programId,
+      final int labEncounterType,
+      final int FSREncounterType,
+      final int masterCardEncounterType,
+      final int adultoSeguimentoEncounterType,
+      final int aRVPediatriaSeguimentoEncounterType) {
+    final SqlCohortDefinition sqlCohortDefinition = new SqlCohortDefinition();
 
     sqlCohortDefinition.setName("patients whose date of drug pick up is before 1985");
     sqlCohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));

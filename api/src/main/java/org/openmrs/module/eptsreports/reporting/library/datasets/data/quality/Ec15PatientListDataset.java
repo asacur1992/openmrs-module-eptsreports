@@ -18,7 +18,6 @@ import org.openmrs.module.eptsreports.reporting.library.datasets.BaseDataSet;
 import org.openmrs.module.eptsreports.reporting.library.queries.data.quality.Ec15Queries;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -28,8 +27,8 @@ public class Ec15PatientListDataset extends BaseDataSet {
    * @param parameterList
    * @return
    */
-  public DataSetDefinition ec15PatientListDataset(List<Parameter> parameterList) {
-    SqlDataSetDefinition dsd = new SqlDataSetDefinition();
+  public DataSetDefinition ec15PatientListDataset(final List<Parameter> parameterList) {
+    final SqlDataSetDefinition dsd = new SqlDataSetDefinition();
     dsd.setName("EC15");
     dsd.addParameters(parameterList);
     dsd.setSqlQuery(Ec15Queries.getEc15CombinedQuery());
