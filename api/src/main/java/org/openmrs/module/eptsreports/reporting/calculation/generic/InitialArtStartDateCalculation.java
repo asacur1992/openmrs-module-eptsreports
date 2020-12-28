@@ -21,6 +21,7 @@ import java.util.Map;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
+import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.PatientProgram;
 import org.openmrs.Program;
@@ -58,37 +59,35 @@ public class InitialArtStartDateCalculation extends AbstractPatientCalculation {
    */
   @Override
   public CalculationResultMap evaluate(
-      final Collection<Integer> cohort,
-      final Map<String, Object> parameterValues,
-      final PatientCalculationContext context) {
+      Collection<Integer> cohort,
+      Map<String, Object> parameterValues,
+      PatientCalculationContext context) {
 
-    final CalculationResultMap map = new CalculationResultMap();
-    final Location location = (Location) context.getFromCache("location");
+    CalculationResultMap map = new CalculationResultMap();
+    Location location = (Location) context.getFromCache("location");
 
-    final boolean considerTransferredIn =
-        this.getBooleanParameter(parameterValues, "considerTransferredIn");
-    final boolean considerPharmacyEncounter =
-        this.getBooleanParameter(parameterValues, "considerPharmacyEncounter");
+    boolean considerTransferredIn = getBooleanParameter(parameterValues, "considerTransferredIn");
+    boolean considerPharmacyEncounter =
+        getBooleanParameter(parameterValues, "considerPharmacyEncounter");
 
-    final Program treatmentProgram = this.hivMetadata.getARTProgram();
-    final Concept arvPlan = this.hivMetadata.getARVPlanConcept();
-    final Concept startDrugsConcept = this.hivMetadata.getStartDrugsConcept();
-    final Concept transferInConcept = this.hivMetadata.getTransferFromOtherFacilityConcept();
-    final Concept historicalStartConcept = this.commonMetadata.getHistoricalDrugStartDateConcept();
-    final Concept artDatePickupConcept = this.hivMetadata.getArtDatePickup();
-    final EncounterType encounterTypePharmacy = this.hivMetadata.getARVPharmaciaEncounterType();
+    Program treatmentProgram = hivMetadata.getARTProgram();
+    Concept arvPlan = hivMetadata.getARVPlanConcept();
+    Concept startDrugsConcept = hivMetadata.getStartDrugsConcept();
+    Concept transferInConcept = hivMetadata.getTransferFromOtherFacilityConcept();
+    Concept historicalStartConcept = commonMetadata.getHistoricalDrugStartDateConcept();
+    Concept artDatePickupConcept = hivMetadata.getArtDatePickup();
+    EncounterType encounterTypePharmacy = hivMetadata.getARVPharmaciaEncounterType();
 
-    final List<EncounterType> encounterTypes =
+    List<EncounterType> encounterTypes =
         Arrays.asList(
             encounterTypePharmacy,
-            this.hivMetadata.getAdultoSeguimentoEncounterType(),
-            this.hivMetadata.getARVPediatriaSeguimentoEncounterType());
+            hivMetadata.getAdultoSeguimentoEncounterType(),
+            hivMetadata.getARVPediatriaSeguimentoEncounterType());
 
-    final CalculationResultMap inProgramMap =
-        this.ePTSCalculationService.firstPatientProgram(
-            treatmentProgram, location, cohort, context);
-    final CalculationResultMap startDrugMap =
-        this.ePTSCalculationService.firstObs(
+    CalculationResultMap inProgramMap =
+        ePTSCalculationService.firstPatientProgram(treatmentProgram, location, cohort, context);
+    CalculationResultMap startDrugMap =
+        ePTSCalculationService.firstObs(
             arvPlan,
             startDrugsConcept,
             location,
@@ -99,8 +98,8 @@ public class InitialArtStartDateCalculation extends AbstractPatientCalculation {
             cohort,
             context);
 
-    final CalculationResultMap historicalMap =
-        this.ePTSCalculationService.firstObs(
+    CalculationResultMap historicalMap =
+        ePTSCalculationService.firstObs(
             historicalStartConcept,
             null,
             location,
@@ -108,63 +107,63 @@ public class InitialArtStartDateCalculation extends AbstractPatientCalculation {
             null,
             null,
             Arrays.asList(
-                this.hivMetadata.getAdultoSeguimentoEncounterType(),
-                this.hivMetadata.getARVPediatriaSeguimentoEncounterType(),
-                this.hivMetadata.getMasterCardEncounterType()),
+                hivMetadata.getAdultoSeguimentoEncounterType(),
+                hivMetadata.getARVPediatriaSeguimentoEncounterType(),
+                hivMetadata.getMasterCardEncounterType()),
             cohort,
             context);
 
-    final CalculationResultMap historicalDrugPickupInReceptionMap =
-        this.ePTSCalculationService.firstObs(
+    CalculationResultMap historicalDrugPickupInReceptionMap =
+        ePTSCalculationService.firstObs(
             artDatePickupConcept,
             null,
             location,
             false,
             null,
             null,
-            Arrays.asList(this.hivMetadata.getMasterCardDrugPickupEncounterType()),
+            Arrays.asList(hivMetadata.getMasterCardDrugPickupEncounterType()),
             cohort,
             context);
 
-    final CalculationResultMap pharmacyEncounterMap =
-        this.ePTSCalculationService.firstEncounter(
+    CalculationResultMap pharmacyEncounterMap =
+        ePTSCalculationService.firstEncounter(
             Arrays.asList(encounterTypePharmacy), cohort, location, context);
-    final CalculationResultMap transferInMap =
-        this.ePTSCalculationService.firstObs(
+    CalculationResultMap transferInMap =
+        ePTSCalculationService.firstObs(
             arvPlan, transferInConcept, location, true, null, null, null, cohort, context);
 
-    for (final Integer pId : cohort) {
+    for (Integer pId : cohort) {
       Date requiredDate = null;
-      final List<Date> enrollmentDates = new ArrayList<Date>();
-      final SimpleResult result = (SimpleResult) inProgramMap.get(pId);
+      List<Date> enrollmentDates = new ArrayList<Date>();
+      SimpleResult result = (SimpleResult) inProgramMap.get(pId);
       if (result != null) {
-        final PatientProgram patientProgram = (PatientProgram) result.getValue();
+        PatientProgram patientProgram = (PatientProgram) result.getValue();
         enrollmentDates.add(patientProgram.getDateEnrolled());
       }
-      final Obs startDrugsObs = EptsCalculationUtils.resultForPatient(startDrugMap, pId);
+      Obs startDrugsObs = EptsCalculationUtils.resultForPatient(startDrugMap, pId);
       if (startDrugsObs != null) {
         enrollmentDates.add(startDrugsObs.getEncounter().getEncounterDatetime());
       }
-      final Obs historicalDateObs = EptsCalculationUtils.resultForPatient(historicalMap, pId);
+      Obs historicalDateObs = EptsCalculationUtils.resultForPatient(historicalMap, pId);
       if (historicalDateObs != null) {
         enrollmentDates.add(historicalDateObs.getValueDatetime());
       }
 
-      final Obs historicalDrugPickupInReceptionDateObs =
+      Obs historicalDrugPickupInReceptionDateObs =
           EptsCalculationUtils.resultForPatient(historicalDrugPickupInReceptionMap, pId);
       if (historicalDrugPickupInReceptionDateObs != null) {
         enrollmentDates.add(historicalDrugPickupInReceptionDateObs.getValueDatetime());
       }
 
       if (considerPharmacyEncounter) {
-        final Encounter pharmacyEncounter =
+        Encounter pharmacyEncounter =
             EptsCalculationUtils.resultForPatient(pharmacyEncounterMap, pId);
         if (pharmacyEncounter != null) {
           enrollmentDates.add(pharmacyEncounter.getEncounterDatetime());
         }
       }
       if (considerTransferredIn) {
-        final Obs transferInObs = EptsCalculationUtils.resultForPatient(transferInMap, pId);
+        Obs transferInObs = EptsCalculationUtils.resultForPatient(transferInMap, pId);
         if (transferInObs != null) {
           enrollmentDates.add(transferInObs.getObsDatetime());
         }
@@ -179,8 +178,7 @@ public class InitialArtStartDateCalculation extends AbstractPatientCalculation {
     return map;
   }
 
-  private boolean getBooleanParameter(
-      final Map<String, Object> parameterValues, final String parameterName) {
+  private boolean getBooleanParameter(Map<String, Object> parameterValues, String parameterName) {
     Boolean parameterValue = null;
     if (parameterValues != null) {
       parameterValue = (Boolean) parameterValues.get(parameterName);
@@ -191,9 +189,8 @@ public class InitialArtStartDateCalculation extends AbstractPatientCalculation {
     return parameterValue;
   }
 
-  public static Date getArtStartDate(
-      final Integer patientId, final CalculationResultMap artStartDates) {
-    final CalculationResult calculationResult = artStartDates.get(patientId);
+  public static Date getArtStartDate(Integer patientId, CalculationResultMap artStartDates) {
+    CalculationResult calculationResult = artStartDates.get(patientId);
     if (calculationResult != null) {
       return (Date) calculationResult.getValue();
     }

@@ -2,6 +2,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts.data.quality;
 
 import java.util.Date;
 import java.util.List;
+import org.openmrs.Location;
 import org.openmrs.module.eptsreports.metadata.HivMetadata;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.data.quality.SummaryQueries;
@@ -9,6 +10,7 @@ import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -2,6 +2,7 @@ package org.openmrs.module.eptsreports.reporting.cohort.definition;
 
 import java.util.Date;
 import java.util.List;
+import org.openmrs.Location;
 import org.openmrs.PatientState;
 import org.openmrs.ProgramWorkflowState;
 import org.openmrs.module.reporting.common.Localized;

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import org.openmrs.Concept;
 import org.openmrs.EncounterType;
+import org.openmrs.Location;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.metadata.CommonMetadata;
 import org.openmrs.module.eptsreports.metadata.HivMetadata;
 import org.openmrs.module.eptsreports.reporting.calculation.dsd.NextAndPrevDatesCalculation;
@@ -13,10 +15,14 @@ import org.openmrs.module.eptsreports.reporting.cohort.definition.CalculationCoh
 import org.openmrs.module.eptsreports.reporting.library.queries.BreastfeedingQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.DsdQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
-import org.openmrs.module.reporting.cohort.definition.*;
+import org.openmrs.module.reporting.cohort.definition.BaseObsCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.common.RangeComparator;
 import org.openmrs.module.reporting.common.SetComparator;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
