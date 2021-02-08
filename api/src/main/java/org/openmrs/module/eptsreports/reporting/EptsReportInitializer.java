@@ -17,7 +17,6 @@ package org.openmrs.module.eptsreports.reporting;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.poi.util.IOUtils;
@@ -36,92 +35,101 @@ import org.openmrs.module.reporting.report.util.ReportUtil;
 import org.openmrs.util.OpenmrsClassLoader;
 
 public class EptsReportInitializer {
-	private final Log log = LogFactory.getLog(this.getClass());
+  private final Log log = LogFactory.getLog(this.getClass());
 
-	/** Initializes all EPTS reports and remove deprocated reports from database. */
-	public void initializeReports() {
-		for (final ReportManager reportManager : Context.getRegisteredComponents(EptsReportManager.class)) {
-			if (reportManager.getClass().getAnnotation(Deprecated.class) != null) {
-				// remove depricated reports
-				EptsReportUtils.purgeReportDefinition(reportManager);
-				this.log.info(
-						"Report " + reportManager.getName() + " is deprecated.  Removing it from database.");
-			} else {
-				// setup EPTS active reports
-				EptsReportUtils.setupReportDefinition(reportManager);
-				this.log.info("Setting up report " + reportManager.getName() + "...");
-			}
-		}
+  /** Initializes all EPTS reports and remove deprocated reports from database. */
+  public void initializeReports() {
+    for (final ReportManager reportManager :
+        Context.getRegisteredComponents(EptsReportManager.class)) {
+      if (reportManager.getClass().getAnnotation(Deprecated.class) != null) {
+        // remove depricated reports
+        EptsReportUtils.purgeReportDefinition(reportManager);
+        this.log.info(
+            "Report " + reportManager.getName() + " is deprecated.  Removing it from database.");
+      } else {
+        // setup EPTS active reports
+        EptsReportUtils.setupReportDefinition(reportManager);
+        this.log.info("Setting up report " + reportManager.getName() + "...");
+      }
+    }
 
-		ReportUtil.updateGlobalProperty(
-				ReportingConstants.GLOBAL_PROPERTY_DATA_EVALUATION_BATCH_SIZE, "-1");
+    ReportUtil.updateGlobalProperty(
+        ReportingConstants.GLOBAL_PROPERTY_DATA_EVALUATION_BATCH_SIZE, "-1");
 
-		this.setUpKeyPopMisauEncoder();
-	}
+    this.setUpKeyPopMisauEncoder();
+  }
 
-	private void setUpKeyPopMisauEncoder() {
-		final ReportService reportService = Context.getService(ReportService.class);
-		final ReportDesign reportDesign = reportService.getReportDesignByUuid("eb02a0d7-64dd-48e7-bdab-a30e9e4e56d2");
-		final ReportDesignResource resource = reportDesign.getResourceByUuid("83157bb7-ef92-4df3-b106-f5ec535cbc63");
-		resource.setName("KEY_POP_MISAU_INDICATORS.xls");
+  private void setUpKeyPopMisauEncoder() {
+    final ReportService reportService = Context.getService(ReportService.class);
+    final ReportDesign reportDesign =
+        reportService.getReportDesignByUuid("eb02a0d7-64dd-48e7-bdab-a30e9e4e56d2");
 
-		final InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resource.getName());
-		try {
-			resource.setContents(IOUtils.toByteArray(is));
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+    if (reportDesign == null) {
+      return;
+    }
 
-		reportDesign.addResource(resource);
+    final ReportDesignResource resource =
+        reportDesign.getResourceByUuid("83157bb7-ef92-4df3-b106-f5ec535cbc63");
+    resource.setName("KEY_POP_MISAU_INDICATORS.xls");
 
-		reportService.saveReportDesign(reportDesign);
-	}
+    final InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resource.getName());
+    try {
+      resource.setContents(IOUtils.toByteArray(is));
+    } catch (final IOException e) {
+      e.printStackTrace();
+    }
 
-	/** Purges all EPTS reports from database. */
-	public void purgeReports() {
-		for (final ReportManager reportManager : Context.getRegisteredComponents(EptsReportManager.class)) {
-			EptsReportUtils.purgeReportDefinition(reportManager);
-			this.log.info("Report " + reportManager.getName() + " removed from database.");
-		}
-	}
+    reportDesign.addResource(resource);
 
-	public void removeEptsReportsGlobalProperties() {
-		final List<GlobalProperty> eptsreports = Context.getAdministrationService()
-				.getGlobalPropertiesByPrefix("eptsreports");
-		Context.getAdministrationService().purgeGlobalProperties(eptsreports);
+    reportService.saveReportDesign(reportDesign);
+  }
 
-		this.log.info("Removing all eptsreports global properties from database.");
-	}
+  /** Purges all EPTS reports from database. */
+  public void purgeReports() {
+    for (final ReportManager reportManager :
+        Context.getRegisteredComponents(EptsReportManager.class)) {
+      EptsReportUtils.purgeReportDefinition(reportManager);
+      this.log.info("Report " + reportManager.getName() + " removed from database.");
+    }
+  }
 
-	public void purgOldReports() {
-		final List<GlobalProperty> globalPropertiesByPrefix = Context.getAdministrationService()
-				.getGlobalPropertiesByPrefix("eptsoldreports");
-		final ReportDefinitionService reportService = Context.getService(ReportDefinitionService.class);
+  public void removeEptsReportsGlobalProperties() {
+    final List<GlobalProperty> eptsreports =
+        Context.getAdministrationService().getGlobalPropertiesByPrefix("eptsreports");
+    Context.getAdministrationService().purgeGlobalProperties(eptsreports);
 
-		for (final GlobalProperty globalProperty : globalPropertiesByPrefix) {
-			try {
-				final ReportDefinition findDefinition = EptsReportUtils
-						.findReportDefinition(globalProperty.getPropertyValue());
-				if (findDefinition != null) {
-					try {
-						reportService.purgeDefinition(findDefinition);
-						Context.getAdministrationService().purgeGlobalProperty(globalProperty);
-						this.log.info("Report " + findDefinition.getName() + " removed from database.");
+    this.log.info("Removing all eptsreports global properties from database.");
+  }
 
-					} catch (final Exception e) {
-						this.log.error(
-								String.format(
-										"Unable to remove the Report %s , StackTrace: %s ",
-										findDefinition.getName(), e.getMessage()));
-					}
-				}
+  public void purgOldReports() {
+    final List<GlobalProperty> globalPropertiesByPrefix =
+        Context.getAdministrationService().getGlobalPropertiesByPrefix("eptsoldreports");
+    final ReportDefinitionService reportService = Context.getService(ReportDefinitionService.class);
 
-			} catch (final Exception e) {
-				this.log.error(
-						String.format(
-								"Unable to find the Definition for the report with UUID  %s. StackTrace: %s ",
-								globalProperty.getPropertyValue(), e.getMessage()));
-			}
-		}
-	}
+    for (final GlobalProperty globalProperty : globalPropertiesByPrefix) {
+      try {
+        final ReportDefinition findDefinition =
+            EptsReportUtils.findReportDefinition(globalProperty.getPropertyValue());
+        if (findDefinition != null) {
+          try {
+            reportService.purgeDefinition(findDefinition);
+            Context.getAdministrationService().purgeGlobalProperty(globalProperty);
+            this.log.info("Report " + findDefinition.getName() + " removed from database.");
+
+          } catch (final Exception e) {
+            this.log.error(
+                String.format(
+                    "Unable to remove the Report %s , StackTrace: %s ",
+                    findDefinition.getName(), e.getMessage()));
+          }
+        }
+
+      } catch (final Exception e) {
+        this.log.error(
+            String.format(
+                "Unable to find the Definition for the report with UUID  %s. StackTrace: %s ",
+                globalProperty.getPropertyValue(), e.getMessage()));
+      }
+    }
+  }
 }

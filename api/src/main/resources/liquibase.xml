@@ -52,4 +52,13 @@
 
 	</changeSet>
 
+	<!-- eSaude Release_20201224 -->
+	<changeSet author="icap-mozambique"
+		id="epts_metadata_for_release330_24122020">
+
+		<sqlFile path="scripts/EPTSMetadataForRelease330_24122020.sql"
+			encoding="UTF-8" />
+
+	</changeSet>
+
 </databaseChangeLog>

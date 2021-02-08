@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
-
 import org.openmrs.module.eptsreports.reporting.calculation.quarterly.ResumoTrimestralUtil.QUARTERLIES;
 import org.openmrs.module.eptsreports.reporting.library.datasets.LocationDataSetDefinition;
 import org.openmrs.module.eptsreports.reporting.library.datasets.resumo.ResumoTrimestralDataSetDefinition;
@@ -36,137 +35,140 @@ import org.springframework.stereotype.Component;
 @Component
 public class SetupResumoTrimestralReport extends EptsDataExportManager {
 
-	public static final String YEAR_PARAMETER = "year";
+  public static final String YEAR_PARAMETER = "year";
 
-	public static final String QUARTER_PARAMETER = "quarter";
+  public static final String QUARTER_PARAMETER = "quarter";
 
-	private final ResumoTrimestralDataSetDefinition resumoTrimestralDataSetDefinition;
+  private final ResumoTrimestralDataSetDefinition resumoTrimestralDataSetDefinition;
 
-	@Autowired
-	public SetupResumoTrimestralReport(
-			final ResumoTrimestralDataSetDefinition resumoTrimestralDataSetDefinition) {
-		this.resumoTrimestralDataSetDefinition = resumoTrimestralDataSetDefinition;
-	}
+  @Autowired
+  public SetupResumoTrimestralReport(
+      final ResumoTrimestralDataSetDefinition resumoTrimestralDataSetDefinition) {
+    this.resumoTrimestralDataSetDefinition = resumoTrimestralDataSetDefinition;
+  }
 
-	@Override
-	public String getExcelDesignUuid() {
-		return "5c04a7b8-371d-445c-b075-5358dc07ef7f";
-	}
+  @Override
+  public String getExcelDesignUuid() {
+    return "5c04a7b8-371d-445c-b075-5358dc07ef7f";
+  }
 
-	@Override
-	public String getUuid() {
-		return "0c64c016-6b09-4ac4-bb6d-bdacd77988ea";
-	}
+  @Override
+  public String getUuid() {
+    return "0c64c016-6b09-4ac4-bb6d-bdacd77988ea";
+  }
 
-	@Override
-	public String getName() {
-		return "Resumo Trimestral das Coortes de Tratamento Antirretroviral";
-	}
+  @Override
+  public String getName() {
+    return "Resumo Trimestral das Coortes de Tratamento Antirretroviral";
+  }
 
-	@Override
-	public String getDescription() {
-		return "Resumo Trimestral das Coortes de Tratamento Antirretroviral";
-	}
+  @Override
+  public String getDescription() {
+    return "Resumo Trimestral das Coortes de Tratamento Antirretroviral";
+  }
 
-	@Override
-	public ReportDefinition constructReportDefinition() {
-		final ReportDefinition rd = new ReportDefinition();
-		rd.setUuid(this.getUuid());
-		rd.setName(this.getName());
-		rd.setDescription(this.getDescription());
-		rd.addParameters(SetupResumoTrimestralReport.getDataParameters());
-		rd.addDataSetDefinition("HF", Mapped.mapStraightThrough(new LocationDataSetDefinition()));
-		rd.addDataSetDefinition(
-				"T",
-				Mapped.mapStraightThrough(this.resumoTrimestralDataSetDefinition.constructResumoTrimestralDataset()));
+  @Override
+  public ReportDefinition constructReportDefinition() {
+    final ReportDefinition rd = new ReportDefinition();
+    rd.setUuid(this.getUuid());
+    rd.setName(this.getName());
+    rd.setDescription(this.getDescription());
+    rd.addParameters(SetupResumoTrimestralReport.getDataParameters());
+    rd.addDataSetDefinition("HF", Mapped.mapStraightThrough(new LocationDataSetDefinition()));
+    rd.addDataSetDefinition(
+        "T",
+        Mapped.mapStraightThrough(
+            this.resumoTrimestralDataSetDefinition.constructResumoTrimestralDataset()));
 
-		return rd;
-	}
+    return rd;
+  }
 
-	@Override
-	public String getVersion() {
-		return "1.0-SNAPSHOT";
-	}
+  @Override
+  public String getVersion() {
+    return "1.0-SNAPSHOT";
+  }
 
-	@Override
-	public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
-		ReportDesign reportDesign = null;
-		try {
-			reportDesign =
-					this.createXlsReportDesign(
-							reportDefinition,
-							"Resumo_Trimestral.xls",
-							"Resumo Trimestral",
-							this.getExcelDesignUuid(),
-							null);
-			final Properties props = new Properties();
-			props.put("sortWeight", "5000");
-			reportDesign.setProperties(props);
-		} catch (final IOException e) {
-			throw new ReportingException(e.toString());
-		}
-		return Arrays.asList(reportDesign);
-	}
+  @Override
+  public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
+    ReportDesign reportDesign = null;
+    try {
+      reportDesign =
+          this.createXlsReportDesign(
+              reportDefinition,
+              "Resumo_Trimestral.xls",
+              "Resumo Trimestral",
+              this.getExcelDesignUuid(),
+              null);
+      final Properties props = new Properties();
+      props.put("sortWeight", "5000");
+      reportDesign.setProperties(props);
+    } catch (final IOException e) {
+      throw new ReportingException(e.toString());
+    }
+    return Arrays.asList(reportDesign);
+  }
 
-	public static List<Parameter> getDataParameters() {
-		final List<Parameter> parameters = new ArrayList<Parameter>();
-		parameters.addAll(SetupResumoTrimestralReport.getCustomParameteres());
-		parameters.add(ReportingConstants.LOCATION_PARAMETER);
-		return parameters;
-	}
+  public static List<Parameter> getDataParameters() {
+    final List<Parameter> parameters = new ArrayList<Parameter>();
+    parameters.addAll(SetupResumoTrimestralReport.getCustomParameteres());
+    parameters.add(ReportingConstants.LOCATION_PARAMETER);
+    return parameters;
+  }
 
-	public static List<Parameter> getCustomParameteres() {
-		return Arrays.asList(SetupResumoTrimestralReport.getYearConfigurableParameter(), SetupResumoTrimestralReport.getQuarterConfigurableParameter());
-	}
+  public static List<Parameter> getCustomParameteres() {
+    return Arrays.asList(
+        SetupResumoTrimestralReport.getYearConfigurableParameter(),
+        SetupResumoTrimestralReport.getQuarterConfigurableParameter());
+  }
 
-	private static Parameter getYearConfigurableParameter() {
-		final Parameter parameter = new Parameter();
-		parameter.setName(SetupResumoTrimestralReport.YEAR_PARAMETER);
-		parameter.setLabel("Ano");
-		parameter.setType(String.class);
-		parameter.setCollectionType(List.class);
-		parameter.setRequired(Boolean.TRUE);
+  private static Parameter getYearConfigurableParameter() {
+    final Parameter parameter = new Parameter();
+    parameter.setName(SetupResumoTrimestralReport.YEAR_PARAMETER);
+    parameter.setLabel("Ano");
+    parameter.setType(String.class);
+    parameter.setCollectionType(List.class);
+    parameter.setRequired(Boolean.TRUE);
 
-		final Properties props = new Properties();
-		final Calendar currentDate = Calendar.getInstance();
-		final int currentYear = currentDate.get(Calendar.YEAR);
+    final Properties props = new Properties();
+    final Calendar currentDate = Calendar.getInstance();
+    final int currentYear = currentDate.get(Calendar.YEAR);
 
-		String codedOptions = "";
-		for (int i = 0; i < 5; i++) {
-			final int year = currentYear - i;
-			if (i == 0) {
-				codedOptions += year;
+    String codedOptions = "";
+    for (int i = 0; i < 5; i++) {
+      final int year = currentYear - i;
+      if (i == 0) {
+        codedOptions += year;
 
-			} else {
-				codedOptions += "," + year;
-			}
-		}
+      } else {
+        codedOptions += "," + year;
+      }
+    }
 
-		props.put("codedOptions", codedOptions);
-		parameter.setWidgetConfiguration(props);
-		parameter.setDefaultValue(Arrays.asList(currentYear));
-		return parameter;
-	}
+    props.put("codedOptions", codedOptions);
+    parameter.setWidgetConfiguration(props);
+    parameter.setDefaultValue(Arrays.asList(currentYear));
+    return parameter;
+  }
 
-	private static Parameter getQuarterConfigurableParameter() {
-		final Parameter parameter = new Parameter();
-		parameter.setName(SetupResumoTrimestralReport.QUARTER_PARAMETER);
-		parameter.setLabel("Trimestre");
-		parameter.setType(String.class);
-		parameter.setCollectionType(List.class);
-		parameter.setRequired(Boolean.TRUE);
+  private static Parameter getQuarterConfigurableParameter() {
+    final Parameter parameter = new Parameter();
+    parameter.setName(SetupResumoTrimestralReport.QUARTER_PARAMETER);
+    parameter.setLabel("Trimestre");
+    parameter.setType(String.class);
+    parameter.setCollectionType(List.class);
+    parameter.setRequired(Boolean.TRUE);
 
-		final Properties props = new Properties();
-		props.put(
-				"codedOptions",
-				QUARTERLIES.QUARTER_ONE.getDescription()
-				+ ","
-				+ QUARTERLIES.QUARTER_TWO.getDescription()
-				+ ","
-				+ QUARTERLIES.QUARTER_THREE.getDescription()
-				+ ","
-				+ QUARTERLIES.QUARTER_FOUR.getDescription());
-		parameter.setWidgetConfiguration(props);
-		return parameter;
-	}
+    final Properties props = new Properties();
+    props.put(
+        "codedOptions",
+        QUARTERLIES.QUARTER_ONE.getDescription()
+            + ","
+            + QUARTERLIES.QUARTER_TWO.getDescription()
+            + ","
+            + QUARTERLIES.QUARTER_THREE.getDescription()
+            + ","
+            + QUARTERLIES.QUARTER_FOUR.getDescription());
+    parameter.setWidgetConfiguration(props);
+    return parameter;
+  }
 }
