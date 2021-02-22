@@ -114,5 +114,20 @@ public interface TxNewQueries {
             + "AND o.concept_id=23866 AND o.value_datetime is NOT NULL AND o.value_datetime BETWEEN :startDate AND :endDate AND e.location_id=:location GROUP BY p.patient_id) "
             + "art_start GROUP BY patient_id ) tx_new "
             + "INNER JOIN person pe ON tx_new.patient_id=pe.person_id WHERE TIMESTAMPDIFF(year,birthdate,art_start_date) BETWEEN %d AND %d AND birthdate IS NOT NULL";
+
+    public static final String findPatientsInComunnityDispensation =
+        "SELECT patient_id FROM\n"
+            + "    (\n"
+            + "		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
+            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
+            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
+            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 23731\n"
+            + "				AND e.encounter_datetime BETWEEN :startDate AND :endDate AND e.location_id = :location\n"
+            + "					GROUP BY e.patient_id\n"
+            + "    )last_encounter INNER JOIN (\n"
+            + "		SELECT o.person_id, o.value_coded, o.obs_datetime FROM obs o\n"
+            + "			WHERE o.voided = 0 AND o.concept_id = 23731 AND o.value_coded IN (1256,1257)\n"
+            + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
+            + "GROUP BY patient_id";
   }
 }

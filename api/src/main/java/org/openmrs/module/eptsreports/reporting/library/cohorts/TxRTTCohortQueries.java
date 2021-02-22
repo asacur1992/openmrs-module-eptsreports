@@ -9,6 +9,7 @@ import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPLHIVLess12
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoAreTransferedOutCalculation;
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoExperiencedIITCalculation;
 import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseFghCalculationCohortDefinition;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class TxRTTCohortQueries {
 
   @Autowired private TxCurrCohortQueries txCurrCohortQueries;
+
+  @Autowired private GenericCohortQueries genericCohorts;
 
   @DocumentedDefinition(value = "TxRttPatientsOnRTT")
   public CohortDefinition getPatientsOnRTT() {
@@ -58,9 +61,52 @@ public class TxRTTCohortQueries {
     return compositionDefinition;
   }
 
+  @DocumentedDefinition(value = "TxRttPatientsOnRTT")
+  public CohortDefinition getCommunityPatientsOnRTT() {
+
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("Tx RTT Community - Patients on RTT");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings =
+        "startDate=${startDate-1d},endDate=${startDate-1d},realEndDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "IIT-PREVIOUS-PERIOD",
+        EptsReportUtils.map(this.getPatientsWhoExperiencedIITCalculation(), mappings));
+
+    compositionDefinition.addSearch(
+        "RTT-TRANFERRED-OUT",
+        EptsReportUtils.map(
+            this.getPatientsWhoWhereTransferredOutCalculation(),
+            "endDate=${startDate},location=${location}"));
+
+    compositionDefinition.addSearch(
+        "TX-CURR",
+        EptsReportUtils.map(
+            this.txCurrCohortQueries.findPatientsWhoAreActiveOnART(),
+            "endDate=${endDate},location=${location}"));
+
+    compositionDefinition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxCurrQueries.QUERY.findCommunityPatientsDispensation),
+            "startDate=${startDate},endDate=${endDate},location=${location}"));
+
+    compositionDefinition.setCompositionString(
+        "(IIT-PREVIOUS-PERIOD NOT RTT-TRANFERRED-OUT) AND TX-CURR AND COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
   @DocumentedDefinition(value = "TxRttPatientsWhoExperiencedIITCalculation")
   public CohortDefinition getPatientsWhoExperiencedIITCalculation() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "txRTTPatientsWhoExperiencedIITCalculation",
             Context.getRegisteredComponents(TxRTTPatientsWhoExperiencedIITCalculation.class)
@@ -74,7 +120,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "TxRttPatientsWhoWhereTransferredOutCalculation")
   public CohortDefinition getPatientsWhoWhereTransferredOutCalculation() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "txRTTPatientsWhoWhereTransferredOutCalculation",
             Context.getRegisteredComponents(TxRTTPatientsWhoAreTransferedOutCalculation.class)
@@ -87,7 +133,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "TxRttPLHIVLess12MonthCalculation")
   public CohortDefinition getPLHIVLess12MonthCalculation() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "txRttPLHIVLess12MonthCalculation",
             Context.getRegisteredComponents(TxRTTPLHIVLess12MonthCalculation.class).get(0));
@@ -100,7 +146,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "TxRttPLHIVGreater12MonthCalculation")
   public CohortDefinition getPLHIVGreather12MonthCalculation() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "txRttPLHIVGreater12MonthCalculation",
             Context.getRegisteredComponents(TxRTTPLHIVGreater12MonthCalculation.class).get(0));
