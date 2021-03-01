@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxPvlsDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -31,9 +32,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupTxCurr21 extends EptsDataExportManager {
+public class SetupDailyTxCurrAndTxPVLS extends EptsDataExportManager {
 
   @Autowired private TxCurrDataset txCurrDataset;
+
+  @Autowired private TxPvlsDataset txPvlsDataset;
 
   @Autowired private GenericCohortQueries genericCohortQueries;
 
@@ -54,26 +57,28 @@ public class SetupTxCurr21 extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "TX_CURR Report 2.4";
+    return "TX_CURR E TX_PVLS DIARIO - v1.11.0";
   }
 
   @Override
   public String getDescription() {
-    return "Number of adults and children currently receiving antiretroviral therapy (ART) (Old Spec).";
+    return "Patients on TX_CURR and TX_PVLS";
   }
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    ReportDefinition reportDefinition = new ReportDefinition();
-    reportDefinition.setUuid(getUuid());
-    reportDefinition.setName(getName());
-    reportDefinition.setDescription(getDescription());
-    reportDefinition.setParameters(txCurrDataset.getParameters());
+    final ReportDefinition reportDefinition = new ReportDefinition();
+    reportDefinition.setUuid(this.getUuid());
+    reportDefinition.setName(this.getName());
+    reportDefinition.setDescription(this.getDescription());
+    reportDefinition.setParameters(this.txCurrDataset.getParameters());
 
     reportDefinition.addDataSetDefinition(
         "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true)));
 
-    // add a base cohort here to help in calculations running
+    reportDefinition.addDataSetDefinition(
+        "P", Mapped.mapStraightThrough(this.txPvlsDataset.constructTxPvlsDatset()));
+
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
@@ -90,8 +95,8 @@ public class SetupTxCurr21 extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "TXCURR_2.1.xls",
-              "TX_CURR Report",
+              "TX_CURR_AND_TX_PVLS.xls",
+              "TX_CURR and TX_PVLS Daily Report",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();

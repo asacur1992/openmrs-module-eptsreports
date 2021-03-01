@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsEligibleToViralLoadDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PatientsEligibleToTPTDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -15,23 +15,23 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class SetupPatientsEligibleToViralLoadListReport extends EptsDataExportManager {
+public class SetupPatientsEligibleToTPTReport extends EptsDataExportManager {
 
-  @Autowired private PatientsEligibleToViralLoadDataset patientsEligibleToViralLoadDataset;
+  @Autowired private PatientsEligibleToTPTDataset patientsEligibleToTPTDataset;
 
   @Override
   public String getUuid() {
-    return "bf3909cc-d7af-450a-a725-7f949a6fd128";
+    return "24cbd272-cd45-4ba5-8e65-7bc8e23c1ecb";
   }
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ELEGÍVEIS PARA CARGA VIRAL - v1.11.0 ";
+    return "LISTA DE PACIENTES ELEGÍVEIS PARA TPT - v1.11.0 ";
   }
 
   @Override
   public String getDescription() {
-    return "This report provides the list of expected patients eligible to viral load";
+    return "This report provides the list of patients eligible to tpt";
   }
 
   @Override
@@ -40,12 +40,12 @@ public class SetupPatientsEligibleToViralLoadListReport extends EptsDataExportMa
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.patientsEligibleToViralLoadDataset.getParameters());
+    reportDefinition.setParameters(this.patientsEligibleToTPTDataset.getParameters());
     reportDefinition.addDataSetDefinition(
-        "LPECV",
+        "LPETPT",
         Mapped.mapStraightThrough(
-            this.patientsEligibleToViralLoadDataset.constructPatientsEligibleToViralLoadDataset(
-                this.patientsEligibleToViralLoadDataset.getParameters())));
+            this.patientsEligibleToTPTDataset.constructPatientsEligibleToTPTDataset(
+                this.patientsEligibleToTPTDataset.getParameters())));
 
     return reportDefinition;
   }
@@ -57,7 +57,7 @@ public class SetupPatientsEligibleToViralLoadListReport extends EptsDataExportMa
 
   @Override
   public String getExcelDesignUuid() {
-    return "5bb71bb0-8d58-4e68-9e9f-76ba9bae19ca";
+    return "7d07916c-9ced-4ae5-9795-31c84fcac015";
   }
 
   @Override
@@ -67,12 +67,12 @@ public class SetupPatientsEligibleToViralLoadListReport extends EptsDataExportMa
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "LIST_OF_PATIENTS_ELIGIBLE_TO_VIRAL_LOAD_REPORT.xls",
-              "Lista de Pacientes Elegíveis para Carga Viral",
+              "LIST_OF_PATIENTS_ELIGIBLE_TO_TPT_REPORT.xls",
+              "Lista de Pacientes Elegíveis para TPT",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:11,dataset:LPECV");
+      props.put("repeatingSections", "sheet:1,row:11,dataset:LPETPT");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {
