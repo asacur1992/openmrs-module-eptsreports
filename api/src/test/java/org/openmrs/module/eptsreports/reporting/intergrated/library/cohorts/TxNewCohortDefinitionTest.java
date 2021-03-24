@@ -1,10 +1,9 @@
 package org.openmrs.module.eptsreports.reporting.intergrated.library.cohorts;
 
-import static org.junit.Assert.assertFalse;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
@@ -49,8 +48,11 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
         this.evaluateCohortDefinition(txNewCompositionCohort, parameters);
 
     assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
+    assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
+    //    System.out.println(evaluateCohortDefinition.size());
+    //        System.out.println(evaluateCohortDefinition.getMemberIds());
 
-    for (int t : evaluateCohortDefinition.getMemberIds()) {
+    for (final int t : evaluateCohortDefinition.getMemberIds()) {
       System.out.println(t);
     }
   }
