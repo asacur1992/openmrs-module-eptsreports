@@ -47,8 +47,7 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
     final EvaluatedCohort evaluateCohortDefinition =
         this.evaluateCohortDefinition(txNewCompositionCohort, parameters);
 
-    assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
-    assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
+    Assert.assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
     //    System.out.println(evaluateCohortDefinition.size());
     //        System.out.println(evaluateCohortDefinition.getMemberIds());
 
