@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TxTBDataset extends BaseDataSet {
+public class TxTBCommunityDataset extends BaseDataSet {
   @Autowired private EptsCommonDimension eptsCommonDimension;
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
@@ -40,7 +40,7 @@ public class TxTBDataset extends BaseDataSet {
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  public DataSetDefinition constructTxTBDataset() {
+  public DataSetDefinition constructTxTBCommunityDataset() {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
@@ -53,6 +53,7 @@ public class TxTBDataset extends BaseDataSet {
         "age",
         EptsReportUtils.map(
             this.eptsCommonDimension.age(this.ageDimensionCohort), "effectiveDate=${endDate}"));
+
     this.addTXTBNumerator(mappings, dataSetDefinition);
 
     this.addTXTBDenominator(mappings, dataSetDefinition);
@@ -66,27 +67,34 @@ public class TxTBDataset extends BaseDataSet {
 
   private void addTXTBNumerator(
       final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
+
     final CohortIndicator numerator =
         this.eptsGeneralIndicator.getIndicator(
-            "NUMERATOR", EptsReportUtils.map(this.txTbCohortQueries.txTbNumerator(), mappings));
+            "NUMERATOR",
+            EptsReportUtils.map(this.txTbCohortQueries.txTbNumeratorCommunity(), mappings));
+
     final CohortIndicator patientsPreviouslyOnARTNumerator =
         this.eptsGeneralIndicator.getIndicator(
             "patientsPreviouslyOnARTNumerator",
             EptsReportUtils.map(
-                this.txTbCohortQueries.patientsPreviouslyOnARTNumerator(), mappings));
+                this.txTbCohortQueries.patientsPreviouslyOnARTNumeratorCommunity(), mappings));
+
     final CohortIndicator patientsNewOnARTNumerator =
         this.eptsGeneralIndicator.getIndicator(
             "patientsNewOnARTNumerator",
-            EptsReportUtils.map(this.txTbCohortQueries.patientsNewOnARTNumerator(), mappings));
+            EptsReportUtils.map(
+                this.txTbCohortQueries.patientsNewOnARTNumeratorCommunity(), mappings));
 
     dataSetDefinition.addColumn(
         "TXB_NUM", "TX_TB: Numerator total", EptsReportUtils.map(numerator, mappings), "");
+
     this.addRow(
         dataSetDefinition,
         "TXB_NUM_PREV",
         "Numerator (patientsPreviouslyOnARTNumerator)",
         EptsReportUtils.map(patientsPreviouslyOnARTNumerator, mappings),
         this.dissagregations());
+
     this.addRow(
         dataSetDefinition,
         "TXB_NUM_NEW",
@@ -97,26 +105,30 @@ public class TxTBDataset extends BaseDataSet {
 
   private void addTXTBDenominator(
       final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
+
     final CohortIndicator previouslyOnARTPostiveScreening =
         this.eptsGeneralIndicator.getIndicator(
             "previouslyOnARTPositiveScreening",
             EptsReportUtils.map(
-                this.txTbCohortQueries.previouslyOnARTPositiveScreening(Boolean.FALSE), mappings));
+                this.txTbCohortQueries.previouslyOnARTPositiveScreening(Boolean.TRUE), mappings));
+
     final CohortIndicator previouslyOnARTNegativeScreening =
         this.eptsGeneralIndicator.getIndicator(
             "previouslyOnARTNegativeScreening",
             EptsReportUtils.map(
-                this.txTbCohortQueries.previouslyOnARTNegativeScreening(Boolean.FALSE), mappings));
+                this.txTbCohortQueries.previouslyOnARTNegativeScreening(Boolean.TRUE), mappings));
+
     final CohortIndicator newOnARTPositiveScreening =
         this.eptsGeneralIndicator.getIndicator(
             "newOnARTPositiveScreening",
             EptsReportUtils.map(
-                this.txTbCohortQueries.newOnARTPositiveScreening(Boolean.FALSE), mappings));
+                this.txTbCohortQueries.newOnARTPositiveScreening(Boolean.TRUE), mappings));
+
     final CohortIndicator newOnARTNegativeScreening =
         this.eptsGeneralIndicator.getIndicator(
             "newOnARTNegativeScreening",
             EptsReportUtils.map(
-                this.txTbCohortQueries.newOnARTNegativeScreening(Boolean.FALSE), mappings));
+                this.txTbCohortQueries.newOnARTNegativeScreening(Boolean.TRUE), mappings));
 
     dataSetDefinition.addColumn(
         "TXB_DEN",
@@ -124,8 +136,7 @@ public class TxTBDataset extends BaseDataSet {
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "Denominator Total",
-                EptsReportUtils.map(
-                    this.txTbCohortQueries.getDenominator(Boolean.FALSE), mappings)),
+                EptsReportUtils.map(this.txTbCohortQueries.getDenominator(Boolean.TRUE), mappings)),
             mappings),
         "");
 

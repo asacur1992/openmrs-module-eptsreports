@@ -329,4 +329,18 @@ public class TxNewCohortQueries {
 
     return definition;
   }
+
+  @DocumentedDefinition(value = "findPatientsInComunnityDispensation")
+  public CohortDefinition communityDispensation() {
+    final CohortDefinition definition =
+        this.genericCohorts.generalSql(
+            "findPatientsInComunnityDispensation",
+            TxNewQueries.QUERY.findPatientsInComunnityDispensation);
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
+  }
 }

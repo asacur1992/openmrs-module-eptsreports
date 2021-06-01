@@ -32,6 +32,8 @@ public class TXTBCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohortQueries;
 
+  @Autowired private TxNewCohortQueries txNewCohortQueries;
+
   private final String generalParameterMapping =
       "startDate=${startDate},endDate=${endDate},location=${location}";
 
@@ -86,7 +88,7 @@ public class TXTBCohortQueries {
             "SputumForAcidFastBacilli",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
                 this.hivMetadata.getMisauLaboratorioEncounterType().getEncounterTypeId(),
-                Arrays.asList(tbMetadata.getSputumForAcidFastBacilli().getConceptId()),
+                Arrays.asList(this.tbMetadata.getSputumForAcidFastBacilli().getConceptId()),
                 Arrays.asList(
                     this.tbMetadata.getPositiveConcept().getConceptId(),
                     this.tbMetadata.getNotFoundConcept().getConceptId())));
@@ -94,9 +96,9 @@ public class TXTBCohortQueries {
     return definition;
   }
 
-  public CohortDefinition getTuberculosisSymptoms(Integer... answerIds) {
+  public CohortDefinition getTuberculosisSymptoms(final Integer... answerIds) {
 
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "tuberculosisSymptoms",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -108,7 +110,7 @@ public class TXTBCohortQueries {
   }
 
   public CohortDefinition getActiveTuberculosis() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "activeTuberculosis",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -120,7 +122,7 @@ public class TXTBCohortQueries {
   }
 
   public CohortDefinition getTbObservations() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "tbObservations",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -140,7 +142,7 @@ public class TXTBCohortQueries {
   }
 
   public CohortDefinition getApplicationForLaboratoryResearch() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "applicationForLaboratoryResearch",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -158,7 +160,7 @@ public class TXTBCohortQueries {
   }
 
   public CohortDefinition getTbGenExpertORCultureTestOrTbLamOrBk() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "tbGenExpertORCultureTestOrTbLamOrBK",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -176,7 +178,7 @@ public class TXTBCohortQueries {
   }
 
   private CohortDefinition getGenExpertOrCulturaOnFichaLaboratorio() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "GenExpertOrCultura",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -192,7 +194,7 @@ public class TXTBCohortQueries {
   }
 
   private CohortDefinition getTbLamOnFichaLaboratorio() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "TbLamOnFichaLaboratorio",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -207,7 +209,7 @@ public class TXTBCohortQueries {
   }
 
   private CohortDefinition getXpertMTBOnFichaLaboratorio() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "XpertMTBOnFichaLaboratorio",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -221,7 +223,7 @@ public class TXTBCohortQueries {
   }
 
   private CohortDefinition getTbRaioXTorax() {
-    CohortDefinition definition =
+    final CohortDefinition definition =
         this.genericCohortQueries.generalSql(
             "tbRaioXTorax",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -347,7 +349,7 @@ public class TXTBCohortQueries {
 
   @DocumentedDefinition(value = "findNegativeInvestigationResultAndAnyResultForTBScreening")
   public CohortDefinition negativeInvestigationResultAndAnyResultForTBScreeningComposition() {
-    CohortDefinition cohortDefinition =
+    final CohortDefinition cohortDefinition =
         this.genericCohortQueries.generalSql(
             "findNegativeInvestigationResultAndAnyResultForTBScreening",
             TXTBQueries.findNegativeInvestigationResultAndAnyResultForTBScreening(
@@ -356,7 +358,7 @@ public class TXTBCohortQueries {
                 this.tbMetadata.getTbScreeningConcept(),
                 this.commonMetadata.getYesConcept(),
                 this.commonMetadata.getNoConcept(),
-                tbMetadata.getResearchResultConcept(),
+                this.tbMetadata.getResearchResultConcept(),
                 this.tbMetadata.getNegativeConcept()));
 
     this.addGeneralParameters(cohortDefinition);
@@ -429,6 +431,31 @@ public class TXTBCohortQueries {
     return cd;
   }
 
+  @DocumentedDefinition(value = "txTbNumeratorCommunity")
+  public CohortDefinition txTbNumeratorCommunity() {
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
+
+    cd.setName("TxTB - txTbNumerator");
+    final CohortDefinition A = this.txTbNumeratorA();
+    cd.addSearch("A", this.map(A, this.generalParameterMapping));
+
+    cd.addSearch(
+        "started-tb-treatment-previous-period",
+        EptsReportUtils.map(
+            this.getTbDrugTreatmentStartDateWithinReportingDate(),
+            "startDate=${startDate-6m},endDate=${startDate-1d},location=${location}"));
+
+    final CohortDefinition communityDispensation = this.txNewCohortQueries.communityDispensation();
+
+    cd.addSearch(
+        "COMMUNITY-DISPENSATION", this.map(communityDispensation, this.generalParameterMapping));
+
+    cd.setCompositionString(
+        "(A AND COMMUNITY-DISPENSATION) NOT started-tb-treatment-previous-period");
+    this.addGeneralParameters(cd);
+    return cd;
+  }
+
   @DocumentedDefinition(value = "positiveScreening")
   public CohortDefinition positiveScreening() {
     final CompositionCohortDefinition cd = new CompositionCohortDefinition();
@@ -473,11 +500,12 @@ public class TXTBCohortQueries {
   }
 
   @DocumentedDefinition(value = "newOnARTPositiveScreening")
-  public CohortDefinition newOnARTPositiveScreening() {
+  public CohortDefinition newOnARTPositiveScreening(final Boolean isCommunity) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("TxTB - newOnARTPositiveScreening");
     definition.addSearch(
-        "denominator", EptsReportUtils.map(this.getDenominator(), this.generalParameterMapping));
+        "denominator",
+        EptsReportUtils.map(this.getDenominator(isCommunity), this.generalParameterMapping));
     definition.addSearch(
         "new-on-art", EptsReportUtils.map(this.getNewOnArt(), this.generalParameterMapping));
     definition.addSearch(
@@ -489,11 +517,12 @@ public class TXTBCohortQueries {
   }
 
   @DocumentedDefinition(value = "newOnARTNegativeScreening")
-  public CohortDefinition newOnARTNegativeScreening() {
+  public CohortDefinition newOnARTNegativeScreening(final Boolean isCommunity) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("TxTB - newOnARTPositiveScreening");
     definition.addSearch(
-        "denominator", EptsReportUtils.map(this.getDenominator(), this.generalParameterMapping));
+        "denominator",
+        EptsReportUtils.map(this.getDenominator(isCommunity), this.generalParameterMapping));
     definition.addSearch(
         "new-on-art", EptsReportUtils.map(this.getNewOnArt(), this.generalParameterMapping));
     definition.addSearch(
@@ -505,11 +534,12 @@ public class TXTBCohortQueries {
   }
 
   @DocumentedDefinition(value = "previouslyOnARTPositiveScreening")
-  public CohortDefinition previouslyOnARTPositiveScreening() {
+  public CohortDefinition previouslyOnARTPositiveScreening(final Boolean isCommunity) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("TxTB - previouslyOnARTPositiveScreening");
     definition.addSearch(
-        "denominator", EptsReportUtils.map(this.getDenominator(), this.generalParameterMapping));
+        "denominator",
+        EptsReportUtils.map(this.getDenominator(isCommunity), this.generalParameterMapping));
     definition.addSearch(
         "new-on-art", EptsReportUtils.map(this.getNewOnArt(), this.generalParameterMapping));
     definition.addSearch(
@@ -521,11 +551,12 @@ public class TXTBCohortQueries {
   }
 
   @DocumentedDefinition(value = "previouslyOnARTNegativeScreening")
-  public CohortDefinition previouslyOnARTNegativeScreening() {
+  public CohortDefinition previouslyOnARTNegativeScreening(final Boolean isCommunity) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("TxTB - previouslyOnARTNegativeScreening");
     definition.addSearch(
-        "denominator", EptsReportUtils.map(this.getDenominator(), this.generalParameterMapping));
+        "denominator",
+        EptsReportUtils.map(this.getDenominator(isCommunity), this.generalParameterMapping));
     definition.addSearch(
         "new-on-art", EptsReportUtils.map(this.getNewOnArt(), this.generalParameterMapping));
     definition.addSearch(
@@ -552,6 +583,31 @@ public class TXTBCohortQueries {
     return cd;
   }
 
+  @DocumentedDefinition(value = "patientsNewOnARTNumeratorCommunity")
+  public CohortDefinition patientsNewOnARTNumeratorCommunity() {
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    cd.setName("TxTB - patientsNewOnARTNumerator");
+    final CohortDefinition NUM = this.txTbNumerator();
+
+    final CohortDefinition communityDispensation = this.txNewCohortQueries.communityDispensation();
+
+    cd.addSearch("NUM", this.map(NUM, this.generalParameterMapping));
+
+    cd.addSearch(
+        "started-during-reporting-period",
+        EptsReportUtils.map(
+            this.genericCohortQueries.getStartedArtOnPeriod(false, true),
+            "onOrAfter=${startDate},onOrBefore=${endDate},location=${location}"));
+
+    cd.addSearch(
+        "COMMUNITY-DISPENSATION", this.map(communityDispensation, this.generalParameterMapping));
+
+    cd.setCompositionString("NUM AND started-during-reporting-period AND COMMUNITY-DISPENSATION");
+
+    this.addGeneralParameters(cd);
+    return cd;
+  }
+
   @DocumentedDefinition(value = "patientsPreviouslyOnARTNumerator")
   public CohortDefinition patientsPreviouslyOnARTNumerator() {
     final CompositionCohortDefinition cd = new CompositionCohortDefinition();
@@ -568,8 +624,34 @@ public class TXTBCohortQueries {
     return cd;
   }
 
+  @DocumentedDefinition(value = "patientsPreviouslyOnARTNumeratorCommunity")
+  public CohortDefinition patientsPreviouslyOnARTNumeratorCommunity() {
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    cd.setName("TxTB - patientsPreviouslyOnARTNumerator");
+
+    final CohortDefinition NUM = this.txTbNumerator();
+    final CohortDefinition communityDispensation = this.txNewCohortQueries.communityDispensation();
+
+    cd.addSearch("NUM", this.map(NUM, this.generalParameterMapping));
+    cd.addSearch(
+        "started-before-start-reporting-period",
+        EptsReportUtils.map(
+            this.genericCohortQueries.getStartedArtBeforeDate(false),
+            "onOrBefore=${startDate-1d},location=${location}"));
+
+    cd.addSearch(
+        "COMMUNITY-DISPENSATION", this.map(communityDispensation, this.generalParameterMapping));
+
+    cd.setCompositionString(
+        "NUM AND started-before-start-reporting-period AND COMMUNITY-DISPENSATION");
+
+    this.addGeneralParameters(cd);
+
+    return cd;
+  }
+
   @DocumentedDefinition(value = "Denominator")
-  public CohortDefinition getDenominator() {
+  public CohortDefinition getDenominator(final Boolean isCommunity) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     this.addGeneralParameters(definition);
     definition.setName("TxTB - Denominator");
@@ -609,7 +691,7 @@ public class TXTBCohortQueries {
             this.getPatientsWhoAreTransferredOut(),
             "startDate=${startDate},endDate=${endDate},location=${location}"));
 
-    CohortDefinition fichaResumoMasterCard =
+    final CohortDefinition fichaResumoMasterCard =
         this.genericCohortQueries.generalSql(
             "onFichaResumoMasterCard",
             TXTBQueries.dateObsByObsDateTimeClausule(
@@ -617,7 +699,7 @@ public class TXTBCohortQueries {
                 this.hivMetadata.getYesConcept().getConceptId(),
                 this.hivMetadata.getMasterCardEncounterType().getEncounterTypeId()));
 
-    CohortDefinition fichaClinicaMasterCard =
+    final CohortDefinition fichaClinicaMasterCard =
         this.genericCohortQueries.generalSql(
             "fichaClinicaMasterCard",
             TXTBQueries.dateObsByObsValueDateTimeClausule(
@@ -643,6 +725,19 @@ public class TXTBCohortQueries {
         "(art-list AND "
             + " ( tb-screening OR tb-investigation OR started-tb-treatment OR in-tb-program OR ficha-resumo-master-card OR ficha-clinica-master-card OR all-tb-symptoms OR ficha-laboratorio-results)) "
             + " NOT ((transferred-out NOT (started-tb-treatment OR in-tb-program)) OR started-tb-treatment-previous-period OR in-tb-program-previous-period)");
+
+    if (isCommunity) {
+      final CohortDefinition communityDispensation =
+          this.txNewCohortQueries.communityDispensation();
+
+      definition.addSearch(
+          "COMMUNITY-DISPENSATION", this.map(communityDispensation, this.generalParameterMapping));
+
+      definition.setCompositionString(
+          "(art-list AND COMMUNITY-DISPENSATION AND"
+              + " ( tb-screening OR tb-investigation OR started-tb-treatment OR in-tb-program OR ficha-resumo-master-card OR ficha-clinica-master-card OR all-tb-symptoms OR ficha-laboratorio-results)) "
+              + " NOT ((transferred-out NOT (started-tb-treatment OR in-tb-program)) OR started-tb-treatment-previous-period OR in-tb-program-previous-period)");
+    }
 
     return definition;
   }
@@ -740,7 +835,7 @@ public class TXTBCohortQueries {
     this.addGeneralParameters(definition);
     definition.setName("TxTB -specimen-sent");
 
-    CohortDefinition applicationForLaboratoryResearchDataset =
+    final CohortDefinition applicationForLaboratoryResearchDataset =
         this.genericCohortQueries.generalSql(
             "applicationForLaboratoryResearch",
             TXTBQueries.dateObsForEncounterAndQuestionAndAnswers(
@@ -1048,7 +1143,7 @@ public class TXTBCohortQueries {
 
   @DocumentedDefinition(value = "patientsWhoAreTransferredOut")
   public CohortDefinition getPatientsWhoAreTransferredOut() {
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "txTBPatientsWhoAreTransferedOutCalculation",
             Context.getRegisteredComponents(TxTBPatientsWhoAreTransferedOutCalculation.class)
