@@ -26,7 +26,7 @@ public class SetupPatientsEligibleToTPTReport extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ELEGÍVEIS PARA TPT - v1.11.0 ";
+    return "LISTA DE PACIENTES ELEGÍVEIS PARA TPT - v1.12.0 ";
   }
 
   @Override

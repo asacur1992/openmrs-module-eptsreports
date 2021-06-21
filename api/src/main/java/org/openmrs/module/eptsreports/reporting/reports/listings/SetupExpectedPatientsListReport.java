@@ -26,7 +26,7 @@ public class SetupExpectedPatientsListReport extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ESPERADOS - v1.10.0 ";
+    return "LISTA DE PACIENTES ESPERADOS - v1.12.0 ";
   }
 
   @Override
