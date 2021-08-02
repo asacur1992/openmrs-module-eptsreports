@@ -26,6 +26,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.PregnantQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.PeriodType;
 import org.openmrs.module.reporting.cohort.definition.BaseObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -262,7 +263,7 @@ public class TxNewCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findPatientsInComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_NEW)),
             mappings));
 
     txNewCompositionCohort.setCompositionString(
@@ -335,7 +336,7 @@ public class TxNewCohortQueries {
     final CohortDefinition definition =
         this.genericCohorts.generalSql(
             "findPatientsInComunnityDispensation",
-            TxNewQueries.QUERY.findPatientsInComunnityDispensation);
+            TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_CURR));
 
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));

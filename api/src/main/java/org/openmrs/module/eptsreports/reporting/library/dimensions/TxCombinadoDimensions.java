@@ -8,6 +8,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.TxCombinadoQueri
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.TxCombinadoType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.indicator.dimension.CohortDefinitionDimension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ public class TxCombinadoDimensions {
     final String mappings =
         "startDate=${startDate},endDate=${endDate},location=${location},months=${months}";
 
+    if (TxCombinadoType.NUMERATOR.equals(combinadoType)) {
+      this.denominatorPregnant(dimension, mappings);
+      return dimension;
+    }
+
     dimension.addCohortDefinition(
         "pregnant",
         EptsReportUtils.map(
@@ -37,6 +43,40 @@ public class TxCombinadoDimensions {
             mappings));
 
     return dimension;
+  }
+
+  private void denominatorPregnant(
+      final CohortDefinitionDimension dimension, final String mappings) {
+    final CompositionCohortDefinition compositionCohortDefinition =
+        new CompositionCohortDefinition();
+    compositionCohortDefinition.setName("PREGNANT_DENOMINATOR");
+    this.addParameters(compositionCohortDefinition);
+
+    compositionCohortDefinition.addSearch(
+        "DENOMINATOR",
+        EptsReportUtils.map(
+            this.addParameters(
+                this.genericCohortQueries.generalSql(
+                    "Patients with consultation or drug pickup - D",
+                    TxCombinadoQueries.QUERY
+                        .findPatientsWithConsultationOrPickUpDrugsInaSpecifiedPeriod(
+                            TxCombinadoType.DENOMINATOR))),
+            mappings));
+
+    compositionCohortDefinition.addSearch(
+        "PREGNANT",
+        EptsReportUtils.map(
+            this.addParameters(
+                this.genericCohortQueries.generalSql(
+                    "pregnant",
+                    TxCombinadoQueries.QUERY.findPatientsWhoPregnant(TxCombinadoType.DENOMINATOR))),
+            mappings));
+
+    compositionCohortDefinition.setCompositionString("DENOMINATOR AND PREGNANT");
+
+    final CohortDefinition cohortDefinition = compositionCohortDefinition;
+
+    dimension.addCohortDefinition("pregnant", EptsReportUtils.map(cohortDefinition, mappings));
   }
 
   public CohortDefinitionDimension findPatientsWhoAreBreastFeeding(
@@ -49,6 +89,11 @@ public class TxCombinadoDimensions {
     final String mappings =
         "startDate=${startDate},endDate=${endDate},location=${location},months=${months}";
 
+    if (TxCombinadoType.NUMERATOR.equals(combinadoType)) {
+      this.denominatorBreatfeeding(dimension, mappings);
+      return dimension;
+    }
+
     dimension.addCohortDefinition(
         "breastfeeding",
         EptsReportUtils.map(
@@ -59,6 +104,41 @@ public class TxCombinadoDimensions {
             mappings));
 
     return dimension;
+  }
+
+  private void denominatorBreatfeeding(
+      final CohortDefinitionDimension dimension, final String mappings) {
+    final CompositionCohortDefinition compositionCohortDefinition =
+        new CompositionCohortDefinition();
+    compositionCohortDefinition.setName("BREASTFEEDING_NUMERATOR");
+    this.addParameters(compositionCohortDefinition);
+
+    compositionCohortDefinition.addSearch(
+        "DENOMINATOR",
+        EptsReportUtils.map(
+            this.addParameters(
+                this.genericCohortQueries.generalSql(
+                    "Patients with consultation or drug pickup - D",
+                    TxCombinadoQueries.QUERY
+                        .findPatientsWithConsultationOrPickUpDrugsInaSpecifiedPeriod(
+                            TxCombinadoType.DENOMINATOR))),
+            mappings));
+
+    compositionCohortDefinition.addSearch(
+        "BREASTFEEDING",
+        EptsReportUtils.map(
+            this.addParameters(
+                this.genericCohortQueries.generalSql(
+                    "breastfeeding",
+                    TxCombinadoQueries.QUERY.findPatientsWhoAreBreastFeeding(
+                        TxCombinadoType.DENOMINATOR))),
+            mappings));
+
+    compositionCohortDefinition.setCompositionString("DENOMINATOR AND BREASTFEEDING");
+
+    final CohortDefinition cohortDefinition = compositionCohortDefinition;
+
+    dimension.addCohortDefinition("breastfeeding", EptsReportUtils.map(cohortDefinition, mappings));
   }
 
   private void addParameters(final CohortDefinitionDimension dimension) {
