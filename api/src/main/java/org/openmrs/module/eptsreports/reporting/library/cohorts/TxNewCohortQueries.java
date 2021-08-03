@@ -25,6 +25,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.BreastfeedingQue
 import org.openmrs.module.eptsreports.reporting.library.queries.PregnantQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
+import org.openmrs.module.eptsreports.reporting.utils.CommunityType;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.PeriodType;
 import org.openmrs.module.reporting.cohort.definition.BaseObsCohortDefinition;
@@ -272,6 +273,65 @@ public class TxNewCohortQueries {
     return txNewCompositionCohort;
   }
 
+  public CohortDefinition getTxNewCommunityCompositionCohortDispensationType(
+      final String cohortName, CommunityType communityType) {
+
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName(cohortName);
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "START-ART",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoAreNewlyEnrolledOnART",
+                TxNewQueries.QUERY.findPatientsWhoAreNewlyEnrolledOnART),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "TRANSFERED-IN",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod",
+                TxNewQueries.QUERY.findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard",
+                TxNewQueries.QUERY
+                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsInComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_NEW)),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "COMMUNITY-DISPENSATION-TYPE",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsInComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(communityType)),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString(
+        "(START-ART AND COMMUNITY-DISPENSATION AND COMMUNITY-DISPENSATION-TYPE) NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+
+    return txNewCompositionCohort;
+  }
+
   public CohortDefinition findPatientsNewlyEnrolledByAgeInAPeriodExcludingBreastFeedingAndPregnant(
       final AgeRange ageRange) {
 
@@ -337,6 +397,21 @@ public class TxNewCohortQueries {
         this.genericCohorts.generalSql(
             "findPatientsInComunnityDispensation",
             TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_CURR));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
+  }
+
+  // criacao da cohort do tipo de despensa
+  @DocumentedDefinition(value = "findPatientsInComunnityDispensationByType")
+  public CohortDefinition communityDispensationType() {
+    final CohortDefinition definition =
+        this.genericCohorts.generalSql(
+            "findPatientsInComunnityDispensationByType",
+            TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(CommunityType.ALL));
 
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));

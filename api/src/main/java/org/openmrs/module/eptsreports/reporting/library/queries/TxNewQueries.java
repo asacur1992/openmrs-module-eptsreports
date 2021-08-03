@@ -1,6 +1,7 @@
 /** */
 package org.openmrs.module.eptsreports.reporting.library.queries;
 
+import org.openmrs.module.eptsreports.reporting.utils.CommunityType;
 import org.openmrs.module.eptsreports.reporting.utils.PeriodType;
 
 /** @author Stélio Moiane */
@@ -135,6 +136,37 @@ public interface TxNewQueries {
 
       if (PeriodType.TX_NEW.equals(periodType)) {
         query = query.replace("IN (1256,1257)", "= 1256");
+      }
+
+      return query;
+    }
+
+    public static String findPatientsInComunnityDispensationByType(CommunityType comunityType) {
+      String query =
+          "SELECT patient_id FROM \n"
+              + "                   (\n"
+              + "               		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
+              + "               			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
+              + "               			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
+              + "               				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 165174\n"
+              + "               				AND e.encounter_datetime BETWEEN :startDate AND :endDate AND e.location_id = :location\n"
+              + "               					GROUP BY e.patient_id\n"
+              + "                   )last_encounter INNER JOIN (\n"
+              + "               		SELECT o.person_id, o.value_coded, o.obs_datetime FROM obs o\n"
+              + "               			WHERE o.voided = 0 AND o.concept_id = 165174 AND o.value_coded IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265) \n"
+              + "               	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
+              + "               GROUP BY patient_id";
+
+      if (CommunityType.ALL.equals(comunityType)) {
+        return query;
+      }
+
+      if (CommunityType.NORMAL.equals(comunityType)) {
+        query =
+            query.replace(
+                "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                "=165175");
+        return query;
       }
 
       return query;
