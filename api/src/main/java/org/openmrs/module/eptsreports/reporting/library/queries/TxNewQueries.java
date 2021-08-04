@@ -177,6 +177,69 @@ public interface TxNewQueries {
                   "=165176");
           break;
 
+        case FARMAC_PRIVATE_PHARMACY:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165177");
+          break;
+
+        case COMMUNITY_DISPENSE_PROVIDER:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165178");
+          break;
+
+        case COMMUNITY_DISPENSE_APE:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165179");
+          break;
+
+        case DAILY_MOBILE_BRIGADES:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165180");
+          break;
+
+        case NIGHT_MOBILE_BRIGADES:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165181");
+          break;
+
+        case DAILY_MOBILE_CLINICS:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165182");
+          break;
+
+        case NIGHT_MOBILE_CLINICS:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165183");
+          break;
+
+        case MOBILE_BRIGADES:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165264");
+          break;
+
+        case MOBILE_CLINICS:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165265");
+          break;
+
         default:
           query = query + "";
           break;

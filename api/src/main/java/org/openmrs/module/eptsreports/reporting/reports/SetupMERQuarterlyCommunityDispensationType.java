@@ -21,9 +21,9 @@ import java.util.Properties;
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDispensationTypeDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDispensationTypeOUTDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
+import org.openmrs.module.eptsreports.reporting.utils.CommunityType;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -37,7 +37,6 @@ import org.springframework.stereotype.Component;
 public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportManager {
 
   @Autowired private TxNewCommunityDispensationTypeDataset txNewCommunityDataset;
-  @Autowired private TxNewCommunityDispensationTypeOUTDataset txOut;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
@@ -78,10 +77,42 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
     reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 
     reportDefinition.addDataSetDefinition(
-        "N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
+        "A",
+        Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewCommunityAllDataset()));
 
+    this.txNewCommunityDataset.setPrefix("N");
     reportDefinition.addDataSetDefinition(
-        "O", Mapped.mapStraightThrough(this.txOut.constructTxNewDataset()));
+        "N",
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(CommunityType.NORMAL)));
+
+    this.txNewCommunityDataset.setPrefix("O");
+    reportDefinition.addDataSetDefinition(
+        "O",
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
+                CommunityType.OUT_OF_TIME)));
+
+    this.txNewCommunityDataset.setPrefix("F");
+    reportDefinition.addDataSetDefinition(
+        "F",
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
+                CommunityType.FARMAC_PRIVATE_PHARMACY)));
+
+    this.txNewCommunityDataset.setPrefix("CDP");
+    reportDefinition.addDataSetDefinition(
+        "CDP",
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
+                CommunityType.COMMUNITY_DISPENSE_PROVIDER)));
+
+    this.txNewCommunityDataset.setPrefix("APE");
+    reportDefinition.addDataSetDefinition(
+        "APE",
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
+                CommunityType.COMMUNITY_DISPENSE_APE)));
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
