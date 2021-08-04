@@ -21,6 +21,7 @@ import java.util.Properties;
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDispensationTypeDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDispensationTypeOUTDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Component;
 public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportManager {
 
   @Autowired private TxNewCommunityDispensationTypeDataset txNewCommunityDataset;
+  @Autowired private TxNewCommunityDispensationTypeOUTDataset txOut;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
@@ -77,6 +79,9 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
 
     reportDefinition.addDataSetDefinition(
         "N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
+
+    reportDefinition.addDataSetDefinition(
+        "O", Mapped.mapStraightThrough(this.txOut.constructTxNewDataset()));
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(

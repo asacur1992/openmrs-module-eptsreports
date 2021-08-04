@@ -141,7 +141,8 @@ public interface TxNewQueries {
       return query;
     }
 
-    public static String findPatientsInComunnityDispensationByType(CommunityType comunityType) {
+    public static String findPatientsInComunnityDispensationByType(
+        final CommunityType comunityType) {
       String query =
           "SELECT patient_id FROM \n"
               + "                   (\n"
@@ -157,16 +158,28 @@ public interface TxNewQueries {
               + "               	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
               + "               GROUP BY patient_id";
 
-      if (CommunityType.ALL.equals(comunityType)) {
-        return query;
-      }
+      switch (comunityType) {
+        case ALL:
+          query = query + "";
+          break;
 
-      if (CommunityType.NORMAL.equals(comunityType)) {
-        query =
-            query.replace(
-                "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                "=165175");
-        return query;
+        case NORMAL:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165175");
+          break;
+
+        case OUT_OF_TIME:
+          query =
+              query.replace(
+                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
+                  "=165176");
+          break;
+
+        default:
+          query = query + "";
+          break;
       }
 
       return query;

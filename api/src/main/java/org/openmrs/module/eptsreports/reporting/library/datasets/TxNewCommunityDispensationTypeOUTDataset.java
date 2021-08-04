@@ -44,7 +44,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
+public class TxNewCommunityDispensationTypeOUTDataset extends BaseDataSet {
 
   @Autowired private TxNewCohortQueries txNewCohortQueries;
 
@@ -61,28 +61,19 @@ public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
 
-    dataSetDefinition.setName("TX_NEW Data Set");
+    dataSetDefinition.setName("TX_OUT Data Set");
     dataSetDefinition.addParameters(this.getParameters());
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition patientEnrolledInART =
+    final CohortDefinition patientEnrolledInARTOut =
         this.txNewCohortQueries.getTxNewCommunityCompositionCohortDispensationType(
-            "communityPatientEnrolledInART", CommunityType.ALL);
+            "communityPatientEnrolledInARTOut", CommunityType.OUT_OF_TIME);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicator =
+    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorOut =
         this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInART, mappings));
-
-    final CohortDefinition patientEnrolledInARTNormal =
-        this.txNewCohortQueries.getTxNewCommunityCompositionCohortDispensationType(
-            "communityPatientEnrolledInARTNormal", CommunityType.NORMAL);
-
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorNormal =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicatorNormal",
-            EptsReportUtils.map(patientEnrolledInARTNormal, mappings));
+            "patientNewlyEnrolledInHIVIndicatorOut",
+            EptsReportUtils.map(patientEnrolledInARTOut, mappings));
 
     this.addDimensions(
         dataSetDefinition,
@@ -100,16 +91,10 @@ public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
 
-    dataSetDefinition.addColumn(
-        "1All",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
-        "");
-
     this.addColums(
         dataSetDefinition,
         mappings,
-        patientEnrolledInHIVStartedARTIndicatorNormal,
+        patientEnrolledInHIVStartedARTIndicatorOut,
         UNDER_ONE,
         ONE_TO_FOUR,
         FIVE_TO_NINE,
@@ -176,6 +161,6 @@ public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
 
   private String getColumnName(final AgeRange range, final Gender gender) {
 
-    return range.getDesagregationColumnName("N", gender);
+    return range.getDesagregationColumnName("O", gender);
   }
 }
