@@ -40,6 +40,8 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
+  private ReportDefinition reportDefinition = new ReportDefinition();
+
   @Override
   public String getVersion() {
     return "1.0-SNAPSHOT";
@@ -67,7 +69,6 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    final ReportDefinition reportDefinition = new ReportDefinition();
 
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
@@ -80,39 +81,15 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
         "A",
         Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewCommunityAllDataset()));
 
-    this.txNewCommunityDataset.setPrefix("N");
-    reportDefinition.addDataSetDefinition(
-        "N",
-        Mapped.mapStraightThrough(
-            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(CommunityType.NORMAL)));
-
-    this.txNewCommunityDataset.setPrefix("O");
-    reportDefinition.addDataSetDefinition(
-        "O",
-        Mapped.mapStraightThrough(
-            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
-                CommunityType.OUT_OF_TIME)));
-
-    this.txNewCommunityDataset.setPrefix("F");
-    reportDefinition.addDataSetDefinition(
-        "F",
-        Mapped.mapStraightThrough(
-            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
-                CommunityType.FARMAC_PRIVATE_PHARMACY)));
-
-    this.txNewCommunityDataset.setPrefix("CDP");
-    reportDefinition.addDataSetDefinition(
-        "CDP",
-        Mapped.mapStraightThrough(
-            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
-                CommunityType.COMMUNITY_DISPENSE_PROVIDER)));
-
-    this.txNewCommunityDataset.setPrefix("APE");
-    reportDefinition.addDataSetDefinition(
-        "APE",
-        Mapped.mapStraightThrough(
-            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(
-                CommunityType.COMMUNITY_DISPENSE_APE)));
+    txNewComunityType("N", CommunityType.NORMAL);
+    txNewComunityType("O", CommunityType.OUT_OF_TIME);
+    txNewComunityType("F", CommunityType.FARMAC_PRIVATE_PHARMACY);
+    txNewComunityType("CDP", CommunityType.COMMUNITY_DISPENSE_PROVIDER);
+    txNewComunityType("APE", CommunityType.COMMUNITY_DISPENSE_APE);
+    txNewComunityType("BMD", CommunityType.DAILY_MOBILE_BRIGADES);
+    txNewComunityType("BMN", CommunityType.NIGHT_MOBILE_BRIGADES);
+    txNewComunityType("CMD", CommunityType.DAILY_MOBILE_CLINICS);
+    txNewComunityType("CMN", CommunityType.NIGHT_MOBILE_CLINICS);
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
@@ -121,6 +98,14 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
             "endDate=${endDate},location=${location}"));
 
     return reportDefinition;
+  }
+
+  private void txNewComunityType(String prefix, CommunityType type) {
+    this.txNewCommunityDataset.setPrefix(prefix);
+    reportDefinition.addDataSetDefinition(
+        prefix,
+        Mapped.mapStraightThrough(
+            this.txNewCommunityDataset.constructTxNewCommunityTypeDataset(type)));
   }
 
   @Override
