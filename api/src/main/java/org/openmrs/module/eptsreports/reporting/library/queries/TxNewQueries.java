@@ -154,90 +154,33 @@ public interface TxNewQueries {
               + "               					GROUP BY e.patient_id\n"
               + "                   )last_encounter INNER JOIN (\n"
               + "               		SELECT o.person_id, o.value_coded, o.obs_datetime FROM obs o\n"
-              + "               			WHERE o.voided = 0 AND o.concept_id = 165174 AND o.value_coded IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265) \n"
+              + "               			WHERE o.voided = 0 AND o.concept_id = 165174 AND o.value_coded IN (165178,165179,165180,165181,165182,165183) \n"
               + "               	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
               + "               GROUP BY patient_id";
 
       switch (comunityType) {
-        case ALL:
-          query = query + "";
-          break;
-
-        case NORMAL:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165175");
-          break;
-
-        case OUT_OF_TIME:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165176");
-          break;
-
-        case FARMAC_PRIVATE_PHARMACY:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165177");
-          break;
-
         case COMMUNITY_DISPENSE_PROVIDER:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165178");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165178");
           break;
 
         case COMMUNITY_DISPENSE_APE:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165179");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165179");
           break;
 
         case DAILY_MOBILE_BRIGADES:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165180");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165180");
           break;
 
         case NIGHT_MOBILE_BRIGADES:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165181");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165181");
           break;
 
         case DAILY_MOBILE_CLINICS:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165182");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165182");
           break;
 
         case NIGHT_MOBILE_CLINICS:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165183");
-          break;
-
-        case MOBILE_BRIGADES:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165264");
-          break;
-
-        case MOBILE_CLINICS:
-          query =
-              query.replace(
-                  "IN (165175,165176,165177,165178,165179,165180,165181,165182,165264,165265)",
-                  "=165265");
+          query = query.replace("IN (165178,165179,165180,165181,165182,165183)", "=165183");
           break;
 
         default:

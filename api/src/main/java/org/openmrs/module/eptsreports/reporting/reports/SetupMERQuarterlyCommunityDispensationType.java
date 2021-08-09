@@ -81,9 +81,6 @@ public class SetupMERQuarterlyCommunityDispensationType extends EptsDataExportMa
         "A",
         Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewCommunityAllDataset()));
 
-    txNewComunityType("N", CommunityType.NORMAL);
-    txNewComunityType("O", CommunityType.OUT_OF_TIME);
-    txNewComunityType("F", CommunityType.FARMAC_PRIVATE_PHARMACY);
     txNewComunityType("CDP", CommunityType.COMMUNITY_DISPENSE_PROVIDER);
     txNewComunityType("APE", CommunityType.COMMUNITY_DISPENSE_APE);
     txNewComunityType("BMD", CommunityType.DAILY_MOBILE_BRIGADES);
