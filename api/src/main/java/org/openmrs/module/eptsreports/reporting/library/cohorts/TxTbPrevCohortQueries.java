@@ -18,8 +18,10 @@ public class TxTbPrevCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohorts;
 
+  @Autowired private TxNewCohortQueries txNewCohortQueries;
+
   @DocumentedDefinition(value = "getTbPrevTotalDenominator")
-  public CohortDefinition getTbPrevTotalDenominator() {
+  public CohortDefinition getTbPrevTotalDenominator(final Boolean isCommunity) {
     final CompositionCohortDefinition dsd = new CompositionCohortDefinition();
 
     dsd.setName("Patients Who Started TPT");
@@ -54,13 +56,28 @@ public class TxTbPrevCohortQueries {
             this.findPatientsWhoStartedArtAndTpiPreviouslyDessagragation(), mappings));
 
     dsd.setCompositionString(
-        "(STARTED-TPT AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT) ");
+        "(STARTED-TPT AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT)");
+
+    if (isCommunity) {
+      final CohortDefinition communityDispensation =
+          this.txNewCohortQueries.communityDispensation();
+
+      dsd.addSearch(
+          "COMMUNITY-DISPENSATION",
+          EptsReportUtils.map(
+              communityDispensation,
+              EptsReportUtils.removeMissingParameterMappingsFromCohortDefintion(
+                  communityDispensation, mappings)));
+
+      dsd.setCompositionString(
+          "(STARTED-TPT AND COMMUNITY-DISPENSATION AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT)");
+    }
 
     return dsd;
   }
 
   @DocumentedDefinition(value = "getTbPrevTotalNumerator")
-  public CohortDefinition getTbPrevTotalNumerator() {
+  public CohortDefinition getTbPrevTotalNumerator(final Boolean isCommunity) {
     final CompositionCohortDefinition dsd = new CompositionCohortDefinition();
 
     dsd.setName("get Patients Who Completed TPT");
@@ -77,7 +94,9 @@ public class TxTbPrevCohortQueries {
                 TxTbPrevQueriesInterface.QUERY
                     .findPatientsWhoCompletedTbPrevPreventiveTreatmentDuringReportingPeriod),
             mappings));
-    dsd.addSearch("DENOMINATOR", EptsReportUtils.map(this.getTbPrevTotalDenominator(), mappings));
+
+    dsd.addSearch(
+        "DENOMINATOR", EptsReportUtils.map(this.getTbPrevTotalDenominator(isCommunity), mappings));
 
     dsd.setCompositionString("ENDED-TPT AND DENOMINATOR");
 

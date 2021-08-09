@@ -1,10 +1,9 @@
 package org.openmrs.module.eptsreports.reporting.intergrated.library.cohorts;
 
-import static org.junit.Assert.assertFalse;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
@@ -48,26 +47,24 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     parameters.put(new Parameter("endDate", "End Date", Date.class), endDate);
     parameters.put(new Parameter("location", "Location", Location.class), location);
 
-    CohortDefinition patientsWhoExperiencedIIT = txRTTCohortQueries.getPatientsOnRTT();
-    CohortDefinition cohortDefinitionC1 =
-        this.resumoMensalAPSSCohortQueries
-            .findPatientsWhoAreCurrentlyEnrolledOnArtWithPrevencaoPosetivaD1();
+    this.txRTTCohortQueries.getPatientsOnRTT();
+    this.resumoMensalAPSSCohortQueries
+        .findPatientsWhoAreCurrentlyEnrolledOnArtWithPrevencaoPosetivaD1();
 
-    CohortDefinition numeratorPreviosPeriod =
-        this.txTBCohortQueries.getSpecimenSentCohortDefinition();
+    this.txTBCohortQueries.getSpecimenSentCohortDefinition(Boolean.FALSE);
 
-    CohortDefinition txCurrWithTPTCompletation =
+    final CohortDefinition txCurrWithTPTCompletation =
         this.tptCompletationCohortQueries.findTxCurrWithTPTCompletation();
 
     final EvaluatedCohort evaluateCohortDefinition =
         this.evaluateCohortDefinition(txCurrWithTPTCompletation, parameters);
 
     System.out.println(evaluateCohortDefinition.getMemberIds().size());
-    assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
+    Assert.assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
 
     System.out.println("----------------------------------");
 
-    for (int t : evaluateCohortDefinition.getMemberIds()) {
+    for (final int t : evaluateCohortDefinition.getMemberIds()) {
       System.out.println(t);
     }
   }
@@ -92,10 +89,10 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     return "dBernardo1";
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
-    Date sstartDate = DateUtil.getDateTime(2018, 11, 14);
-    Date lastDate = DateUtil.adjustDate(sstartDate, 7, DurationUnit.MONTHS);
+    final Date sstartDate = DateUtil.getDateTime(2018, 11, 14);
+    final Date lastDate = DateUtil.adjustDate(sstartDate, 7, DurationUnit.MONTHS);
 
     System.out.println(lastDate);
   }
