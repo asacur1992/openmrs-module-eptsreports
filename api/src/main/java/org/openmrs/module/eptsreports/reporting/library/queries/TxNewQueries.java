@@ -1,8 +1,6 @@
 /** */
 package org.openmrs.module.eptsreports.reporting.library.queries;
 
-import org.openmrs.module.eptsreports.reporting.utils.PeriodType;
-
 /** @author Stélio Moiane */
 public interface TxNewQueries {
 
@@ -117,27 +115,93 @@ public interface TxNewQueries {
             + "art_start GROUP BY patient_id ) tx_new "
             + "INNER JOIN person pe ON tx_new.patient_id=pe.person_id WHERE TIMESTAMPDIFF(year,birthdate,art_start_date) BETWEEN %d AND %d AND birthdate IS NOT NULL";
 
-    public static final String findPatientsInComunnityDispensation(final PeriodType periodType) {
-      String query =
-          "SELECT patient_id FROM "
-              + "    (\n"
-              + "		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
-              + "			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
-              + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
-              + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 23731\n"
-              + "				AND e.encounter_datetime BETWEEN :startDate AND :endDate AND e.location_id = :location\n"
-              + "					GROUP BY e.patient_id\n"
-              + "    )last_encounter INNER JOIN (\n"
-              + "		SELECT o.person_id, o.value_coded, o.obs_datetime FROM obs o\n"
-              + "			WHERE o.voided = 0 AND o.concept_id = 23731 AND o.value_coded IN (1256,1257)\n"
-              + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
-              + "GROUP BY patient_id";
+    public static final String findPatientsWhoStartedARTWithComunnityDispensation =
+        "SELECT tx_new.patient_id FROM \n"
+            + "(\n"
+            + "	SELECT art_start.patient_id, MIN(art_start_date) art_start_date FROM \n"
+            + "	(\n"
+            + "		SELECT p.patient_id, MIN(e.encounter_datetime) art_start_date FROM patient p \n"
+            + "			INNER JOIN encounter e ON p.patient_id=e.patient_id \n"
+            + "            INNER JOIN obs o ON o.encounter_id=e.encounter_id \n"
+            + "            WHERE e.voided=0 AND o.voided=0 AND p.voided=0 AND e.encounter_type in (18,6,9) \n"
+            + "            AND o.concept_id=1255 AND o.value_coded=1256 AND e.encounter_datetime <= :endDate AND e.location_id = :location GROUP BY p.patient_id \n"
+            + "        \n"
+            + "		UNION \n"
+            + "             \n"
+            + "		SELECT p.patient_id, MIN(value_datetime) art_start_date FROM patient p INNER JOIN encounter e ON p.patient_id=e.patient_id \n"
+            + "        	INNER JOIN obs o ON e.encounter_id=o.encounter_id WHERE p.voided=0 AND e.voided=0 AND o.voided=0 AND e.encounter_type IN (18,6,9,53) \n"
+            + "            AND o.concept_id=1190 AND o.value_datetime is NOT NULL AND o.value_datetime <= :endDate AND e.location_id = :location GROUP BY p.patient_id \n"
+            + "        \n"
+            + "		UNION \n"
+            + "             \n"
+            + "		SELECT pg.patient_id, MIN(date_enrolled) art_start_date FROM patient p \n"
+            + "        	INNER JOIN patient_program pg ON p.patient_id=pg.patient_id \n"
+            + "            WHERE pg.voided=0 AND p.voided=0 AND program_id=2 AND date_enrolled <= :endDate AND location_id = :location GROUP BY pg.patient_id \n"
+            + "             \n"
+            + "		UNION \n"
+            + "		\n"
+            + "		SELECT e.patient_id, MIN(e.encounter_datetime) AS art_start_date FROM patient p \n"
+            + "			INNER JOIN encounter e ON p.patient_id=e.patient_id \n"
+            + "            WHERE p.voided=0 AND e.encounter_type=18 AND e.voided=0 AND e.encounter_datetime <= :endDate AND e.location_id = :location GROUP BY p.patient_id \n"
+            + "    	\n"
+            + "		UNION \n"
+            + "		\n"
+            + "		SELECT p.patient_id, MIN(value_datetime) art_start_date FROM patient p \n"
+            + "			INNER JOIN encounter e ON p.patient_id=e.patient_id \n"
+            + "            INNER JOIN obs o ON e.encounter_id=o.encounter_id \n"
+            + "            WHERE p.voided=0 AND e.voided=0 AND o.voided=0 AND e.encounter_type=52 \n"
+            + "            AND o.concept_id=23866 AND o.value_datetime is NOT NULL AND o.value_datetime <= :endDate AND e.location_id = :location GROUP BY p.patient_id\n"
+            + "	) art_start GROUP BY patient_id \n"
+            + ") tx_new \n"
+            + "INNER JOIN\n"
+            + "(\n"
+            + "	SELECT min_community_dispensation.patient_id, MIN(min_date) start_date FROM \n"
+            + "	( \n"
+            + "		SELECT e.patient_id, MIN(e.encounter_datetime) min_date FROM patient p \n"
+            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id \n"
+            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id \n"
+            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 23731 \n"
+            + "				AND e.encounter_type = 6 AND o.value_coded = 1256 \n"
+            + "				AND e.encounter_datetime <= :endDate AND e.location_id = :location \n"
+            + "					GROUP BY e.patient_id \n"
+            + "		UNION \n"
+            + "			\n"
+            + "		SELECT e.patient_id, MIN(e.encounter_datetime) min_date FROM patient p \n"
+            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id \n"
+            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id \n"
+            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 165174 \n"
+            + "				AND e.encounter_type = 18 AND o.value_coded IN (165183,165182,165181,165180,165179,165178)  \n"
+            + "				AND e.encounter_datetime <= :endDate AND e.location_id = :location \n"
+            + "					GROUP BY e.patient_id \n"
+            + "						\n"
+            + "	)min_community_dispensation GROUP BY patient_id \n"
+            + ")community_dispensation_start ON community_dispensation_start.patient_id = tx_new.patient_id\n"
+            + "	WHERE art_start_date = start_date\n"
+            + "	AND art_start_date BETWEEN :startDate AND :endDate";
 
-      if (PeriodType.TX_NEW.equals(periodType)) {
-        query = query.replace("IN (1256,1257)", "= 1256");
-      }
-
-      return query;
-    }
+    public static final String findPatientsInComunnityDispensation =
+        "SELECT patient_id FROM\n"
+            + "(	\n"
+            + "	SELECT patient_id, MAX(max_date) max_date FROM\n"
+            + "	(\n"
+            + "		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
+            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
+            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
+            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 23731\n"
+            + "				AND e.encounter_type = 6 AND o.value_coded IN (1256,1257) \n"
+            + "				AND e.encounter_datetime <= :endDate AND e.location_id = :location\n"
+            + "					GROUP BY e.patient_id\n"
+            + "		UNION\n"
+            + "		\n"
+            + "		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
+            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
+            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
+            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 165174\n"
+            + "				AND e.encounter_type = 18 AND o.value_coded IN (165183,165182,165181,165180,165179,165178) \n"
+            + "				AND e.encounter_datetime <= :endDate AND e.location_id = :location\n"
+            + "					GROUP BY e.patient_id\n"
+            + "					\n"
+            + "	)max_community_dispensation GROUP BY patient_id\n"
+            + ")community_dispensation";
   }
 }

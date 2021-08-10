@@ -24,9 +24,9 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
   @Test
   public void shouldFindPatientsNewlyEnrolledInART() throws EvaluationException {
 
-    final Location location = Context.getLocationService().getLocation(270);
+    final Location location = Context.getLocationService().getLocation(269);
     final Date startDate = DateUtil.getDateTime(2021, 03, 21);
-    final Date endDate = DateUtil.getDateTime(2021, 04, 20);
+    final Date endDate = DateUtil.getDateTime(2021, 06, 20);
 
     final Map<Parameter, Object> parameters = new HashMap<>();
 
