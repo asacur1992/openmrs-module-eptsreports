@@ -264,9 +264,8 @@ public class TxNewCohortQueries {
     return txNewCompositionCohort;
   }
 
-  public CohortDefinition getTxNewCommunityCompositionCohortDispensationType(
-      final String cohortName, CommunityType communityType) {
-
+  public CohortDefinition getTxNewCommunityCompositionTypeCohort(
+      final String cohortName, final CommunityType ct) {
     final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
 
     txNewCompositionCohort.setName(cohortName);
@@ -277,11 +276,19 @@ public class TxNewCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     txNewCompositionCohort.addSearch(
-        "START-ART",
+        "COMMUNITY-DISPENSATION-TYPE",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findPatientsWhoAreNewlyEnrolledOnART",
-                TxNewQueries.QUERY.findPatientsWhoAreNewlyEnrolledOnART),
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTWithComunnityDispensation),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "START-ART-WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(ct)),
             mappings));
 
     txNewCompositionCohort.addSearch(
@@ -301,24 +308,8 @@ public class TxNewCohortQueries {
                     .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
             mappings));
 
-    txNewCompositionCohort.addSearch(
-        "COMMUNITY-DISPENSATION",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "findPatientsInComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_NEW)),
-            mappings));
-
-    txNewCompositionCohort.addSearch(
-        "COMMUNITY-DISPENSATION-TYPE",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "findPatientsInComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(communityType)),
-            mappings));
-
     txNewCompositionCohort.setCompositionString(
-        "(START-ART AND COMMUNITY-DISPENSATION AND COMMUNITY-DISPENSATION-TYPE) NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+        "(COMMUNITY-DISPENSATION-TYPE AND START-ART-WITH-COMMUNITY-DISPENSATION) NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
 
     return txNewCompositionCohort;
   }
@@ -388,21 +379,6 @@ public class TxNewCohortQueries {
         this.genericCohorts.generalSql(
             "findPatientsInComunnityDispensation",
             TxNewQueries.QUERY.findPatientsInComunnityDispensation);
-
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "Location", Location.class));
-
-    return definition;
-  }
-
-  // criacao da cohort do tipo de despensa
-  @DocumentedDefinition(value = "findPatientsInComunnityDispensationByType")
-  public CohortDefinition communityDispensationType() {
-    final CohortDefinition definition =
-        this.genericCohorts.generalSql(
-            "findPatientsInComunnityDispensationByType",
-            TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(CommunityType.ALL));
 
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
