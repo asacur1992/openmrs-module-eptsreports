@@ -86,60 +86,60 @@ public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
             EptsReportUtils.map(patientEnrolledInART, mappings));
 
     /*
-    final CohortDefinition patientEnrolledInARTAPE =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.COMMUNITY_DISPENSE_APE);
+        final CohortDefinition patientEnrolledInARTAPE =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.COMMUNITY_DISPENSE_APE);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorAPE =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTAPE, mappings));
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorAPE =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTAPE, mappings));
 
-    final CohortDefinition patientEnrolledInARTProvider =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.COMMUNITY_DISPENSE_PROVIDER);
+        final CohortDefinition patientEnrolledInARTProvider =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.COMMUNITY_DISPENSE_PROVIDER);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorProvider =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTProvider, mappings));
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorProvider =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTProvider, mappings));
 
-    final CohortDefinition patientEnrolledInARTDB =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.DAILY_MOBILE_BRIGADES);
+        final CohortDefinition patientEnrolledInARTDB =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.DAILY_MOBILE_BRIGADES);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorDB =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTDB, mappings));
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorDB =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTDB, mappings));
 
-    final CohortDefinition patientEnrolledInARTDM =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.DAILY_MOBILE_CLINICS);
+        final CohortDefinition patientEnrolledInARTDM =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.DAILY_MOBILE_CLINICS);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorDM =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTDM, mappings));
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorDM =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTDM, mappings));
 
-    final CohortDefinition patientEnrolledInARTNB =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.NIGHT_MOBILE_BRIGADES);
+        final CohortDefinition patientEnrolledInARTNB =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.NIGHT_MOBILE_BRIGADES);
 
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorNB =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTNB, mappings));
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorNB =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTNB, mappings));
 
-    final CohortDefinition patientEnrolledInARTNT =
-        this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
-            "communityPatientEnrolledInART", CommunityType.NIGHT_MOBILE_CLINICS);
-  
-    final CohortIndicator patientEnrolledInHIVStartedARTIndicatorNT =
-        this.eptsGeneralIndicator.getIndicator(
-            "patientNewlyEnrolledInHIVIndicator",
-            EptsReportUtils.map(patientEnrolledInARTNT, mappings));
-*/
+        final CohortDefinition patientEnrolledInARTNT =
+            this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
+                "communityPatientEnrolledInART", CommunityType.NIGHT_MOBILE_CLINICS);
+
+        final CohortIndicator patientEnrolledInHIVStartedARTIndicatorNT =
+            this.eptsGeneralIndicator.getIndicator(
+                "patientNewlyEnrolledInHIVIndicator",
+                EptsReportUtils.map(patientEnrolledInARTNT, mappings));
+    */
     final CohortDefinition patientEnrolledInARTBM =
         this.txNewCohortQueries.getTxNewCommunityCompositionTypeCohort(
             "communityPatientEnrolledInART", CommunityType.MOBILE_BRIGADES);
@@ -165,42 +165,42 @@ public class TxNewCommunityDispensationTypeDataset extends BaseDataSet {
         "");
 
     /*
-    dataSetDefinition.addColumn(
-        "1AllPE",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorAPE, mappings),
-        "");
+        dataSetDefinition.addColumn(
+            "1AllPE",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorAPE, mappings),
+            "");
 
-    dataSetDefinition.addColumn(
-        "1AllProvider",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorProvider, mappings),
-        "");
+        dataSetDefinition.addColumn(
+            "1AllProvider",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorProvider, mappings),
+            "");
 
-    dataSetDefinition.addColumn(
-        "1AllDB",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorDB, mappings),
-        "");
+        dataSetDefinition.addColumn(
+            "1AllDB",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorDB, mappings),
+            "");
 
-    dataSetDefinition.addColumn(
-        "1AllDM",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorDM, mappings),
-        "");
+        dataSetDefinition.addColumn(
+            "1AllDM",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorDM, mappings),
+            "");
 
-    dataSetDefinition.addColumn(
-        "1AllNB",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorNB, mappings),
-        "");
+        dataSetDefinition.addColumn(
+            "1AllNB",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorNB, mappings),
+            "");
 
-    dataSetDefinition.addColumn(
-        "1AllPEX",
-        "TX_NEW: New on ART Community",
-        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorNT, mappings),
-        "");
-*/
+        dataSetDefinition.addColumn(
+            "1AllPEX",
+            "TX_NEW: New on ART Community",
+            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicatorNT, mappings),
+            "");
+    */
     dataSetDefinition.addColumn(
         "1AllBM",
         "TX_NEW: Community Mobile Brigades",

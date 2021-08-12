@@ -31,6 +31,16 @@ public class TxRetDimensionCohort {
         EptsReportUtils.map(
             txRetCohortQueries.oneTo19WhoStartedTargetAtARTInitiation(),
             "endDate=${endDate},location=${location}"));
+    dim.addCohortDefinition(
+        "0104",
+        EptsReportUtils.map(
+            txRetCohortQueries.oneTo4WhoStartedTargetAtARTInitiation(),
+            "endDate=${endDate},location=${location}"));
+    dim.addCohortDefinition(
+        "0509",
+        EptsReportUtils.map(
+            txRetCohortQueries.fiveTo19WhoStartedTargetAtARTInitiation(),
+            "endDate=${endDate},location=${location}"));
     return dim;
   }
 

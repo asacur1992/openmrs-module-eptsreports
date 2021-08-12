@@ -111,6 +111,8 @@ public class TxRetDataset extends BaseDataSet {
     return Arrays.asList(
         new ColumnParameters("<1", "Children <1 anos", "0009=0001", "0001"),
         new ColumnParameters("1–9", "Children 1-9 anos", "0009=0109", "0109"),
+        new ColumnParameters("1–4", "Children 1-4 anos", "0009=0104", "0104"),
+        new ColumnParameters("5–9", "Children 5-9 anos", "0009=0509", "0509"),
         new ColumnParameters("pregnant", "Pregnant", "pregnantOrBreastFeeding=GRAVIDAS", "PREG"),
         new ColumnParameters(
             "pregnant24", "Pregnant", "pregnantOrBreastFeeding24=GRAVIDAS", "PREG24"),

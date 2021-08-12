@@ -121,6 +121,24 @@ public class TXRetCohortQueries {
             TXRetQueries.oneTo19WhoStartedTargetAtARTInitiation()));
   }
 
+  // ICAP
+  /** map endDate, location rightly when using this */
+  public CohortDefinition oneTo4WhoStartedTargetAtARTInitiation() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "oneTo4WhoStartedTargetAtARTInitiation",
+            TXRetQueries.oneTo4WhoStartedTargetAtARTInitiation()));
+  }
+
+  // ICAP
+  /** map endDate, location rightly when using this */
+  public CohortDefinition fiveTo19WhoStartedTargetAtARTInitiation() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "fiveTo19WhoStartedTargetAtARTInitiation",
+            TXRetQueries.fiveTo19WhoStartedTargetAtARTInitiation()));
+  }
+
   /** map startDate, endDate, location rightly when using this */
   public CohortDefinition pregnancyEnrolledInART() {
     return cohortDefinition(
