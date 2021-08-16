@@ -154,6 +154,25 @@ public class TxRetDataset extends BaseDataSet {
             "40-49Females", "40-49 anos - Feminino", "onArtByGenderAndAge=40-49F", "4049F"),
         new ColumnParameters("50+Males", "50+ anos - Masculino", "onArtByGenderAndAge=50+M", "50M"),
         new ColumnParameters(
-            "50+Females", "50+ anos - Feminino", "onArtByGenderAndAge=50+F", "50F"));
+            "50+Females", "50+ anos - Feminino", "onArtByGenderAndAge=50+F", "50F"),
+
+        // ICAP
+        new ColumnParameters("1Males", "1- anos - Masculino", "onArtByGenderAndAge=1-M", "1M"),
+        new ColumnParameters("1Females", "1- anos - Feminino", "onArtByGenderAndAge=1-F", "1F"),
+        new ColumnParameters("1-4Males", "1-4 anos - Masculino", "onArtByGenderAndAge=1-4M", "14M"),
+        new ColumnParameters(
+            "1-4Females", "1-4 anos - Feminino", "onArtByGenderAndAge=1-4F", "14F"),
+        new ColumnParameters("5-9Males", "5-9 anos - Masculino", "onArtByGenderAndAge=5-9M", "59M"),
+        new ColumnParameters(
+            "5-9Females", "5-9 anos - Feminino", "onArtByGenderAndAge=5-9F", "59F"),
+        new ColumnParameters(
+            "40-44Males", "40-44 anos - Masculino", "onArtByGenderAndAge=40-44M", "4044M"),
+        new ColumnParameters(
+            "40-44Females", "40-44 anos - Feminino", "onArtByGenderAndAge=40-44F", "4044F"));
+    /*
+    new ColumnParameters(
+        "45-49Males", "45-49 anos - Masculino", "onArtByGenderAndAge=45-49M", "4549M"),
+    new ColumnParameters(
+        "45-49Females", "45-49 anos - Feminino", "onArtByGenderAndAge=45-49F", "4549F")); */
   }
 }

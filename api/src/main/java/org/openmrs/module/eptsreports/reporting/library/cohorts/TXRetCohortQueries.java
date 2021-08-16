@@ -319,4 +319,67 @@ public class TXRetCohortQueries {
             "infantsWhoGaveAwardsTwoYearsBehindReferenceDate",
             TXRetQueries.infantsWhoGaveAwardsTwoYearsBehindReferenceDate()));
   }
+
+  // ICAP
+
+  /** map endDate, location rightly when using this */
+  public CohortDefinition menOnArtUnder1() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("menOnArtUnder1", TXRetQueries.genderOnArtUnder1("M")));
+  }
+
+  /** map endDate, location rightly when using this */
+  public CohortDefinition womenOnArtUnder1() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("womenOnArtUnder1", TXRetQueries.genderOnArtUnder1("F")));
+  }
+
+  public CohortDefinition menOnArt1To4() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("menOnArt1To4", TXRetQueries.genderOnArtXToY("M", 1, 4)));
+  }
+
+  /** map endDate, location rightly when using this */
+  public CohortDefinition womenOnArt1To4() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("womenOnArt1To4", TXRetQueries.genderOnArtXToY("F", 1, 4)));
+  }
+
+  public CohortDefinition menOnArt5To9() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("menOnArt5To9", TXRetQueries.genderOnArtXToY("M", 5, 9)));
+  }
+
+  /** map endDate, location rightly when using this */
+  public CohortDefinition womenOnArt5To9() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql("womenOnArt5To9", TXRetQueries.genderOnArtXToY("F", 5, 9)));
+  }
+
+  public CohortDefinition menOnArt40To44() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "menOnArt40To44", TXRetQueries.genderOnArtXToY("M", 40, 44)));
+  }
+
+  public CohortDefinition womenOnArt40To44() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "womenOnArt40To44", TXRetQueries.genderOnArtXToY("F", 40, 44)));
+  }
+  /*
+  public CohortDefinition menOnArt45To49() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "menOnArt45To49", TXRetQueries.genderOnArtXToY("M", 45, 49)));
+  }
+
+
+  public CohortDefinition womenOnArt45To49() {
+    return cohortDefinition(
+        genericCohortQueries.generalSql(
+            "womenOnArt45To49", TXRetQueries.genderOnArtXToY("F", 45, 49)));
+  }
+
+  */
 }
