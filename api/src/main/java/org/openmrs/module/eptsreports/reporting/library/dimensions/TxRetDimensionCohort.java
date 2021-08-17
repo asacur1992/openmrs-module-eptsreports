@@ -118,12 +118,12 @@ public class TxRetDimensionCohort {
         "40-44M", EptsReportUtils.map(txRetCohortQueries.menOnArt40To44(), mappings));
     dim.addCohortDefinition(
         "40-44F", EptsReportUtils.map(txRetCohortQueries.womenOnArt40To44(), mappings));
-    /*
-        dim.addCohortDefinition(
-            "45-49M", EptsReportUtils.map(txRetCohortQueries.menOnArt45To49(), mappings));
-        dim.addCohortDefinition(
-            "45-49M", EptsReportUtils.map(txRetCohortQueries.womenOnArt45To49(), mappings));
-    */
+
+    dim.addCohortDefinition(
+        "45-49M", EptsReportUtils.map(txRetCohortQueries.menOnArt45To49(), mappings));
+    dim.addCohortDefinition(
+        "45-49F", EptsReportUtils.map(txRetCohortQueries.womenOnArt45To49(), mappings));
+
     return dim;
   }
 }

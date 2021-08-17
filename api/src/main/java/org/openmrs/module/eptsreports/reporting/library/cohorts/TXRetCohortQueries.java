@@ -367,19 +367,16 @@ public class TXRetCohortQueries {
         genericCohortQueries.generalSql(
             "womenOnArt40To44", TXRetQueries.genderOnArtXToY("F", 40, 44)));
   }
-  /*
+
   public CohortDefinition menOnArt45To49() {
     return cohortDefinition(
         genericCohortQueries.generalSql(
             "menOnArt45To49", TXRetQueries.genderOnArtXToY("M", 45, 49)));
   }
 
-
   public CohortDefinition womenOnArt45To49() {
     return cohortDefinition(
         genericCohortQueries.generalSql(
             "womenOnArt45To49", TXRetQueries.genderOnArtXToY("F", 45, 49)));
   }
-
-  */
 }

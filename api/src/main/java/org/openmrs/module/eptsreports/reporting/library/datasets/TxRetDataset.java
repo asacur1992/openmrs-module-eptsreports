@@ -168,11 +168,10 @@ public class TxRetDataset extends BaseDataSet {
         new ColumnParameters(
             "40-44Males", "40-44 anos - Masculino", "onArtByGenderAndAge=40-44M", "4044M"),
         new ColumnParameters(
-            "40-44Females", "40-44 anos - Feminino", "onArtByGenderAndAge=40-44F", "4044F"));
-    /*
-    new ColumnParameters(
-        "45-49Males", "45-49 anos - Masculino", "onArtByGenderAndAge=45-49M", "4549M"),
-    new ColumnParameters(
-        "45-49Females", "45-49 anos - Feminino", "onArtByGenderAndAge=45-49F", "4549F")); */
+            "40-44Females", "40-44 anos - Feminino", "onArtByGenderAndAge=40-44F", "4044F"),
+        new ColumnParameters(
+            "45-49Males", "45-49 anos - Masculino", "onArtByGenderAndAge=45-49M", "4549M"),
+        new ColumnParameters(
+            "45-49Females", "45-49 anos - Feminino", "onArtByGenderAndAge=45-49F", "4549F"));
   }
 }
