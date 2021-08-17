@@ -127,11 +127,11 @@ public class TxCombinadoCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
   @Override
   protected String username() {
-    return "";
+    return "admin";
   }
 
   @Override
   protected String password() {
-    return "";
+    return "Ic@pSIS2021";
   }
 }
