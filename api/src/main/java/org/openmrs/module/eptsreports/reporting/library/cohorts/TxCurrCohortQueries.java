@@ -399,7 +399,6 @@ public class TxCurrCohortQueries {
 
     return definition;
   }
-  
 
   @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
   public CohortDefinition findCommunityPatientsWhoAreActiveOnART() {

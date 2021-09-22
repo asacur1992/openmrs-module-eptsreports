@@ -49,11 +49,22 @@ public class TxCurrRegimesDataset extends BaseDataSet {
 
   @Autowired private EptsCommonDimension eptsCommonDimension;
 
+  private String prefix;
+
+  public void setPrefix(String prefix) {
+    this.prefix = prefix;
+  }
+
+  public String getPrefix() {
+    return prefix;
+  }
+
   @Autowired
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  public CohortIndicatorDataSetDefinition constructTxCurrDataset(final boolean currentSpec) {
+  public CohortIndicatorDataSetDefinition constructTxCurrDataset(
+      final boolean currentSpec, RegeminType type) {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
@@ -63,7 +74,7 @@ public class TxCurrRegimesDataset extends BaseDataSet {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     final CohortDefinition txCurrCompositionCohort =
-        this.txCurrCohortQueries.findDTGRegimeOnPatientsWhoAreActiveOnART(RegeminType.TDF_3TC_DTG);
+        this.txCurrCohortQueries.findDTGRegimeOnPatientsWhoAreActiveOnART(type);
 
     final CohortIndicator txCurrIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -115,29 +126,6 @@ public class TxCurrRegimesDataset extends BaseDataSet {
     return dataSetDefinition;
   }
 
-  private void addDimensions(
-      final CohortIndicatorDataSetDefinition cohortIndicatorDataSetDefinition,
-      final String mappings,
-      final AgeRange... ranges) {
-
-    for (final AgeRange range : ranges) {
-
-      cohortIndicatorDataSetDefinition.addDimension(
-          this.getName(Gender.MALE, range),
-          EptsReportUtils.map(
-              this.eptsCommonDimension.findPatientsByGenderAndRange(
-                  this.getName(Gender.MALE, range), range, Gender.MALE),
-              mappings));
-
-      cohortIndicatorDataSetDefinition.addDimension(
-          this.getName(Gender.FEMALE, range),
-          EptsReportUtils.map(
-              this.eptsCommonDimension.findPatientsByGenderAndRange(
-                  this.getName(Gender.FEMALE, range), range, Gender.FEMALE),
-              mappings));
-    }
-  }
-
   private void addColums(
       final CohortIndicatorDataSetDefinition dataSetDefinition,
       final String mappings,
@@ -146,8 +134,8 @@ public class TxCurrRegimesDataset extends BaseDataSet {
 
     for (final AgeRange range : rannges) {
 
-      final String maleName = this.getName(Gender.MALE, range);
-      final String femaleName = this.getName(Gender.FEMALE, range);
+      final String maleName = this.getColumnName(range, Gender.MALE);
+      final String femaleName = this.getColumnName(range, Gender.FEMALE);
 
       dataSetDefinition.addColumn(
           maleName,
@@ -163,13 +151,31 @@ public class TxCurrRegimesDataset extends BaseDataSet {
     }
   }
 
-  private String getName(final Gender gender, final AgeRange ageRange) {
-    String name = "C-males-" + ageRange.getName() + "" + gender.getName();
+  private void addDimensions(
+      final CohortIndicatorDataSetDefinition cohortIndicatorDataSetDefinition,
+      final String mappings,
+      final AgeRange... ranges) {
 
-    if (gender.equals(Gender.FEMALE)) {
-      name = "C-females-" + ageRange.getName() + "" + gender.getName();
+    for (final AgeRange range : ranges) {
+
+      cohortIndicatorDataSetDefinition.addDimension(
+          this.getColumnName(range, Gender.MALE),
+          EptsReportUtils.map(
+              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
+                  this.getColumnName(range, Gender.MALE), range, Gender.MALE.getName()),
+              mappings));
+
+      cohortIndicatorDataSetDefinition.addDimension(
+          this.getColumnName(range, Gender.FEMALE),
+          EptsReportUtils.map(
+              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
+                  this.getColumnName(range, Gender.FEMALE), range, Gender.FEMALE.getName()),
+              mappings));
     }
+  }
 
-    return name;
+  private String getColumnName(final AgeRange range, final Gender gender) {
+
+    return range.getDesagregationColumnName(prefix, gender);
   }
 }

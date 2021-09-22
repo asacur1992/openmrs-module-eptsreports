@@ -24,6 +24,7 @@ import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrRegimesDa
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.RegeminType;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -38,6 +39,8 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
   @Autowired private TxCurrRegimesDataset txCurrDataset;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
+
+  private ReportDefinition reportDefinition = new ReportDefinition();
 
   @Override
   public String getVersion() {
@@ -66,7 +69,6 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    final ReportDefinition reportDefinition = new ReportDefinition();
 
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
@@ -75,8 +77,11 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
     reportDefinition.addParameter(new Parameter("endDate", "Data Final", Date.class));
     reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 
-    reportDefinition.addDataSetDefinition(
-        "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true)));
+    // reportDefinition.addDataSetDefinition(
+    //   "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true,
+    // RegeminType.TDF_3TC_DTG)));
+
+    txCurrRegeminsType("C", RegeminType.TDF_3TC_DTG);
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
@@ -85,6 +90,12 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
             "endDate=${endDate},location=${location}"));
 
     return reportDefinition;
+  }
+
+  private void txCurrRegeminsType(String prefix, RegeminType type) {
+    this.txCurrDataset.setPrefix(prefix);
+    reportDefinition.addDataSetDefinition(
+        prefix, Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true, type)));
   }
 
   @Override
