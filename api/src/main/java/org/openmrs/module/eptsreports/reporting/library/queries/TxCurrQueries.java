@@ -1,6 +1,8 @@
 /** */
 package org.openmrs.module.eptsreports.reporting.library.queries;
 
+import org.openmrs.module.eptsreports.reporting.utils.RegeminType;
+
 /** @author Stélio Moiane */
 public interface TxCurrQueries {
 
@@ -210,5 +212,78 @@ public interface TxCurrQueries {
             + "			WHERE o.voided = 0 AND o.concept_id = 23731 AND o.value_coded IN (1256,1257)\n"
             + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
             + "GROUP BY patient_id";
+
+    public static final String findOnARTRegimens(final RegeminType regimenType) {
+
+      String query =
+          "SELECT  fila_periodo.patient_id FROM\n"
+              + "(Select p.patient_id,max(e.encounter_datetime) as datas_fila										\n"
+              + "	from 	patient p																				\n"
+              + "			inner join encounter e on e.patient_id = p.patient_id\n"
+              + "			inner join obs o on o.encounter_id = e.encounter_id\n"
+              + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
+              + "  o.voided=0 and o.concept_id=1088 and\n"
+              + "			e.location_id= :location and e.encounter_datetime between :startDate and :endDate  		\n"
+              + "	group by p.patient_id ) fila_periodo\n"
+              + " \n"
+              + "INNER JOIN\n"
+              + " \n"
+              + "    (Select p.patient_id,max(e.encounter_datetime) 	as datas_prox				\n"
+              + "	from 	patient p																\n"
+              + "			inner join encounter e on e.patient_id = p.patient_id\n"
+              + "			inner join obs o on o.encounter_id = e.encounter_id\n"
+              + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
+              + "  o.voided=0 and o.concept_id=1088 AND o.value_coded =23784  and\n"
+              + "			e.location_id= :location and e.encounter_datetime between :startDate	and :endDate  	\n"
+              + "	group by p.patient_id) prox_levantamento\n"
+              + "    \n"
+              + "	ON prox_levantamento.patient_id= fila_periodo.patient_id  \n"
+              + "    WHERE fila_periodo.datas_fila = prox_levantamento.datas_prox\n"
+              + "    \n"
+              + "    UNION\n"
+              + "    \n"
+              + "SELECT person_id FROM obs obs_final \n"
+              + "INNER JOIN\n"
+              + " (SELECT FILA.codigo_encontro as codigo FROM (\n"
+              + "\n"
+              + "Select p.patient_id, max(encounter_datetime), e.encounter_id as codigo_encontro\n"
+              + "	from 	patient p													\n"
+              + "			inner join encounter e on e.patient_id = p.patient_id\n"
+              + "			inner join obs o on o.encounter_id = e.encounter_id\n"
+              + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
+              + "  o.voided=0 and o.concept_id=5096  and\n"
+              + "			e.location_id= :location AND value_datetime between :startDate AND :endDate AND e.encounter_datetime not between :startDate AND :endDate  																				\n"
+              + "	group by p.patient_id) FILA\n"
+              + "    \n"
+              + "LEFT JOIN\n"
+              + "(Select p.patient_id, max(encounter_datetime)							\n"
+              + "	from 	patient p												\n"
+              + "			inner join encounter e on e.patient_id = p.patient_id\n"
+              + "			inner join obs o on o.encounter_id = e.encounter_id\n"
+              + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
+              + "  o.voided=0 and o.concept_id=1088 and \n"
+              + "			e.location_id= :location and e.encounter_datetime between :startDate  and :endDate  		\n"
+              + "	group by p.patient_id\n"
+              + ") PROX \n"
+              + "ON FILA.patient_id = PROX.patient_id\n"
+              + "\n"
+              + "WHERE  PROX.patient_id is NULL) lista_prox_consulta\n"
+              + " ON obs_final.encounter_id = lista_prox_consulta.codigo AND obs_final.concept_id=1088 AND obs_final.value_coded =23784";
+
+      switch (regimenType) {
+        case TDF_3TC_DTG:
+          query = query + "";
+          break;
+
+        case ABC_3TC_LPV_r:
+          query = query.replace("=23784", "IN (1311,6106)");
+          break;
+
+        case OTHERS:
+          query = query.replace("=23784", " NOT IN (23784,1311,6106)");
+          break;
+      }
+      return query;
+    }
   }
 }
