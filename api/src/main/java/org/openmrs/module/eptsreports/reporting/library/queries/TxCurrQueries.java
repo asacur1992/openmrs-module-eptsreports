@@ -213,32 +213,40 @@ public interface TxCurrQueries {
             + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
             + "GROUP BY patient_id";
 
+    /*busca por regimes de consultas no intervalo selecionado
+     * e tambem busca por regimes cuja a data da proxima consulta é superior
+     * ou igual a data de inicio e a data do encontro(FILA) é inferior a data
+     * de inicio, isto é para garantir que contemos
+     * os que tiveram consulta no passado e a data do proximo
+     * levantamento esta dentro do periodo em analise
+     */
     public static final String findOnARTRegimens(final RegeminType regimenType) {
 
       String query =
           "SELECT  fila_periodo.patient_id FROM\n"
-              + "(Select p.patient_id,max(e.encounter_datetime) as datas_fila										\n"
-              + "	from 	patient p																				\n"
+              + "(Select p.patient_id,max(e.encounter_datetime) as datas_fila, max(e.encounter_id) as codigo_encontro_fila\n"
+              + "	from 	patient p																																	\n"
               + "			inner join encounter e on e.patient_id = p.patient_id\n"
               + "			inner join obs o on o.encounter_id = e.encounter_id\n"
               + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
               + "  o.voided=0 and o.concept_id=1088 and\n"
-              + "			e.location_id= :location and e.encounter_datetime between :startDate and :endDate  		\n"
+              + "			e.location_id=:location and e.encounter_datetime between :startDate	and :endDate																				\n"
               + "	group by p.patient_id ) fila_periodo\n"
               + " \n"
               + "INNER JOIN\n"
               + " \n"
-              + "    (Select p.patient_id,max(e.encounter_datetime) 	as datas_prox				\n"
-              + "	from 	patient p																\n"
+              + "    (Select p.patient_id,max(e.encounter_datetime) 	as datas_prox, max(e.encounter_id) as codigo_encontro_datas_prox																							\n"
+              + "	from 	patient p																																	\n"
               + "			inner join encounter e on e.patient_id = p.patient_id\n"
               + "			inner join obs o on o.encounter_id = e.encounter_id\n"
               + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
-              + "  o.voided=0 and o.concept_id=1088 AND o.value_coded =23784  and\n"
-              + "			e.location_id= :location and e.encounter_datetime between :startDate	and :endDate  	\n"
+              + "  o.voided=0 and o.concept_id=1088 AND o.value_coded =23784 and\n"
+              + "			e.location_id=:location and e.encounter_datetime between :startDate	and :endDate																				\n"
               + "	group by p.patient_id) prox_levantamento\n"
               + "    \n"
               + "	ON prox_levantamento.patient_id= fila_periodo.patient_id  \n"
-              + "    WHERE fila_periodo.datas_fila = prox_levantamento.datas_prox\n"
+              + "    WHERE fila_periodo.datas_fila = prox_levantamento.datas_prox AND\n"
+              + "    fila_periodo.codigo_encontro_fila = prox_levantamento.codigo_encontro_datas_prox\n"
               + "    \n"
               + "    UNION\n"
               + "    \n"
@@ -247,28 +255,29 @@ public interface TxCurrQueries {
               + " (SELECT FILA.codigo_encontro as codigo FROM (\n"
               + "\n"
               + "Select p.patient_id, max(encounter_datetime), e.encounter_id as codigo_encontro\n"
-              + "	from 	patient p													\n"
+              + "	from 	patient p																																	\n"
               + "			inner join encounter e on e.patient_id = p.patient_id\n"
               + "			inner join obs o on o.encounter_id = e.encounter_id\n"
               + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
               + "  o.voided=0 and o.concept_id=5096  and\n"
-              + "			e.location_id= :location AND value_datetime between :startDate AND :endDate AND e.encounter_datetime not between :startDate AND :endDate  																				\n"
+              + "			e.location_id=:location AND value_datetime >= :startDate AND e.encounter_datetime < :startDate																			\n"
               + "	group by p.patient_id) FILA\n"
               + "    \n"
               + "LEFT JOIN\n"
-              + "(Select p.patient_id, max(encounter_datetime)							\n"
-              + "	from 	patient p												\n"
+              + "(Select p.patient_id, max(encounter_datetime)																							\n"
+              + "	from 	patient p																																	\n"
               + "			inner join encounter e on e.patient_id = p.patient_id\n"
               + "			inner join obs o on o.encounter_id = e.encounter_id\n"
               + "	where 	p.voided=0 and e.voided=0 and e.encounter_type=18 and\n"
               + "  o.voided=0 and o.concept_id=1088 and \n"
-              + "			e.location_id= :location and e.encounter_datetime between :startDate  and :endDate  		\n"
+              + "			e.location_id=:location and e.encounter_datetime between :startDate and :endDate																				\n"
               + "	group by p.patient_id\n"
               + ") PROX \n"
               + "ON FILA.patient_id = PROX.patient_id\n"
               + "\n"
               + "WHERE  PROX.patient_id is NULL) lista_prox_consulta\n"
-              + " ON obs_final.encounter_id = lista_prox_consulta.codigo AND obs_final.concept_id=1088 AND obs_final.value_coded =23784";
+              + " ON obs_final.encounter_id = lista_prox_consulta.codigo AND obs_final.concept_id=1088 AND obs_final.value_coded =23784\n"
+              + "";
 
       switch (regimenType) {
         case TDF_3TC_DTG:

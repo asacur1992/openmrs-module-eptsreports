@@ -77,11 +77,9 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
     reportDefinition.addParameter(new Parameter("endDate", "Data Final", Date.class));
     reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 
-    // reportDefinition.addDataSetDefinition(
-    //   "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true,
-    // RegeminType.TDF_3TC_DTG)));
-
     txCurrRegeminsType("C", RegeminType.TDF_3TC_DTG);
+    txCurrRegeminsType("N", RegeminType.ABC_3TC_LPV_r);
+    txCurrRegeminsType("O", RegeminType.OTHERS);
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(

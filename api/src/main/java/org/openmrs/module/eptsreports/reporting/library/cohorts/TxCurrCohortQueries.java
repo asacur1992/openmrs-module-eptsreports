@@ -426,8 +426,9 @@ public class TxCurrCohortQueries {
     return definition;
   }
 
-  @DocumentedDefinition(value = "DTGRegimenOnPatientsWhoAreActiveOnART")
-  public CohortDefinition findDTGRegimeOnPatientsWhoAreActiveOnART(final RegeminType regimens) {
+  // Regimes para pacientes Activos no TXCURR
+  @DocumentedDefinition(value = "RegeminsOnPatientsWhoAreActiveOnART")
+  public CohortDefinition findRegeminsOnPatientsWhoAreActiveOnART(final RegeminType regimens) {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
     definition.setName("DTGRegimeOnPatientsWhoAreActiveOnART");
@@ -446,7 +447,7 @@ public class TxCurrCohortQueries {
         "DTG-REGIMEN",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findDTGRegimenPatientsDispensation",
+                "findRegeminsOnPatientsWhoAreActiveOnART",
                 TxCurrQueries.QUERY.findOnARTRegimens(regimens)),
             mappings));
 

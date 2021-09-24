@@ -74,7 +74,7 @@ public class TxCurrRegimesDataset extends BaseDataSet {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     final CohortDefinition txCurrCompositionCohort =
-        this.txCurrCohortQueries.findDTGRegimeOnPatientsWhoAreActiveOnART(type);
+        this.txCurrCohortQueries.findRegeminsOnPatientsWhoAreActiveOnART(type);
 
     final CohortIndicator txCurrIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -103,9 +103,26 @@ public class TxCurrRegimesDataset extends BaseDataSet {
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
 
-    dataSetDefinition.addColumn(
-        "C1All", "TX_CURR: Currently on ART", EptsReportUtils.map(txCurrIndicator, mappings), "");
+    if (type.equals(RegeminType.TDF_3TC_DTG)) {
+      dataSetDefinition.addColumn(
+          "C1All",
+          "TX_CURR: TDF_3TC_DTG Regime",
+          EptsReportUtils.map(txCurrIndicator, mappings),
+          "");
+    }
 
+    if (type.equals(RegeminType.ABC_3TC_LPV_r)) {
+      dataSetDefinition.addColumn(
+          "N1All",
+          "TX_CURR: ABC_3TC_LPV_r Regime",
+          EptsReportUtils.map(txCurrIndicator, mappings),
+          "");
+    }
+
+    if (type.equals(RegeminType.OTHERS)) {
+      dataSetDefinition.addColumn(
+          "O1All", "TX_CURR: Outros Regimes", EptsReportUtils.map(txCurrIndicator, mappings), "");
+    }
     this.addColums(
         dataSetDefinition,
         mappings,
@@ -161,15 +178,15 @@ public class TxCurrRegimesDataset extends BaseDataSet {
       cohortIndicatorDataSetDefinition.addDimension(
           this.getColumnName(range, Gender.MALE),
           EptsReportUtils.map(
-              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
-                  this.getColumnName(range, Gender.MALE), range, Gender.MALE.getName()),
+              this.eptsCommonDimension.findPatientsByGenderAndRange(
+                  this.getColumnName(range, Gender.MALE), range, Gender.MALE),
               mappings));
 
       cohortIndicatorDataSetDefinition.addDimension(
           this.getColumnName(range, Gender.FEMALE),
           EptsReportUtils.map(
-              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
-                  this.getColumnName(range, Gender.FEMALE), range, Gender.FEMALE.getName()),
+              this.eptsCommonDimension.findPatientsByGenderAndRange(
+                  this.getColumnName(range, Gender.FEMALE), range, Gender.FEMALE),
               mappings));
     }
   }
