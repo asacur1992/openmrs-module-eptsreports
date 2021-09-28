@@ -22,6 +22,7 @@ import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatient
 import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispenseLessThan3MonthCalculation;
 import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseFghCalculationCohortDefinition;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -416,7 +417,7 @@ public class TxCurrCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxCurrQueries.QUERY.findCommunityPatientsDispensation),
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
             mappings));
 
     definition.setCompositionString("CURRENTLY-ON-ART AND COMMUNITY-DISPENSATION");

@@ -24,14 +24,18 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
   @Test
   public void shouldFindPatientsNewlyEnrolledInART() throws EvaluationException {
 
-    final Location location = Context.getLocationService().getLocation(270);
+    final Location location = Context.getLocationService().getLocation(269);
     final Date startDate = DateUtil.getDateTime(2021, 03, 21);
-    final Date endDate = DateUtil.getDateTime(2021, 04, 20);
+    final Date endDate = DateUtil.getDateTime(2021, 06, 20);
 
     final Map<Parameter, Object> parameters = new HashMap<>();
 
     parameters.put(new Parameter("startDate", "Start Date", Date.class), startDate);
+
     parameters.put(new Parameter("endDate", "End Date", Date.class), endDate);
+
+    // parameters.put(new Parameter("endRevisionDate", "End Date", Date.class), revisionDate);
+
     parameters.put(new Parameter("location", "Location", Location.class), location);
 
     final CohortDefinition txNewCompositionCohort =
@@ -49,7 +53,7 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
   @Override
   protected String username() {
-    return "admin";
+    return "domingos.bernardo";
   }
 
   @Override

@@ -25,8 +25,8 @@ import org.openmrs.module.eptsreports.reporting.library.queries.BreastfeedingQue
 import org.openmrs.module.eptsreports.reporting.library.queries.PregnantQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
+import org.openmrs.module.eptsreports.reporting.utils.CommunityType;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
-import org.openmrs.module.eptsreports.reporting.utils.PeriodType;
 import org.openmrs.module.reporting.cohort.definition.BaseObsCohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -234,11 +234,11 @@ public class TxNewCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     txNewCompositionCohort.addSearch(
-        "START-ART",
+        "START-ART-WITH-COMMUNITY-DISPENSATION",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findPatientsWhoAreNewlyEnrolledOnART",
-                TxNewQueries.QUERY.findPatientsWhoAreNewlyEnrolledOnART),
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTWithComunnityDispensation),
             mappings));
 
     txNewCompositionCohort.addSearch(
@@ -258,16 +258,58 @@ public class TxNewCohortQueries {
                     .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
             mappings));
 
+    txNewCompositionCohort.setCompositionString(
+        "START-ART-WITH-COMMUNITY-DISPENSATION NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+
+    return txNewCompositionCohort;
+  }
+
+  public CohortDefinition getTxNewCommunityCompositionTypeCohort(
+      final String cohortName, final CommunityType ct) {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName(cohortName);
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
     txNewCompositionCohort.addSearch(
-        "COMMUNITY-DISPENSATION",
+        "COMMUNITY-DISPENSATION-TYPE",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findPatientsInComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_NEW)),
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTWithComunnityDispensation),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "START-ART-WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensationByType(ct)),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "TRANSFERED-IN",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod",
+                TxNewQueries.QUERY.findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod),
+            mappings));
+
+    txNewCompositionCohort.addSearch(
+        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard",
+                TxNewQueries.QUERY
+                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
             mappings));
 
     txNewCompositionCohort.setCompositionString(
-        "START-ART AND COMMUNITY-DISPENSATION NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+        "(COMMUNITY-DISPENSATION-TYPE AND START-ART-WITH-COMMUNITY-DISPENSATION) NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
 
     return txNewCompositionCohort;
   }
@@ -336,7 +378,7 @@ public class TxNewCohortQueries {
     final CohortDefinition definition =
         this.genericCohorts.generalSql(
             "findPatientsInComunnityDispensation",
-            TxNewQueries.QUERY.findPatientsInComunnityDispensation(PeriodType.TX_CURR));
+            TxNewQueries.QUERY.findPatientsInComunnityDispensation);
 
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
