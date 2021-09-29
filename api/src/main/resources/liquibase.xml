@@ -30,7 +30,7 @@
 	<changeSet author="icap-mozambique"
 		id="epts_metadata_for_release360_21092021">
 
-		<sqlFile path="scripts/EPTSMetadataForRelease360_20092021.sql"
+		<sqlFile path="scripts/EPTSMetadataForRelease360_2x_20092021.sql"
 			encoding="UTF-8" />
 
 	</changeSet>
