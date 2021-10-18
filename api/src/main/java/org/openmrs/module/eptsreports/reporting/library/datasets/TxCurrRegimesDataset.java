@@ -63,12 +63,37 @@ public class TxCurrRegimesDataset extends BaseDataSet {
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
+  // TX CURR Data Set
+  public CohortIndicatorDataSetDefinition constructTxCurrDataset() {
+
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
+    dataSetDefinition.setName("TX_CURR Data Set");
+    dataSetDefinition.addParameters(this.getParameters());
+
+    final String mappings = "endDate=${endDate},location=${location}";
+
+    final CohortDefinition txCurrCompositionCohort =
+        this.txCurrCohortQueries.findPatientsWhoAreActiveOnART();
+
+    final CohortIndicator txCurrIndicator =
+        this.eptsGeneralIndicator.getIndicator(
+            "findPatientsWhoAreActiveOnART",
+            EptsReportUtils.map(txCurrCompositionCohort, mappings));
+
+    dataSetDefinition.addColumn(
+        "CURRAll", "TX_CURR: Currently on ART", EptsReportUtils.map(txCurrIndicator, mappings), "");
+
+    return dataSetDefinition;
+  }
+
+  // TX REGEMINS Data Set
   public CohortIndicatorDataSetDefinition constructTxCurrDataset(
       final boolean currentSpec, RegeminType type) {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
-    dataSetDefinition.setName("TX_CURR Data Set");
+    dataSetDefinition.setName("TX_CURR Regemins Data Set");
     dataSetDefinition.addParameters(this.getParameters());
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
@@ -80,6 +105,14 @@ public class TxCurrRegimesDataset extends BaseDataSet {
         this.eptsGeneralIndicator.getIndicator(
             "findPatientsWhoAreActiveOnART",
             EptsReportUtils.map(txCurrCompositionCohort, mappings));
+
+    final CohortDefinition txCurrCompositionCohortOthers =
+        this.txCurrCohortQueries.findRegeminsOnPatientsWhoAreActiveOnARTOthers(type);
+
+    final CohortIndicator txCurrIndicatorOthers =
+        this.eptsGeneralIndicator.getIndicator(
+            "findPatientsWhoAreActiveOnART",
+            EptsReportUtils.map(txCurrCompositionCohortOthers, mappings));
 
     dataSetDefinition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
     dataSetDefinition.addDimension(
@@ -121,24 +154,47 @@ public class TxCurrRegimesDataset extends BaseDataSet {
 
     if (type.equals(RegeminType.OTHERS)) {
       dataSetDefinition.addColumn(
-          "O1All", "TX_CURR: Outros Regimes", EptsReportUtils.map(txCurrIndicator, mappings), "");
+          "O1All",
+          "TX_CURR: Outros Regimes",
+          EptsReportUtils.map(txCurrIndicatorOthers, mappings),
+          "");
+
+      this.addColums(
+          dataSetDefinition,
+          mappings,
+          txCurrIndicatorOthers,
+          UNDER_ONE,
+          ONE_TO_FOUR,
+          FIVE_TO_NINE,
+          TEN_TO_FOURTEEN,
+          FIFTEEN_TO_NINETEEN,
+          TWENTY_TO_TWENTY_FOUR,
+          TWENTY_FIVE_TO_TWENTY_NINE,
+          THIRTY_TO_THRITY_FOUR,
+          THIRTY_FIVE_TO_THIRTY_NINE,
+          FORTY_TO_FORTY_FOUR,
+          FORTY_FIVE_TO_FORTY_NINE,
+          ABOVE_FIFTY);
     }
-    this.addColums(
-        dataSetDefinition,
-        mappings,
-        txCurrIndicator,
-        UNDER_ONE,
-        ONE_TO_FOUR,
-        FIVE_TO_NINE,
-        TEN_TO_FOURTEEN,
-        FIFTEEN_TO_NINETEEN,
-        TWENTY_TO_TWENTY_FOUR,
-        TWENTY_FIVE_TO_TWENTY_NINE,
-        THIRTY_TO_THRITY_FOUR,
-        THIRTY_FIVE_TO_THIRTY_NINE,
-        FORTY_TO_FORTY_FOUR,
-        FORTY_FIVE_TO_FORTY_NINE,
-        ABOVE_FIFTY);
+    
+    if (!type.equals(RegeminType.OTHERS)) {
+      this.addColums(
+          dataSetDefinition,
+          mappings,
+          txCurrIndicator,
+          UNDER_ONE,
+          ONE_TO_FOUR,
+          FIVE_TO_NINE,
+          TEN_TO_FOURTEEN,
+          FIFTEEN_TO_NINETEEN,
+          TWENTY_TO_TWENTY_FOUR,
+          TWENTY_FIVE_TO_TWENTY_NINE,
+          THIRTY_TO_THRITY_FOUR,
+          THIRTY_FIVE_TO_THIRTY_NINE,
+          FORTY_TO_FORTY_FOUR,
+          FORTY_FIVE_TO_FORTY_NINE,
+          ABOVE_FIFTY);
+    }
 
     return dataSetDefinition;
   }

@@ -289,7 +289,7 @@ public interface TxCurrQueries {
           break;
 
         case OTHERS:
-          query = query.replace("=23784", " NOT IN (23784,1311,6106)");
+          query = query.replace("=23784", "IN (23784,1311,6106)");
           break;
       }
       return query;

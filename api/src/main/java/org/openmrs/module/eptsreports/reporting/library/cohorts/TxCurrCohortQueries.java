@@ -444,14 +444,45 @@ public class TxCurrCohortQueries {
     mappings = mappings.concat(",startDate=${startDate}");
 
     definition.addSearch(
-        "DTG-REGIMEN",
+        "REGIMEN",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findRegeminsOnPatientsWhoAreActiveOnART",
                 TxCurrQueries.QUERY.findOnARTRegimens(regimens)),
             mappings));
 
-    definition.setCompositionString("CURRENTLY-ON-ART AND DTG-REGIMEN");
+    definition.setCompositionString("CURRENTLY-ON-ART AND REGIMEN");
+
+    return definition;
+  }
+
+  // Outros Regimes mais os que não tiveram Fila
+  @DocumentedDefinition(value = "RegeminsOnPatientsWhoAreActiveOnART")
+  public CohortDefinition findRegeminsOnPatientsWhoAreActiveOnARTOthers(
+      final RegeminType regimens) {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("DTGRegimeOnPatientsWhoAreActiveOnART");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    mappings = mappings.concat(",startDate=${startDate}");
+
+    definition.addSearch(
+        "DTG-LPV-REGIMEN",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findRegeminsOnPatientsWhoAreActiveOnART",
+                TxCurrQueries.QUERY.findOnARTRegimens(regimens)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART NOT DTG-LPV-REGIMEN");
 
     return definition;
   }
