@@ -176,7 +176,7 @@ public class TxCurrRegimesDataset extends BaseDataSet {
           FORTY_FIVE_TO_FORTY_NINE,
           ABOVE_FIFTY);
     }
-    
+
     if (!type.equals(RegeminType.OTHERS)) {
       this.addColums(
           dataSetDefinition,
