@@ -36,6 +36,7 @@ import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIn
 import org.openmrs.module.eptsreports.reporting.library.queries.ErimType;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCombinadoQueries;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
+import org.openmrs.module.eptsreports.reporting.utils.EptsListUtils;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.Gender;
 import org.openmrs.module.eptsreports.reporting.utils.TxCombinadoType;
@@ -58,6 +59,8 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
   @Autowired private GenericCohortQueries genericCohortQueries;
 
   @Autowired private TxCombinadoDimensions txCombinadoDimensions;
+
+  private final String numeratorPrefix = "NR";
 
   public DataSetDefinition constructTxCombinadoNumeratorDataset() {
 
@@ -87,17 +90,19 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
         ABOVE_FIFTY);
 
     definition.addDimension(
-        this.getColumnName(AgeRange.UNKNOWN, Gender.MALE),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE),
         EptsReportUtils.map(
             this.eptsCommonDimension.findPatientsWithUnknownAgeByGender(
-                this.getColumnName(AgeRange.UNKNOWN, Gender.MALE), Gender.MALE),
+                EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE),
+                Gender.MALE),
             ""));
 
     definition.addDimension(
-        this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE),
         EptsReportUtils.map(
             this.eptsCommonDimension.findPatientsWithUnknownAgeByGender(
-                this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE), Gender.FEMALE),
+                EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE),
+                Gender.FEMALE),
             ""));
 
     definition.addDimension(
@@ -130,11 +135,71 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
         EptsReportUtils.map(numeratorIndicator, mappings),
         "pregnant=pregnant");
 
+    EptsListUtils.addColumsByDimensionAndGender(
+        "P_",
+        this.numeratorPrefix,
+        definition,
+        mappings,
+        numeratorIndicator,
+        "pregnant",
+        Gender.FEMALE,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "P_NR-femalesUnknownF",
+        "unknownF",
+        EptsReportUtils.map(numeratorIndicator, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "|pregnant=pregnant");
+
     definition.addColumn(
         "CB_NUM_BREASTFEEDING",
         "Breastfeeding",
         EptsReportUtils.map(numeratorIndicator, mappings),
         "breastfeeding=breastfeeding");
+
+    EptsListUtils.addColumsByDimensionAndGender(
+        "BF_",
+        this.numeratorPrefix,
+        definition,
+        mappings,
+        numeratorIndicator,
+        "breastfeeding",
+        Gender.FEMALE,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "BF_NR-femalesUnknownF",
+        "unknownF",
+        EptsReportUtils.map(numeratorIndicator, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "|breastfeeding=breastfeeding");
 
     definition.addColumn(
         "CB_NUM_DEAD",
@@ -198,17 +263,17 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
         "NR-malesUnknownM",
         "unknownM",
         EptsReportUtils.map(numeratorIndicator, mappings),
-        this.getColumnName(AgeRange.UNKNOWN, Gender.MALE)
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE)
             + "="
-            + this.getColumnName(AgeRange.UNKNOWN, Gender.MALE));
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE));
 
     definition.addColumn(
         "NR-femalesUnknownF",
         "unknownF",
         EptsReportUtils.map(numeratorIndicator, mappings),
-        this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE)
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
             + "="
-            + this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE));
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE));
 
     return definition;
   }
@@ -309,23 +374,23 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
     for (final AgeRange range : ranges) {
 
       cohortIndicatorDataSetDefinition.addDimension(
-          this.getColumnName(range, Gender.MALE),
+          EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.MALE),
           EptsReportUtils.map(
               this.eptsCommonDimension.findPatientsByGenderAndRange(
-                  this.getColumnName(range, Gender.MALE), range, Gender.MALE),
+                  EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.MALE),
+                  range,
+                  Gender.MALE),
               mappings));
 
       cohortIndicatorDataSetDefinition.addDimension(
-          this.getColumnName(range, Gender.FEMALE),
+          EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.FEMALE),
           EptsReportUtils.map(
               this.eptsCommonDimension.findPatientsByGenderAndRange(
-                  this.getColumnName(range, Gender.FEMALE), range, Gender.FEMALE),
+                  EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.FEMALE),
+                  range,
+                  Gender.FEMALE),
               mappings));
     }
-  }
-
-  private String getColumnName(final AgeRange range, final Gender gender) {
-    return range.getDesagregationColumnName("NR", gender);
   }
 
   public void setGenericCohortQueries(final GenericCohortQueries genericCohortQueries) {
@@ -336,12 +401,13 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
       final CohortIndicatorDataSetDefinition dataSetDefinition,
       final String mappings,
       final CohortIndicator cohortIndicator,
-      final AgeRange... rannges) {
+      final AgeRange... ranges) {
 
-    for (final AgeRange range : rannges) {
+    for (final AgeRange range : ranges) {
 
-      final String maleName = this.getColumnName(range, Gender.MALE);
-      final String femaleName = this.getColumnName(range, Gender.FEMALE);
+      final String maleName = EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.MALE);
+      final String femaleName =
+          EptsListUtils.getColumnName(this.numeratorPrefix, range, Gender.FEMALE);
 
       dataSetDefinition.addColumn(
           maleName,

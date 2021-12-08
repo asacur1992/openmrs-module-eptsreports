@@ -36,9 +36,9 @@ public class TxCombinadoCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
   @Before
   public void setup() {
-    final Location location = Context.getLocationService().getLocation(270);
-    final Date startDate = DateUtil.getDateTime(2021, 03, 21);
-    final Date endDate = DateUtil.getDateTime(2021, 04, 20);
+    final Location location = Context.getLocationService().getLocation(271);
+    final Date startDate = DateUtil.getDateTime(2020, 9, 21);
+    final Date endDate = DateUtil.getDateTime(2021, 9, 20);
     final Integer month = 12;
 
     this.parameters = new HashMap<>();
@@ -91,8 +91,8 @@ public class TxCombinadoCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
     final CohortDefinition cohortDefinition =
         this.genericCohortQueries.generalSql(
-            "Pregnant",
-            TxCombinadoQueries.QUERY.findPatientsWhoAreBreastFeeding(TxCombinadoType.DENOMINATOR));
+            "breastfeeding",
+            TxCombinadoQueries.QUERY.findPatientsWhoAreBreastFeeding(TxCombinadoType.NUMERATOR));
 
     final EvaluatedCohort evaluateCohortDefinition =
         this.evaluateCohortDefinition(cohortDefinition, this.parameters);

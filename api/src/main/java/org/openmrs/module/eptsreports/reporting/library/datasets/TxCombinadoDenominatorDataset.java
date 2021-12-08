@@ -35,6 +35,7 @@ import org.openmrs.module.eptsreports.reporting.library.dimensions.TxCombinadoDi
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCombinadoQueries;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
+import org.openmrs.module.eptsreports.reporting.utils.EptsListUtils;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.Gender;
 import org.openmrs.module.eptsreports.reporting.utils.TxCombinadoType;
@@ -56,6 +57,8 @@ public class TxCombinadoDenominatorDataset extends BaseDataSet {
   @Autowired private GenericCohortQueries genericCohortQueries;
 
   @Autowired private TxCombinadoDimensions txCombinadoDimensions;
+
+  private final String denominatorPrefix = "DR";
 
   public DataSetDefinition constructTxCombinadoDenominatorDataset() {
 
@@ -128,11 +131,71 @@ public class TxCombinadoDenominatorDataset extends BaseDataSet {
         EptsReportUtils.map(denominatorIndicator, mappings),
         "pregnant=pregnant");
 
+    EptsListUtils.addColumsByDimensionAndGender(
+        "P_",
+        this.denominatorPrefix,
+        definition,
+        mappings,
+        denominatorIndicator,
+        "pregnant",
+        Gender.FEMALE,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "P_DR-femalesUnknownF",
+        "unknownF",
+        EptsReportUtils.map(denominatorIndicator, mappings),
+        EptsListUtils.getColumnName(this.denominatorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.denominatorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "|pregnant=pregnant");
+
     definition.addColumn(
         "CB_DEN_BREASTFEEDING",
         "Breastfeeding",
         EptsReportUtils.map(denominatorIndicator, mappings),
         "breastfeeding=breastfeeding");
+
+    EptsListUtils.addColumsByDimensionAndGender(
+        "BF_",
+        this.denominatorPrefix,
+        definition,
+        mappings,
+        denominatorIndicator,
+        "breastfeeding",
+        Gender.FEMALE,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "BF_DR-femalesUnknownF",
+        "unknownF",
+        EptsReportUtils.map(denominatorIndicator, mappings),
+        EptsListUtils.getColumnName(this.denominatorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.denominatorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "|breastfeeding=breastfeeding");
 
     this.addColums(
         definition,
