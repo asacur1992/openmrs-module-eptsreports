@@ -34,5 +34,16 @@
 			encoding="UTF-8" />
 
 	</changeSet>
+	
+	
+	<!-- ICAP Release_09122021 -->
+	<changeSet author="icap-mozambique"
+		id="role_visualizao_release_09122021">
+
+		<sqlFile path="scripts/role_visualizacao.sql"
+			encoding="UTF-8" />
+
+	</changeSet>
+	
 
 </databaseChangeLog>
