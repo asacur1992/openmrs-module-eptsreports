@@ -213,7 +213,7 @@ public interface TxCurrQueries {
             + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
             + "GROUP BY patient_id";
 
-    /*busca por regimes de consultas no intervalo selecionado
+    /*busca regimes em consultas no intervalo selecionado
      * e tambem busca por regimes cuja a data da proxima consulta é superior
      * ou igual a data de inicio e a data do encontro(FILA) é inferior a data
      * de inicio, isto é para garantir que contemos
@@ -288,8 +288,16 @@ public interface TxCurrQueries {
           query = query.replace("=23784", "IN (1311,6106)");
           break;
 
+        case ABC_3TC_DTG:
+          query = query.replace("=23784", "IN (23786,23800)");
+          break;
+
+        case AZT_3TC_LPV_r:
+          query = query.replace("=23784", "IN (6100,21163)");
+          break;
+
         case OTHERS:
-          query = query.replace("=23784", "IN (23784,1311,6106)");
+          query = query.replace("=23784", "IN (23784,1311,6106,6100,21163,23786,23800)");
           break;
       }
       return query;
