@@ -152,6 +152,22 @@ public class TxCurrRegimesDataset extends BaseDataSet {
           "");
     }
 
+    if (type.equals(RegeminType.ABC_3TC_DTG)) {
+      dataSetDefinition.addColumn(
+          "B1All",
+          "TX_CURR: ABC_3TC_DTG Regime",
+          EptsReportUtils.map(txCurrIndicator, mappings),
+          "");
+    }
+
+    if (type.equals(RegeminType.AZT_3TC_LPV_r)) {
+      dataSetDefinition.addColumn(
+          "Z1All",
+          "TX_CURR: AZT_3TC_LPV_r Regime",
+          EptsReportUtils.map(txCurrIndicator, mappings),
+          "");
+    }
+
     if (type.equals(RegeminType.OTHERS)) {
       dataSetDefinition.addColumn(
           "O1All",

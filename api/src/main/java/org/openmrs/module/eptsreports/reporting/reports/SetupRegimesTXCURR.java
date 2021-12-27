@@ -83,6 +83,8 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
     txCurrRegeminsType("C", RegeminType.TDF_3TC_DTG);
     txCurrRegeminsType("N", RegeminType.ABC_3TC_LPV_r);
     txCurrRegeminsType("O", RegeminType.OTHERS);
+    txCurrRegeminsType("B", RegeminType.ABC_3TC_DTG);
+    txCurrRegeminsType("Z", RegeminType.AZT_3TC_LPV_r);
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
