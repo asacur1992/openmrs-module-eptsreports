@@ -25,35 +25,18 @@
 			encoding="UTF-8" />
 
 	</changeSet>
-
-	<!-- eSaude Release360_21092021 -->
+	
+	
+	<!-- eSaude Release370_20122021 -->
 	<changeSet author="icap-mozambique"
-		id="epts_metadata_for_release360_2109202117">
+		id="epts_metadata_for_release370_21122021">
 
-		<sqlFile path="scripts/EPTSMetadataForRelease360_2x_20092021.sql"
+		<sqlFile path="scripts/EPTSMetadataForRelease370_PlatformVersion_2x_20122021.sql"
 			encoding="UTF-8" />
 
 	</changeSet>
-	
-	
-	<!-- ICAP Release_09122021 -->
-	<changeSet author="icap-mozambique"
-		id="role_visualizao_release_09122021">
-
-		<sqlFile path="scripts/role_visualizacao.sql"
-			encoding="UTF-8" />
-
-	</changeSet>
-	
-		<!-- ICAP PREP FIX -->
-	<changeSet author="icap-mozambique"
-		id="prep_bug_fix_16122021">
-
-		<sqlFile path="scripts/update_concept_class_and_dataType_versao3.sql"
-			encoding="UTF-8" />
-
-	</changeSet>
-	
+		
+		
 	
 
 </databaseChangeLog>

@@ -8,7 +8,6 @@ import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.TxNewCohortQueries;
-import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.evaluation.EvaluationException;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -34,8 +33,7 @@ public class TxNewCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
     parameters.put(new Parameter("location", "Location", Location.class), location);
 
-    final CohortDefinition txNewCompositionCohort =
-        this.txNewCohortQueries.getTxNewCommunityCompositionCohort("TX_NEW");
+    this.txNewCohortQueries.getTxNewCommunityCompositionCohort("TX_NEW");
 
     // final EvaluatedCohort evaluateCohortDefinition =
     // this.evaluateCohortDefinition(txNewCompositionCohort, parameters);

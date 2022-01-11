@@ -20,7 +20,6 @@ import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxMlCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxPvlsCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttCommunityDataset;
@@ -44,8 +43,6 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
   @Autowired private TxCurrCommunityDataset txCurrCommunityDataset;
 
   @Autowired private TxRttCommunityDataset txRttCommunityDataset;
-
-  @Autowired private TxMlCommunityDataset txMlCommunityDataset;
 
   @Autowired private TRFINCommunityDataset txTfrInCommunityDataset;
 
@@ -94,8 +91,8 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
     reportDefinition.addDataSetDefinition(
         "P", Mapped.mapStraightThrough(this.txPvlsCommunityDataset.constructTxPvlsDatset()));
 
-    reportDefinition.addDataSetDefinition(
-        "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
+    //    reportDefinition.addDataSetDefinition(
+    //        "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
 
     reportDefinition.addDataSetDefinition(
         "R", Mapped.mapStraightThrough(this.txRttCommunityDataset.constructTxRttDataset()));
