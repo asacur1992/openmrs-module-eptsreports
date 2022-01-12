@@ -44,7 +44,7 @@
 
 	</changeSet>
 	
-		<!-- ICAP PREP FIX -->
+		<!-- ICAP PREP FIX 
 	<changeSet author="icap-mozambique"
 		id="prep_bug_fix_16122021">
 
@@ -52,5 +52,5 @@
 			encoding="UTF-8" />
 
 	</changeSet>
-
+-->
 </databaseChangeLog>
