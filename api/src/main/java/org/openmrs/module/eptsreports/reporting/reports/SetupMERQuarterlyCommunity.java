@@ -17,10 +17,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxMlCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxPvlsCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttCommunityDataset;
@@ -37,99 +37,102 @@ import org.springframework.stereotype.Component;
 @Component
 public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
-  @Autowired private TxPvlsCommunityDataset txPvlsCommunityDataset;
+	@Autowired
+	private TxPvlsCommunityDataset txPvlsCommunityDataset;
 
-  @Autowired private TxNewCommunityDataset txNewCommunityDataset;
+	@Autowired
+	private TxNewCommunityDataset txNewCommunityDataset;
 
-  @Autowired private TxCurrCommunityDataset txCurrCommunityDataset;
+	@Autowired
+	private TxCurrCommunityDataset txCurrCommunityDataset;
 
-  @Autowired private TxRttCommunityDataset txRttCommunityDataset;
+	@Autowired
+	private TxRttCommunityDataset txRttCommunityDataset;
 
-  @Autowired private TxMlCommunityDataset txMlCommunityDataset;
+	@Autowired
+	private TRFINCommunityDataset txTfrInCommunityDataset;
 
-  @Autowired private TRFINCommunityDataset txTfrInCommunityDataset;
+	@Autowired
+	protected GenericCohortQueries genericCohortQueries;
 
-  @Autowired protected GenericCohortQueries genericCohortQueries;
+	@Override
+	public String getVersion() {
+		return "1.0-SNAPSHOT";
+	}
 
-  @Override
-  public String getVersion() {
-    return "1.0-SNAPSHOT";
-  }
+	@Override
+	public String getUuid() {
+		return "1dd7abdc-877c-4014-9376-16414a9462ca";
+	}
 
-  @Override
-  public String getUuid() {
-    return "1dd7abdc-877c-4014-9376-16414a9462ca";
-  }
+	@Override
+	public String getExcelDesignUuid() {
+		return "eb581a7b-d077-48ea-8ca7-b121e2911900";
+	}
 
-  @Override
-  public String getExcelDesignUuid() {
-    return "eb581a7b-d077-48ea-8ca7-b121e2911900";
-  }
+	@Override
+	public String getName() {
+		return "PEPFAR MER 2.5 Quarterly - Comunidade";
+	}
 
-  @Override
-  public String getName() {
-    return "PEPFAR MER 2.5 Quarterly - Comunidade";
-  }
+	@Override
+	public String getDescription() {
+		return "MER Quarterly Report Comunidade";
+	}
 
-  @Override
-  public String getDescription() {
-    return "MER Quarterly Report Comunidade";
-  }
+	@Override
+	public ReportDefinition constructReportDefinition() {
+		final ReportDefinition reportDefinition = new ReportDefinition();
 
-  @Override
-  public ReportDefinition constructReportDefinition() {
-    final ReportDefinition reportDefinition = new ReportDefinition();
+		reportDefinition.setUuid(this.getUuid());
+		reportDefinition.setName(this.getName());
+		reportDefinition.setDescription(this.getDescription());
+		reportDefinition.setParameters(this.txRttCommunityDataset.getParameters());
 
-    reportDefinition.setUuid(this.getUuid());
-    reportDefinition.setName(this.getName());
-    reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.txRttCommunityDataset.getParameters());
+		reportDefinition.addDataSetDefinition(
+				"N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
 
-    reportDefinition.addDataSetDefinition(
-        "N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
+		reportDefinition.addDataSetDefinition(
+				"C", Mapped.mapStraightThrough(this.txCurrCommunityDataset.constructTxCurrDataset(true)));
 
-    reportDefinition.addDataSetDefinition(
-        "C", Mapped.mapStraightThrough(this.txCurrCommunityDataset.constructTxCurrDataset(true)));
+		reportDefinition.addDataSetDefinition(
+				"P", Mapped.mapStraightThrough(this.txPvlsCommunityDataset.constructTxPvlsDatset()));
 
-    reportDefinition.addDataSetDefinition(
-        "P", Mapped.mapStraightThrough(this.txPvlsCommunityDataset.constructTxPvlsDatset()));
+		//    reportDefinition.addDataSetDefinition(
+		//        "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
 
-    reportDefinition.addDataSetDefinition(
-        "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
+		reportDefinition.addDataSetDefinition(
+				"R", Mapped.mapStraightThrough(this.txRttCommunityDataset.constructTxRttDataset()));
 
-    reportDefinition.addDataSetDefinition(
-        "R", Mapped.mapStraightThrough(this.txRttCommunityDataset.constructTxRttDataset()));
+		reportDefinition.addDataSetDefinition(
+				"TR", Mapped.mapStraightThrough(this.txTfrInCommunityDataset.constructTxTRFIN()));
 
-    reportDefinition.addDataSetDefinition(
-        "TR", Mapped.mapStraightThrough(this.txTfrInCommunityDataset.constructTxTRFIN()));
+		reportDefinition.setBaseCohortDefinition(
+				EptsReportUtils.map(
+						this.genericCohortQueries.generalSql(
+								"baseCohortQuery", BaseQueries.getBaseCohortQuery()),
+						"endDate=${endDate},location=${location}"));
 
-    reportDefinition.setBaseCohortDefinition(
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "baseCohortQuery", BaseQueries.getBaseCohortQuery()),
-            "endDate=${endDate},location=${location}"));
+		return reportDefinition;
+	}
 
-    return reportDefinition;
-  }
+	@Override
+	public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
+		ReportDesign reportDesign = null;
+		try {
+			reportDesign = this.createXlsReportDesign(
+					reportDefinition,
+					"PEPFAR_MER_2.5_QUARTERLY.xls",
+					"PEPFAR MER 2.5 Quarterly Report",
+					this.getExcelDesignUuid(),
+					null);
+			final Properties props = new Properties();
+			props.put("sortWeight", "5000");
+			reportDesign.setProperties(props);
+		} catch (final IOException e) {
+			throw new ReportingException(e.toString());
+		}
 
-  @Override
-  public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
-    ReportDesign reportDesign = null;
-    try {
-      reportDesign =
-          this.createXlsReportDesign(
-              reportDefinition,
-              "PEPFAR_MER_2.5_QUARTERLY.xls",
-              "PEPFAR MER 2.5 Quarterly Report",
-              this.getExcelDesignUuid(),
-              null);
-      final Properties props = new Properties();
-      props.put("sortWeight", "5000");
-      reportDesign.setProperties(props);
-    } catch (final IOException e) {
-      throw new ReportingException(e.toString());
-    }
-
-    return Arrays.asList(reportDesign);
-  }
+		return Arrays.asList(reportDesign);
+	}
 }
