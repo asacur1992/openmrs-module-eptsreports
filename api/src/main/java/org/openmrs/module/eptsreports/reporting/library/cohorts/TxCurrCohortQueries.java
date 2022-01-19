@@ -487,6 +487,119 @@ public class TxCurrCohortQueries {
     return definition;
   }
 
+  // Dispensa pelos APES para pacientes Activos no TXCURR
+  @DocumentedDefinition(value = "APEsOnPatientsWhoAreActiveOnART")
+  public CohortDefinition findAPEsOnPatientsWhoAreActiveOnART() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("APEsOnPatientsWhoAreActiveOnART");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    mappings = "startDate=${startDate}," + mappings;
+
+    definition.addSearch(
+        "APES",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findAPEsOnPatientsWhoAreActiveOnART", TxCurrQueries.QUERY.findOnARTAPEs),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND APES");
+
+    return definition;
+  }
+
+  /* Dispensa pelos APES Com evento de Carga Viral nos
+  ultimos 12 meses para pacientes Activos no TXCURR */
+  @DocumentedDefinition(value = "APEsOnPatientsWhoAreActiveOnARTWithViralLoadEvent")
+  public CohortDefinition findPatientWithViralLoadEventWithinPast12Months() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("APEsOnPatientsWhoAreActiveOnARTWithViralLoadEvent");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "VIRAL-LOAD",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "APEsOnPatientsWhoAreActiveOnARTWithViralLoadEvent",
+                TxCurrQueries.QUERY.findPatientWithViralLoadEventWithinPast12Months),
+            mappings));
+
+    mappings = "startDate=${startDate}," + mappings;
+
+    definition.addSearch(
+        "APES",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findAPEsOnPatientsWhoAreActiveOnART", TxCurrQueries.QUERY.findOnARTAPEs),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND VIRAL-LOAD AND APES");
+
+    return definition;
+  }
+
+  /* Dispensa pelos APES Com evento de Carga Viral abaixo de 1000 copias
+  ultimos 12 meses para pacientes Activos no TXCURR */
+  @DocumentedDefinition(value = "APEsOnPatientWithViralLoadLessThan1000WithinPast12Months")
+  public CohortDefinition findPatientWithViralLoadLessThan1000WithinPast12Months() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("APEsOnPatientsWhoAreActiveOnARTWithViralLoadEvent");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "VIRAL-LOAD",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "APEsOnPatientsWhoAreActiveOnARTWithViralLoadEvent",
+                TxCurrQueries.QUERY.findPatientWithViralLoadEventWithinPast12Months),
+            mappings));
+
+    definition.addSearch(
+        "THOUSAND-COPIES",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "APEsOnPatientWithViralLoadLessThan1000WithinPast12Months",
+                TxCurrQueries.QUERY.findPatientWithViralLoadLessThan1000WithinPast12Months),
+            mappings));
+
+    mappings = "startDate=${startDate}," + mappings;
+
+    definition.addSearch(
+        "APES",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findAPEsOnPatientsWhoAreActiveOnART", TxCurrQueries.QUERY.findOnARTAPEs),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND VIRAL-LOAD AND THOUSAND-COPIES AND APES");
+
+    return definition;
+  }
+
   public CohortDefinition getPatientsOnArtOnArvDispenseForLessThan3Months() {
     final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients On Art On ARV Dispensation less than 3 months");
