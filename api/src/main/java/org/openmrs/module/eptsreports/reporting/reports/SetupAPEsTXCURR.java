@@ -58,12 +58,12 @@ public class SetupAPEsTXCURR extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "APEs TX_CURR Report";
+    return "RELATORIO DE DESEMPENHO APEs";
   }
 
   @Override
   public String getDescription() {
-    return "APEs TX_CURR Report";
+    return "RELATORIO DE DESEMPENHO APEs";
   }
 
   @Override
