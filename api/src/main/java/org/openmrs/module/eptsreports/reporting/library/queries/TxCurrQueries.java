@@ -302,5 +302,69 @@ public interface TxCurrQueries {
       }
       return query;
     }
+
+    // Tiveram Fila ou Consulta com o tipo APES
+    public static final String findOnARTAPEs =
+        "SELECT APES.patient_id\n"
+            + "FROM   (SELECT e.patient_id,\n"
+            + "               Max(e.encounter_datetime) max_date\n"
+            + "        FROM   patient p\n"
+            + "               INNER JOIN encounter e\n"
+            + "                       ON e.patient_id = p.patient_id\n"
+            + "               INNER JOIN obs o\n"
+            + "                       ON o.encounter_id = e.encounter_id\n"
+            + "        WHERE  p.voided = 0\n"
+            + "               AND e.voided = 0\n"
+            + "               AND o.voided = 0\n"
+            + "               AND o.concept_id = 165174\n"
+            + "               AND e.encounter_type = 18\n"
+            + "               AND o.value_coded = 165179\n"
+            + "               AND e.encounter_datetime BETWEEN :startDate AND :endDate\n"
+            + "               AND e.location_id = :location\n"
+            + "        GROUP  BY e.patient_id\n"
+            + "        UNION\n"
+            + "        SELECT e.patient_id,\n"
+            + "               Max(e.encounter_datetime) max_date\n"
+            + "        FROM   patient p\n"
+            + "               INNER JOIN encounter e\n"
+            + "                       ON e.patient_id = p.patient_id\n"
+            + "               INNER JOIN obs o\n"
+            + "                       ON o.encounter_id = e.encounter_id\n"
+            + "        WHERE  p.voided = 0\n"
+            + "               AND e.voided = 0\n"
+            + "               AND o.voided = 0\n"
+            + "               AND o.concept_id = 165174\n"
+            + "               AND e.encounter_type = 6\n"
+            + "               AND o.value_coded = 165179\n"
+            + "               AND e.encounter_datetime BETWEEN :startDate AND :endDate\n"
+            + "               AND e.location_id = :location\n"
+            + "        GROUP  BY e.patient_id) APES\n"
+            + "GROUP  BY patient_id ";
+
+    public static final String findPatientWithViralLoadEventWithinPast12Months =
+        " SELECT  carga_viral.patient_id FROM (Select p.patient_id\n"
+            + "from patient p\n"
+            + "             inner join encounter e on p.patient_id=e.patient_id\n"
+            + "             inner join obs o on e.encounter_id=o.encounter_id\n"
+            + "        where p.voided=0 and e.voided=0 and o.voided=0 and e.encounter_type in (6,9,53,13,51) and  \n"
+            + "o.concept_id in (856,1305) and  o.obs_datetime between date_add(date_add(:endDate, interval -12 MONTH), interval 1 day) and :endDate  and\n"
+            + "e.location_id=:location\n"
+            + "group by p.patient_id ) carga_viral";
+
+    public static final String findPatientWithViralLoadLessThan1000WithinPast12Months =
+        "select abaixo_mil_copias.patient_id\n"
+            + "	 from 		\n"
+            + "		( \n"
+            + "			Select p.patient_id,max(o.obs_datetime) data_carga, e.encounter_type\n"
+            + "			from 	patient p \n"
+            + "					inner join encounter e on p.patient_id=e.patient_id \n"
+            + "					inner join obs o on e.encounter_id=o.encounter_id \n"
+            + "			where 	p.voided=0 and e.voided=0 and o.voided=0 and e.encounter_type in (6,9,53,13,51) and  o.concept_id in (856,1305) and  \n"
+            + "					o.obs_datetime between date_add(date_add(:endDate, interval -12 MONTH), interval 1 day) and :endDate and e.location_id=:location\n"
+            + "			group by p.patient_id\n"
+            + "		) abaixo_mil_copias \n"
+            + "			inner join obs on obs.person_id=abaixo_mil_copias.patient_id and obs.obs_datetime=abaixo_mil_copias.data_carga \n"
+            + "		where obs.voided=0 and ((obs.concept_id=856 and obs.value_numeric<1000) or obs.concept_id=1305)  and obs.location_id=:location\n"
+            + "  ";
   }
 }

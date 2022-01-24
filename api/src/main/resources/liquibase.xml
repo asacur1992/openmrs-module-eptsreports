@@ -25,18 +25,5 @@
 			encoding="UTF-8" />
 
 	</changeSet>
-	
-	
-	<!-- eSaude Release370_20122021 -->
-	<changeSet author="icap-mozambique"
-		id="epts_metadata_for_release370_21122021">
-
-		<sqlFile path="scripts/EPTSMetadataForRelease370_PlatformVersion_2x_20122021.sql"
-			encoding="UTF-8" />
-
-	</changeSet>
-		
-		
-	
 
 </databaseChangeLog>
