@@ -30,7 +30,8 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class TxRttDataset extends BaseDataSet {
+public class TxRttDataset extends BaseDataSet
+    implements GenericCohortDatasetDefinition<TxRttDataset> {
 
   @Autowired private TxRTTCohortQueries txRTTCohortQueries;
 
@@ -40,6 +41,8 @@ public class TxRttDataset extends BaseDataSet {
 
   @Autowired private KeyPopulationDimension keyPopulationDimension;
 
+  private IndicatorType indicatorType;
+
   public DataSetDefinition constructTxRttDataset() {
 
     final CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
@@ -48,7 +51,7 @@ public class TxRttDataset extends BaseDataSet {
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition patientsOnRttDefinition = this.txRTTCohortQueries.getPatientsOnRTT();
+    final CohortDefinition patientsOnRttDefinition = this.getCohortDefinition();
 
     final CohortIndicator patientOnRttIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -70,7 +73,7 @@ public class TxRttDataset extends BaseDataSet {
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
 
-    definition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
+    definition.addDimension("gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
 
     definition.addDimension(
         this.getColumnName(AgeRange.UNKNOWN, Gender.MALE),
@@ -166,7 +169,7 @@ public class TxRttDataset extends BaseDataSet {
         "R-DurationIIT-LESS-3MONTHS",
         "Duration of IIT Before returning Treatment <3 months",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Duration of IIT Before returning Treatment <3 months",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries.getDurationInterruptionOfTreatmentLessThan3Months(),
@@ -178,7 +181,7 @@ public class TxRttDataset extends BaseDataSet {
         "R-DurationIIT-BETWEEN-3-5MONTHS",
         "Duration of IIT Before returning Treatment Between 3-5 months",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Duration of IIT Before returning Treatment Between 3-5 months",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries.getDurationInterruptionOfTreatmentBetween3And5Months(),
@@ -190,7 +193,7 @@ public class TxRttDataset extends BaseDataSet {
         "R-DurationIIT-GREATER-OR-EQUAL-6MONTHS",
         "Duration of IIT Before returning Treatment Greater Or Equal 6 months",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Duration of IIT Before returning Treatment Greater or Equal 6 months",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries
@@ -203,7 +206,7 @@ public class TxRttDataset extends BaseDataSet {
         "PLHIVLESS12MONTH",
         "PLHIV <12 months",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "patients PLHIV <12 Months",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries.getPLHIVLess12MonthCalculation(), mappings)),
@@ -214,7 +217,7 @@ public class TxRttDataset extends BaseDataSet {
         "PLHIVGREATER12MONTH",
         "PLHIV >=12 months",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "patients PLHIV >=12 Months",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries.getPLHIVGreather12MonthCalculation(), mappings)),
@@ -225,7 +228,7 @@ public class TxRttDataset extends BaseDataSet {
         "PLHIVUNKOWN",
         "PLHIV Unknown Desaggregation",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "patients PLHIV With unknown date of IIT ",
                 EptsReportUtils.map(
                     this.txRTTCohortQueries.getPLHIVUnknownDesaggregation(), mappings)),
@@ -236,7 +239,7 @@ public class TxRttDataset extends BaseDataSet {
         "PLHIVTOTAL",
         "PLHIV Total",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Patients PLHIV - All",
                 EptsReportUtils.map(this.txRTTCohortQueries.getPLHIVTotal(), mappings)),
             mappings),
@@ -295,5 +298,20 @@ public class TxRttDataset extends BaseDataSet {
           EptsReportUtils.map(cohortIndicator, mappings),
           femaleName + "=" + femaleName);
     }
+  }
+
+  @Override
+  public CohortDefinition getCohortDefinition() {
+    if (IndicatorType.COMMUNITY.equals(this.indicatorType)) {
+      return this.txRTTCohortQueries.getCommunityPatientsOnRTT();
+    }
+
+    return this.txRTTCohortQueries.getPatientsOnRTT();
+  }
+
+  @Override
+  public TxRttDataset indicatorType(final IndicatorType indicatorType) {
+    this.indicatorType = indicatorType;
+    return this;
   }
 }

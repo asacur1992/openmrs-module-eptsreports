@@ -13,7 +13,7 @@ package org.openmrs.module.eptsreports.reporting.library.datasets;
 
 import java.util.Arrays;
 import java.util.List;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.PvlsCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.PvlsCommunityCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.AgeDimensionCohortInterface;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.EptsCommonDimension;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.KeyPopulationDimension;
@@ -33,7 +33,7 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
-  @Autowired private PvlsCohortQueries pvlsCohortQueries;
+  @Autowired private PvlsCommunityCohortQueries pvlsCommunityCohortQueries;
 
   @Autowired private KeyPopulationDimension keyPopulationDimension;
 
@@ -67,8 +67,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "patients with viral load",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
                     mappings)),
             mappings),
         "");
@@ -81,8 +81,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "viral load results on routine adults and children",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         this.getAdultChildrenColumns());
@@ -95,8 +95,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "viral load results on routine adults and children",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         this.getAdultChildrenColumns());
@@ -108,8 +108,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Pregant routine",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         "");
@@ -119,10 +119,10 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         "pregnant target",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
-                "Pregant routine",
+                "Pregant target",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         "");
@@ -134,21 +134,21 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Breastfeeding routine",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         "");
 
     dataSetDefinition.addColumn(
         "DBREASTARGET",
-        "Breastfeeding routine",
+        "Breastfeeding target",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
-                "Pregant routine",
+                "Breastfeeding target",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         "");
@@ -160,8 +160,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "patients with viral load",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months(),
                     mappings)),
             mappings),
         "");
@@ -174,8 +174,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "viral load results on routine adults and children",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         this.getAdultChildrenColumns());
@@ -188,8 +188,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "viral load results on routine adults and children",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         this.getAdultChildrenColumns());
@@ -201,47 +201,47 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Pregant routine",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine(),
                     mappings)),
             mappings),
         "");
 
     dataSetDefinition.addColumn(
         "NPREGTARGET",
-        "Pregant routine",
+        "Pregant target",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
-                "Pregant routine",
+                "Pregant target",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target(),
                     mappings)),
             mappings),
         "");
 
     dataSetDefinition.addColumn(
         "NBREASROTINE",
-        "Pregant routine",
+        "Breastfeeding routine",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
-                "Pregant routine",
+                "Breastfeeding routine",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine(),
                     mappings)),
             mappings),
         "");
 
     dataSetDefinition.addColumn(
         "NBREASTARGET",
-        "Pregant target",
+        "Breastfeeding target",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
-                "Pregant routine",
+                "Breastfeeding target",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target(),
+                    this.pvlsCommunityCohortQueries
+                        .findPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target(),
                     mappings)),
             mappings),
         "");
@@ -255,8 +255,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Rotine Sub Total",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         "");
@@ -268,8 +268,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Target Sub Total",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         "");
@@ -283,8 +283,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Rotine Numerator Sub Total",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
                     mappings)),
             mappings),
         "");
@@ -296,8 +296,8 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "Target Numerator Sub Total",
                 EptsReportUtils.map(
-                    this.pvlsCohortQueries
-                        .findCommunityPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
+                    this.pvlsCommunityCohortQueries
+                        .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
                     mappings)),
             mappings),
         "");
@@ -326,7 +326,7 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         this.eptsGeneralIndicator.getIndicator(
             "rotine",
             EptsReportUtils.map(
-                this.pvlsCohortQueries
+                this.pvlsCommunityCohortQueries
                     .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
                 mappings));
 
@@ -334,7 +334,7 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         this.eptsGeneralIndicator.getIndicator(
             "target",
             EptsReportUtils.map(
-                this.pvlsCohortQueries
+                this.pvlsCommunityCohortQueries
                     .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
                 mappings));
 
@@ -342,13 +342,13 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         "DRMSM",
         "Homosexual",
         EptsReportUtils.map(rotineDenominator, mappings),
-        "homosexual=homosexual");
+        "gender=M|homosexual=homosexual");
 
     dataSetDefinition.addColumn(
         "DTMSM",
         "Homosexual",
         EptsReportUtils.map(targetDenominator, mappings),
-        "homosexual=homosexual");
+        "gender=M|homosexual=homosexual");
 
     dataSetDefinition.addColumn(
         "DRPWID",
@@ -378,13 +378,13 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         "DRFSW",
         "Sex Worker",
         EptsReportUtils.map(rotineDenominator, mappings),
-        "sex-worker=sex-worker");
+        "gender=F|sex-worker=sex-worker");
 
     dataSetDefinition.addColumn(
         "DTFSW",
         "Sex Worker",
         EptsReportUtils.map(targetDenominator, mappings),
-        "sex-worker=sex-worker");
+        "gender=F|sex-worker=sex-worker");
 
     // Key population collumn Numerator
 
@@ -392,7 +392,7 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         this.eptsGeneralIndicator.getIndicator(
             "rotine",
             EptsReportUtils.map(
-                this.pvlsCohortQueries
+                this.pvlsCommunityCohortQueries
                     .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
                 mappings));
 
@@ -400,7 +400,7 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         this.eptsGeneralIndicator.getIndicator(
             "target",
             EptsReportUtils.map(
-                this.pvlsCohortQueries
+                this.pvlsCommunityCohortQueries
                     .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
                 mappings));
 
@@ -420,25 +420,25 @@ public class TxPvlsCommunityDataset extends BaseDataSet {
         "NRMSM",
         "Homosexual",
         EptsReportUtils.map(rotineNumerator, mappings),
-        "homosexual=homosexual");
+        "gender=M|homosexual=homosexual");
 
     dataSetDefinition.addColumn(
         "NTMSM",
         "Homosexual",
         EptsReportUtils.map(targetNumerator, mappings),
-        "homosexual=homosexual");
+        "gender=M|homosexual=homosexual");
 
     dataSetDefinition.addColumn(
         "NRFSW",
         "Sex Worker",
         EptsReportUtils.map(rotineNumerator, mappings),
-        "sex-worker=sex-worker");
+        "gender=F|sex-worker=sex-worker");
 
     dataSetDefinition.addColumn(
         "NTFSW",
         "Sex Worker",
         EptsReportUtils.map(targetNumerator, mappings),
-        "sex-worker=sex-worker");
+        "gender=F|sex-worker=sex-worker");
 
     dataSetDefinition.addColumn(
         "NRPRI",

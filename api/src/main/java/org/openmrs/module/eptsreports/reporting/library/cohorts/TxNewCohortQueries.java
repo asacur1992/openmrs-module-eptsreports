@@ -234,32 +234,17 @@ public class TxNewCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     txNewCompositionCohort.addSearch(
-        "START-ART-WITH-COMMUNITY-DISPENSATION",
+        "START-ART", EptsReportUtils.map(this.getTxNewCompositionCohort(cohortName), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findPatientsWhoStartedARTWithComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsWhoStartedARTWithComunnityDispensation),
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnity),
             mappings));
 
-    txNewCompositionCohort.addSearch(
-        "TRANSFERED-IN",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod",
-                TxNewQueries.QUERY.findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod),
-            mappings));
-
-    txNewCompositionCohort.addSearch(
-        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard",
-                TxNewQueries.QUERY
-                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
-            mappings));
-
-    txNewCompositionCohort.setCompositionString(
-        "START-ART-WITH-COMMUNITY-DISPENSATION NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+    txNewCompositionCohort.setCompositionString("START-ART AND WITH-COMMUNITY-DISPENSATION");
 
     return txNewCompositionCohort;
   }
@@ -280,7 +265,7 @@ public class TxNewCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findPatientsWhoStartedARTWithComunnityDispensation",
-                TxNewQueries.QUERY.findPatientsWhoStartedARTWithComunnityDispensation),
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnity),
             mappings));
 
     txNewCompositionCohort.addSearch(
