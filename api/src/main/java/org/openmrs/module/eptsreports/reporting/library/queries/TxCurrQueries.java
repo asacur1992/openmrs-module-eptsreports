@@ -169,8 +169,7 @@ public interface TxCurrQueries {
             + "  group by inicio.patient_id																															"
             + " ) inicio_fila_seg																																	"
             /*
-             * Aqui encontramos a data do proximo levantamento marcado no ultimo
-             * levantamento de ARV
+             * Aqui encontramos a data do proximo levantamento marcado no ultimo levantamento de ARV
              */
             + "  left join																																			"
             + "	 obs obs_fila on obs_fila.person_id=inicio_fila_seg.patient_id																						"
@@ -198,27 +197,10 @@ public interface TxCurrQueries {
             + "INNER JOIN person ON patient_id = person_id WHERE patient.voided=0 AND person.voided=0 "
             + "AND TIMESTAMPDIFF(year,birthdate,:endDate) BETWEEN %d AND %d AND gender='%s' AND birthdate IS NOT NULL";
 
-    public static final String findCommunityPatientsDispensation =
-        "SELECT patient_id FROM\n"
-            + "    (\n"
-            + "		SELECT e.patient_id, MAX(e.encounter_datetime) max_date FROM patient p\n"
-            + "			INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
-            + "			INNER JOIN obs o ON o.encounter_id = e.encounter_id\n"
-            + "				WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 23731\n"
-            + "				--AND e.encounter_datetime <= :endDate AND e.location_id = :location\n"
-            + "					GROUP BY e.patient_id\n"
-            + "    )last_encounter INNER JOIN (\n"
-            + "		SELECT o.person_id, o.value_coded, o.obs_datetime FROM obs o\n"
-            + "			WHERE o.voided = 0 AND o.concept_id = 23731 AND o.value_coded IN (1256,1257)\n"
-            + "	)obs_value ON last_encounter.patient_id = obs_value.person_id AND obs_value.obs_datetime = max_date\n"
-            + "GROUP BY patient_id";
-
-    /*busca regimes em consultas no intervalo selecionado
-     * e tambem busca por regimes cuja a data da proxima consulta é superior
-     * ou igual a data de inicio e a data do encontro(FILA) é inferior a data
-     * de inicio, isto é para garantir que contemos
-     * os que tiveram consulta no passado e a data do proximo
-     * levantamento esta dentro do periodo em analise
+    /*
+     * busca regimes em consultas no intervalo selecionado e tambem busca por regimes cuja a data da proxima consulta é
+     * superior ou igual a data de inicio e a data do encontro(FILA) é inferior a data de inicio, isto é para garantir que
+     * contemos os que tiveram consulta no passado e a data do proximo levantamento esta dentro do periodo em analise
      */
     public static final String findOnARTRegimens(final RegeminType regimenType) {
 

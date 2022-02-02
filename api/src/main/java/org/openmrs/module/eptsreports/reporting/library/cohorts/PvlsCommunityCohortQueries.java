@@ -2,6 +2,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
 import org.openmrs.Location;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxPvlsQueriesInterface;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxPvlsQueriesInterface.QUERY.WomanState;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -10,16 +11,21 @@ import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinitio
 import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PvlsCohortQueries {
+public class PvlsCommunityCohortQueries {
+
+  @Autowired private GenericCohortQueries genericCohorts;
 
   @DocumentedDefinition(
       value = "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months")
   public CohortDefinition
       findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months() {
-    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    final String mappings = "endDate=${endDate},location=${location}";
 
     definition.setName(
         "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months");
@@ -27,9 +33,24 @@ public class PvlsCohortQueries {
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
-    definition.setQuery(
-        TxPvlsQueriesInterface.QUERY
-            .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months);
+    definition.addSearch(
+        "VIRAL-LOAD-REGISTERED",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxPvlsQueriesInterface.QUERY
+                    .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("VIRAL-LOAD-REGISTERED AND COMMUNITY-DISPENSATION");
 
     return definition;
   }
@@ -38,7 +59,9 @@ public class PvlsCohortQueries {
       value = "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget")
   public CohortDefinition
       findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget() {
-    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    final String mappings = "endDate=${endDate},location=${location}";
 
     definition.setName(
         "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget");
@@ -46,9 +69,24 @@ public class PvlsCohortQueries {
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
-    definition.setQuery(
-        TxPvlsQueriesInterface.QUERY
-            .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget);
+    definition.addSearch(
+        "VIRAL-LOAD-REGISTERED-TARGET",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxPvlsQueriesInterface.QUERY
+                    .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("VIRAL-LOAD-REGISTERED-TARGET AND COMMUNITY-DISPENSATION");
 
     return definition;
   }
@@ -90,7 +128,9 @@ public class PvlsCohortQueries {
           "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months")
   public CohortDefinition
       findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months() {
-    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    final String mappings = "endDate=${endDate},location=${location}";
 
     definition.setName(
         "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months");
@@ -98,9 +138,24 @@ public class PvlsCohortQueries {
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
-    definition.setQuery(
-        TxPvlsQueriesInterface.QUERY
-            .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months);
+    definition.addSearch(
+        "VIRAL-LOAD-LESS-THAN1000",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months",
+                TxPvlsQueriesInterface.QUERY
+                    .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("VIRAL-LOAD-LESS-THAN1000 AND COMMUNITY-DISPENSATION");
 
     return definition;
   }
@@ -110,7 +165,8 @@ public class PvlsCohortQueries {
           "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget")
   public CohortDefinition
       findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget() {
-    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    final String mappings = "endDate=${endDate},location=${location}";
 
     definition.setName(
         "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget");
@@ -118,9 +174,24 @@ public class PvlsCohortQueries {
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
-    definition.setQuery(
-        TxPvlsQueriesInterface.QUERY
-            .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget);
+    definition.addSearch(
+        "VIRAL-LOAD-LESS-THAN1000-TARGET",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget",
+                TxPvlsQueriesInterface.QUERY
+                    .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("VIRAL-LOAD-LESS-THAN1000-TARGET AND COMMUNITY-DISPENSATION");
 
     return definition;
   }

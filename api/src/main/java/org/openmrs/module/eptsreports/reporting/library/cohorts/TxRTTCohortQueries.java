@@ -12,7 +12,7 @@ import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPLHIVLess12
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoAreTransferedOutCalculation;
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoExperiencedIITCalculation;
 import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseFghCalculationCohortDefinition;
-import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -86,31 +86,17 @@ public class TxRTTCohortQueries {
         "startDate=${startDate-1d},endDate=${startDate-1d},realEndDate=${endDate},location=${location}";
 
     compositionDefinition.addSearch(
-        "IIT-PREVIOUS-PERIOD",
-        EptsReportUtils.map(this.getPatientsWhoExperiencedIITCalculation(), mappings));
-
-    compositionDefinition.addSearch(
-        "RTT-TRANFERRED-OUT",
-        EptsReportUtils.map(
-            this.getPatientsWhoWhereTransferredOutCalculation(),
-            "endDate=${startDate},location=${location}"));
-
-    compositionDefinition.addSearch(
-        "TX-CURR",
-        EptsReportUtils.map(
-            this.txCurrCohortQueries.findPatientsWhoAreActiveOnART(),
-            "endDate=${endDate},location=${location}"));
+        "PATIENTS-ON-RTT", EptsReportUtils.map(this.getPatientsOnRTT(), mappings));
 
     compositionDefinition.addSearch(
         "COMMUNITY-DISPENSATION",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxCurrQueries.QUERY.findCommunityPatientsDispensation),
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
             "startDate=${startDate},endDate=${endDate},location=${location}"));
 
-    compositionDefinition.setCompositionString(
-        "(IIT-PREVIOUS-PERIOD NOT RTT-TRANFERRED-OUT) AND TX-CURR AND COMMUNITY-DISPENSATION");
+    compositionDefinition.setCompositionString("PATIENTS-ON-RTT AND COMMUNITY-DISPENSATION");
 
     return compositionDefinition;
   }
@@ -144,7 +130,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "DurationInterruptionOfTreatmentLessThan3Months")
   public CohortDefinition getDurationInterruptionOfTreatmentLessThan3Months() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "DurationInterruptionOfTreatmentLessThan3Months",
             Context.getRegisteredComponents(
@@ -159,7 +145,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "DurationInterruptionOfTreatmentBetween3And5Months")
   public CohortDefinition getDurationInterruptionOfTreatmentBetween3And5Months() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "DurationInterruptionOfTreatmentBetween3And5Months",
             Context.getRegisteredComponents(
@@ -174,7 +160,7 @@ public class TxRTTCohortQueries {
 
   @DocumentedDefinition(value = "DurationInterruptionOfTreatmentGreaterOrEqual6Months")
   public CohortDefinition getDurationInterruptionOfTreatmentGreaterOrEqual6Months() {
-    BaseFghCalculationCohortDefinition definition =
+    final BaseFghCalculationCohortDefinition definition =
         new BaseFghCalculationCohortDefinition(
             "DurationInterruptionOfTreatmentGreaterOrEqual6Months",
             Context.getRegisteredComponents(
