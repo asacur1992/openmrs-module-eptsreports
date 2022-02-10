@@ -40,7 +40,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PrepNewDataset extends BaseDataSet {
+public class PrepNewDataset extends BaseDataSet
+    implements GenericCohortDatasetDefinition<PrepNewDataset> {
 
   @Autowired private PrepNewCohortQueries prepNewCohortQueries;
 
@@ -54,6 +55,8 @@ public class PrepNewDataset extends BaseDataSet {
 
   @Autowired private PrepKeyPopulationDimension prepKeyPopulationDimension;
 
+  private IndicatorType indicatorType;
+
   public DataSetDefinition constructPrepNewDataset() {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
@@ -64,8 +67,7 @@ public class PrepNewDataset extends BaseDataSet {
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition clientsNewlyEnrolledInPrep =
-        this.prepNewCohortQueries.getClientsNewlyEnrolledInPrep();
+    final CohortDefinition clientsNewlyEnrolledInPrep = this.getCohortDefinition();
 
     final CohortIndicator clientsNewlyEnrolledInPrepIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -84,7 +86,8 @@ public class PrepNewDataset extends BaseDataSet {
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
 
-    dataSetDefinition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
+    dataSetDefinition.addDimension(
+        "gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
 
     dataSetDefinition.addDimension(
         this.getColumnName(AgeRange.UNKNOWN, Gender.MALE),
@@ -234,7 +237,21 @@ public class PrepNewDataset extends BaseDataSet {
     }
   }
 
-  private String getColumnName(AgeRange range, Gender gender) {
+  private String getColumnName(final AgeRange range, final Gender gender) {
     return range.getDesagregationColumnName("PREP-N", gender);
+  }
+
+  @Override
+  public CohortDefinition getCohortDefinition() {
+    if (IndicatorType.COMMUNITY.equals(this.indicatorType)) {
+      return this.prepNewCohortQueries.getCommnunityClientsNewlyEnrolledInPrep();
+    }
+    return this.prepNewCohortQueries.getClientsNewlyEnrolledInPrep();
+  }
+
+  @Override
+  public PrepNewDataset indicatorType(final IndicatorType indicatorType) {
+    this.indicatorType = indicatorType;
+    return this;
   }
 }
