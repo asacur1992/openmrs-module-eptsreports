@@ -30,8 +30,7 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class TxRttDataset extends BaseDataSet
-    implements GenericCohortDatasetDefinition<TxRttDataset> {
+public class TxRttDataset extends BaseDataSet {
 
   @Autowired private TxRTTCohortQueries txRTTCohortQueries;
 
@@ -41,8 +40,6 @@ public class TxRttDataset extends BaseDataSet
 
   @Autowired private KeyPopulationDimension keyPopulationDimension;
 
-  private IndicatorType indicatorType;
-
   public DataSetDefinition constructTxRttDataset() {
 
     final CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
@@ -51,7 +48,7 @@ public class TxRttDataset extends BaseDataSet
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition patientsOnRttDefinition = this.getCohortDefinition();
+    final CohortDefinition patientsOnRttDefinition = this.txRTTCohortQueries.getPatientsOnRTT();
 
     final CohortIndicator patientOnRttIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -298,20 +295,5 @@ public class TxRttDataset extends BaseDataSet
           EptsReportUtils.map(cohortIndicator, mappings),
           femaleName + "=" + femaleName);
     }
-  }
-
-  @Override
-  public CohortDefinition getCohortDefinition() {
-    if (IndicatorType.COMMUNITY.equals(this.indicatorType)) {
-      return this.txRTTCohortQueries.getCommunityPatientsOnRTT();
-    }
-
-    return this.txRTTCohortQueries.getPatientsOnRTT();
-  }
-
-  @Override
-  public TxRttDataset indicatorType(final IndicatorType indicatorType) {
-    this.indicatorType = indicatorType;
-    return this;
   }
 }

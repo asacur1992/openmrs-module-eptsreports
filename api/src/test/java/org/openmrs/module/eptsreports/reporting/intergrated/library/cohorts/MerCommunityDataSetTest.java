@@ -10,8 +10,7 @@ import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
-import org.openmrs.module.eptsreports.reporting.library.datasets.IndicatorType;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrDataset;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -22,14 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 /** @author Stélio Moiane */
 public class MerCommunityDataSetTest extends DefinitionsFGHLiveTest {
 
-  @Autowired private TxRttDataset dataset;
+  @Autowired private TxCurrDataset dataset;
 
   private Map<Parameter, Object> parameters;
 
   @Before
   public void setup() {
     final Location location = Context.getLocationService().getLocation(305);
-    final Date startDate = DateUtil.getDateTime(2021, 10, 21);
+    final Date startDate = DateUtil.getDateTime(2021, 11, 21);
     final Date endDate = DateUtil.getDateTime(2021, 12, 20);
 
     this.parameters = new HashMap<>();
@@ -41,8 +40,7 @@ public class MerCommunityDataSetTest extends DefinitionsFGHLiveTest {
   @Test
   public void shoulEvaluateDataSet() throws EvaluationException {
 
-    final DataSetDefinition numeratorDataset =
-        this.dataset.indicatorType(IndicatorType.COMMUNITY).constructTxRttDataset();
+    final DataSetDefinition numeratorDataset = this.dataset.constructTxCurrDataset(false);
 
     final DataSet evaluateDatasetDefinition =
         this.evaluateDatasetDefinition(numeratorDataset, this.parameters);

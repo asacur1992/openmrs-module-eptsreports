@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PrepNewDataset extends BaseDataSet {
+public class PrepNewCommunityDataset extends BaseDataSet {
 
   @Autowired private PrepNewCohortQueries prepNewCohortQueries;
 
@@ -65,7 +65,7 @@ public class PrepNewDataset extends BaseDataSet {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     final CohortDefinition clientsNewlyEnrolledInPrep =
-        this.prepNewCohortQueries.getClientsNewlyEnrolledInPrep();
+        this.prepNewCohortQueries.getCommnunityClientsNewlyEnrolledInPrep();
 
     final CohortIndicator clientsNewlyEnrolledInPrepIndicator =
         this.eptsGeneralIndicator.getIndicator(

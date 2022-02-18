@@ -40,8 +40,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TRFINDataset extends BaseDataSet
-    implements GenericCohortDatasetDefinition<TRFINDataset> {
+public class TRFINDataset extends BaseDataSet {
 
   @Autowired private TRFINCohortQueries txTrfInCohortQueries;
 
@@ -53,8 +52,6 @@ public class TRFINDataset extends BaseDataSet
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  private IndicatorType indicatorType;
-
   public CohortIndicatorDataSetDefinition constructTxTRFIN() {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
@@ -64,7 +61,8 @@ public class TRFINDataset extends BaseDataSet
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition txTRFINDefinition = this.getCohortDefinition();
+    final CohortDefinition txTRFINDefinition =
+        this.txTrfInCohortQueries.getPatiensWhoAreTransferredIn();
 
     final CohortIndicator txTRFINIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -204,20 +202,5 @@ public class TRFINDataset extends BaseDataSet
       name = "TRAN-females-" + ageRange.getName() + "" + gender.getName();
     }
     return name;
-  }
-
-  @Override
-  public CohortDefinition getCohortDefinition() {
-    if (IndicatorType.COMMUNITY.equals(this.indicatorType)) {
-      return this.txTrfInCohortQueries.getCommunityPatiensWhoAreTransferredIn();
-    }
-
-    return this.txTrfInCohortQueries.getPatiensWhoAreTransferredIn();
-  }
-
-  @Override
-  public TRFINDataset indicatorType(final IndicatorType indicatorType) {
-    this.indicatorType = indicatorType;
-    return this;
   }
 }
