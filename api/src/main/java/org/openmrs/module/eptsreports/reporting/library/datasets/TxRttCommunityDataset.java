@@ -43,7 +43,7 @@ public class TxRttCommunityDataset extends BaseDataSet {
   public DataSetDefinition constructTxRttDataset() {
 
     final CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
-    definition.setName("TX RTT Community Dataset");
+    definition.setName("TX RTT Dataset");
     definition.addParameters(this.getParameters());
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
@@ -70,6 +70,8 @@ public class TxRttCommunityDataset extends BaseDataSet {
         FORTY_TO_FORTY_FOUR,
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
+
+    definition.addDimension("gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
 
     definition.addDimension(
         this.getColumnName(AgeRange.UNKNOWN, Gender.MALE),
@@ -141,7 +143,7 @@ public class TxRttCommunityDataset extends BaseDataSet {
         "R-MSM",
         "Homosexual",
         EptsReportUtils.map(patientOnRttIndicator, mappings),
-        "homosexual=homosexual");
+        "gender=M|homosexual=homosexual");
 
     definition.addColumn(
         "R-PWID",
@@ -159,7 +161,44 @@ public class TxRttCommunityDataset extends BaseDataSet {
         "R-FSW",
         "Sex Worker",
         EptsReportUtils.map(patientOnRttIndicator, mappings),
-        "sex-worker=sex-worker");
+        "gender=F|sex-worker=sex-worker");
+
+    definition.addColumn(
+        "R-DurationIIT-LESS-3MONTHS",
+        "Duration of IIT Before returning Treatment <3 months",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "Duration of IIT Before returning Treatment <3 months",
+                EptsReportUtils.map(
+                    this.txRTTCohortQueries.getDurationInterruptionOfTreatmentLessThan3Months(),
+                    mappings)),
+            mappings),
+        "");
+
+    definition.addColumn(
+        "R-DurationIIT-BETWEEN-3-5MONTHS",
+        "Duration of IIT Before returning Treatment Between 3-5 months",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "Duration of IIT Before returning Treatment Between 3-5 months",
+                EptsReportUtils.map(
+                    this.txRTTCohortQueries.getDurationInterruptionOfTreatmentBetween3And5Months(),
+                    mappings)),
+            mappings),
+        "");
+
+    definition.addColumn(
+        "R-DurationIIT-GREATER-OR-EQUAL-6MONTHS",
+        "Duration of IIT Before returning Treatment Greater Or Equal 6 months",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "Duration of IIT Before returning Treatment Greater or Equal 6 months",
+                EptsReportUtils.map(
+                    this.txRTTCohortQueries
+                        .getDurationInterruptionOfTreatmentGreaterOrEqual6Months(),
+                    mappings)),
+            mappings),
+        "");
 
     definition.addColumn(
         "PLHIVLESS12MONTH",
@@ -183,14 +222,16 @@ public class TxRttCommunityDataset extends BaseDataSet {
             mappings),
         "");
 
-    // TODO: Vai entrar na proxima versao
-    // definition.addColumn("PLHIVUNKOWN", "PLHIV Unknown Desaggregation",
-    // EptsReportUtils.map(
-    // eptsGeneralIndicator.getIndicator("patients PLHIV With unknown date of IIT ",
-    // EptsReportUtils.map(this.txRTTCohortQueries.getPLHIVUnknownDesaggregation(),
-    // mappings)),
-    // mappings),
-    // "");
+    definition.addColumn(
+        "PLHIVUNKOWN",
+        "PLHIV Unknown Desaggregation",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "patients PLHIV With unknown date of IIT ",
+                EptsReportUtils.map(
+                    this.txRTTCohortQueries.getPLHIVUnknownDesaggregation(), mappings)),
+            mappings),
+        "");
 
     definition.addColumn(
         "PLHIVTOTAL",

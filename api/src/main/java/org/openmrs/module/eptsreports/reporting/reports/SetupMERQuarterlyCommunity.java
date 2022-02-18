@@ -18,15 +18,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.datasets.IndicatorType;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PrepCtCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewCommunityDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxMlCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxPvlsCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -42,19 +41,19 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
   @Autowired private TxPvlsCommunityDataset txPvlsCommunityDataset;
 
-  @Autowired private TxNewDataset txNewDataset;
+  @Autowired private TxNewCommunityDataset txNewCommunityDataset;
 
-  @Autowired private TxCurrDataset txCurrDataset;
+  @Autowired private TxCurrCommunityDataset txCurrCommunityDataset;
 
-  @Autowired private TxRttDataset txRttDataset;
+  @Autowired private TxRttCommunityDataset txRttCommunityDataset;
 
   @Autowired private TxMlCommunityDataset txMlCommunityDataset;
 
-  @Autowired private TRFINDataset txTfrInDataset;
+  @Autowired private TRFINCommunityDataset tRFINCommunityDataset;
 
-  @Autowired private PrepNewDataset prepNewDataset;
+  @Autowired private PrepNewCommunityDataset prepNewCommunityDataset;
 
-  @Autowired private PrepCtCommunityDataset prepCommunityDataset;
+  @Autowired private PrepCtCommunityDataset prepCtCommunityDataset;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
@@ -92,19 +91,13 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.txRttDataset.getParameters());
+    reportDefinition.setParameters(this.txRttCommunityDataset.getParameters());
 
     reportDefinition.addDataSetDefinition(
-        "N",
-        Mapped.mapStraightThrough(
-            this.txNewDataset.indicatorType(IndicatorType.COMMUNITY).constructTxNewDataset()));
+        "N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
 
     reportDefinition.addDataSetDefinition(
-        "C",
-        Mapped.mapStraightThrough(
-            this.txCurrDataset
-                .indicatorType(IndicatorType.COMMUNITY)
-                .constructTxCurrDataset(true)));
+        "C", Mapped.mapStraightThrough(this.txCurrCommunityDataset.constructTxCurrDataset(true)));
 
     reportDefinition.addDataSetDefinition(
         "P", Mapped.mapStraightThrough(this.txPvlsCommunityDataset.constructTxPvlsDatset()));
@@ -113,22 +106,17 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
         "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
 
     reportDefinition.addDataSetDefinition(
-        "R",
-        Mapped.mapStraightThrough(
-            this.txRttDataset.indicatorType(IndicatorType.COMMUNITY).constructTxRttDataset()));
+        "R", Mapped.mapStraightThrough(this.txRttCommunityDataset.constructTxRttDataset()));
 
     reportDefinition.addDataSetDefinition(
-        "TR",
-        Mapped.mapStraightThrough(
-            this.txTfrInDataset.indicatorType(IndicatorType.COMMUNITY).constructTxTRFIN()));
+        "TR", Mapped.mapStraightThrough(this.tRFINCommunityDataset.constructTxTRFIN()));
 
     reportDefinition.addDataSetDefinition(
-        "PREP",
-        Mapped.mapStraightThrough(
-            this.prepNewDataset.indicatorType(IndicatorType.COMMUNITY).constructPrepNewDataset()));
+        "PREP", Mapped.mapStraightThrough(this.prepNewCommunityDataset.constructPrepNewDataset()));
 
     reportDefinition.addDataSetDefinition(
-        "PrEP_CT", Mapped.mapStraightThrough(this.prepCommunityDataset.constructPrepCtDataset()));
+        "PrEP_CT", Mapped.mapStraightThrough(this.prepCtCommunityDataset.constructPrepCtDataset()));
+
     reportDefinition.addDataSetDefinition(
         "D",
         Mapped.mapStraightThrough(this.DatinCodeDataSet.constructDataset(this.getParameters())));

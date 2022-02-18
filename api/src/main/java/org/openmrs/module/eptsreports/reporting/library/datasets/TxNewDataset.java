@@ -45,8 +45,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TxNewDataset extends BaseDataSet
-    implements GenericCohortDatasetDefinition<TxNewDataset> {
+public class TxNewDataset extends BaseDataSet {
 
   @Autowired private TxNewCohortQueries txNewCohortQueries;
 
@@ -60,8 +59,6 @@ public class TxNewDataset extends BaseDataSet
 
   @Autowired private KeyPopulationDimension keyPopulationDimension;
 
-  private IndicatorType indicatorType;
-
   public DataSetDefinition constructTxNewDataset() {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
@@ -72,7 +69,8 @@ public class TxNewDataset extends BaseDataSet
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition patientEnrolledInART = this.getCohortDefinition();
+    final CohortDefinition patientEnrolledInART =
+        this.txNewCohortQueries.getTxNewCompositionCohort("patientEnrolledInART");
 
     final CohortIndicator patientEnrolledInHIVStartedARTIndicator =
         this.eptsGeneralIndicator.getIndicator(
@@ -240,20 +238,5 @@ public class TxNewDataset extends BaseDataSet
 
   private String getColumnName(final AgeRange range, final Gender gender) {
     return range.getDesagregationColumnName("N", gender);
-  }
-
-  @Override
-  public CohortDefinition getCohortDefinition() {
-    if (IndicatorType.COMMUNITY.equals(this.indicatorType)) {
-      return this.txNewCohortQueries.getTxNewCommunityCompositionCohort("patientEnrolledInART_CD");
-    }
-
-    return this.txNewCohortQueries.getTxNewCompositionCohort("patientEnrolledInART");
-  }
-
-  @Override
-  public TxNewDataset indicatorType(final IndicatorType indicatorType) {
-    this.indicatorType = indicatorType;
-    return this;
   }
 }

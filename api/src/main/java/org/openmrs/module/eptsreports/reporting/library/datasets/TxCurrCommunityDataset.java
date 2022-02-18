@@ -48,7 +48,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TxCurrDataset extends BaseDataSet {
+public class TxCurrCommunityDataset extends BaseDataSet {
 
   @Autowired private TxCurrCohortQueries txCurrCohortQueries;
 
@@ -74,7 +74,7 @@ public class TxCurrDataset extends BaseDataSet {
     final String mappings = "endDate=${endDate},location=${location}";
 
     final CohortDefinition txCurrCompositionCohort =
-        this.txCurrCohortQueries.findPatientsWhoAreActiveOnART();
+        this.txCurrCohortQueries.findCommunityPatientsWhoAreActiveOnART();
 
     final CohortIndicator txCurrIndicator =
         this.eptsGeneralIndicator.getIndicator(

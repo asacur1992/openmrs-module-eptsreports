@@ -16,17 +16,22 @@ package org.openmrs.module.eptsreports.reporting.library.datasets;
 
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.ABOVE_FIFTY;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.FIFTEEN_TO_NINETEEN;
+import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.FIVE_TO_NINE;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.FORTY_FIVE_TO_FORTY_NINE;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.FORTY_TO_FORTY_FOUR;
+import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.ONE_TO_FOUR;
+import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.TEN_TO_FOURTEEN;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.THIRTY_FIVE_TO_THIRTY_NINE;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.THIRTY_TO_THRITY_FOUR;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.TWENTY_FIVE_TO_TWENTY_NINE;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.TWENTY_TO_TWENTY_FOUR;
+import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.UNDER_ONE;
+import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.UNKNOWN;
 
-import org.openmrs.module.eptsreports.reporting.library.cohorts.PrepNewCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.TxNewCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.AgeDimensionCohortInterface;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.EptsCommonDimension;
-import org.openmrs.module.eptsreports.reporting.library.dimensions.PrepKeyPopulationDimension;
+import org.openmrs.module.eptsreports.reporting.library.dimensions.KeyPopulationDimension;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -40,41 +45,49 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PrepNewDataset extends BaseDataSet {
+public class TxNewCommunityDataset extends BaseDataSet {
 
-  @Autowired private PrepNewCohortQueries prepNewCohortQueries;
+  @Autowired private TxNewCohortQueries txNewCohortQueries;
 
   @Autowired private EptsCommonDimension eptsCommonDimension;
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
   @Autowired
-  @Qualifier("commonAgeDimensionCohort")
+  @Qualifier("txNewAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  @Autowired private PrepKeyPopulationDimension prepKeyPopulationDimension;
+  @Autowired private KeyPopulationDimension keyPopulationDimension;
 
-  public DataSetDefinition constructPrepNewDataset() {
+  public DataSetDefinition constructTxNewDataset() {
 
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
 
-    dataSetDefinition.setName("PREP_NEW Data Set");
+    dataSetDefinition.setName("TX_NEW Data Set");
     dataSetDefinition.addParameters(this.getParameters());
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    final CohortDefinition clientsNewlyEnrolledInPrep =
-        this.prepNewCohortQueries.getClientsNewlyEnrolledInPrep();
+    final CohortDefinition patientEnrolledInART =
+        this.txNewCohortQueries.getTxNewCommunityCompositionCohort("patientEnrolledInART_CD");
 
-    final CohortIndicator clientsNewlyEnrolledInPrepIndicator =
+    final CohortIndicator patientEnrolledInHIVStartedARTIndicator =
         this.eptsGeneralIndicator.getIndicator(
-            "clientsNewlyEnrolledInPrepIndicator",
-            EptsReportUtils.map(clientsNewlyEnrolledInPrep, mappings));
+            "patientNewlyEnrolledInHIVIndicator",
+            EptsReportUtils.map(patientEnrolledInART, mappings));
+
+    dataSetDefinition.addDimension(
+        "breastfeeding",
+        EptsReportUtils.map(this.eptsCommonDimension.findPatientsWhoAreBreastfeeding(), mappings));
 
     this.addDimensions(
         dataSetDefinition,
         mappings,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
         FIFTEEN_TO_NINETEEN,
         TWENTY_TO_TWENTY_FOUR,
         TWENTY_FIVE_TO_TWENTY_NINE,
@@ -103,38 +116,40 @@ public class PrepNewDataset extends BaseDataSet {
 
     dataSetDefinition.addDimension(
         "homosexual",
-        EptsReportUtils.map(
-            this.prepKeyPopulationDimension.findPatientsWhoAreHomosexual(), mappings));
+        EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreHomosexual(), mappings));
 
     dataSetDefinition.addDimension(
         "drug-user",
-        EptsReportUtils.map(this.prepKeyPopulationDimension.findPatientsWhoUseDrugs(), mappings));
+        EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoUseDrugs(), mappings));
 
     dataSetDefinition.addDimension(
         "prisioner",
-        EptsReportUtils.map(
-            this.prepKeyPopulationDimension.findPatientsWhoAreInPrison(), mappings));
+        EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreInPrison(), mappings));
 
     dataSetDefinition.addDimension(
         "sex-worker",
-        EptsReportUtils.map(
-            this.prepKeyPopulationDimension.findPatientsWhoAreSexWorker(), mappings));
-
-    dataSetDefinition.addDimension(
-        "transgender",
-        EptsReportUtils.map(
-            this.prepKeyPopulationDimension.findPatientsWhoAreTransGender(), mappings));
+        EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreSexWorker(), mappings));
 
     dataSetDefinition.addColumn(
-        "PREP-N-All",
-        "PREP_NEW: New on PREP",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
+        "1All",
+        "TX_NEW: New on ART",
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "");
+
+    dataSetDefinition.addColumn(
+        "ANC",
+        "TX_NEW: Breastfeeding Started ART",
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
+        "breastfeeding=breastfeeding");
 
     this.addColums(
         dataSetDefinition,
         mappings,
-        clientsNewlyEnrolledInPrepIndicator,
+        patientEnrolledInHIVStartedARTIndicator,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
         FIFTEEN_TO_NINETEEN,
         TWENTY_TO_TWENTY_FOUR,
         TWENTY_FIVE_TO_TWENTY_NINE,
@@ -144,44 +159,30 @@ public class PrepNewDataset extends BaseDataSet {
         FORTY_FIVE_TO_FORTY_NINE,
         ABOVE_FIFTY);
 
-    dataSetDefinition.addColumn(
-        "PREP-N-males-unknownM",
-        "unknownM",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
-        this.getColumnName(AgeRange.UNKNOWN, Gender.MALE)
-            + "="
-            + this.getColumnName(AgeRange.UNKNOWN, Gender.MALE));
+    this.addColums(dataSetDefinition, "", patientEnrolledInHIVStartedARTIndicator, UNKNOWN);
 
     dataSetDefinition.addColumn(
-        "PREP-N-females-unknownF",
-        "unknownF",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
-        this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE)
-            + "="
-            + this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE));
-
-    dataSetDefinition.addColumn(
-        "PREP-N-MSM",
+        "N-MSM",
         "Homosexual",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "gender=M|homosexual=homosexual");
 
     dataSetDefinition.addColumn(
-        "PREP-N-PWID",
+        "N-PWID",
         "Drugs User",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "drug-user=drug-user");
 
     dataSetDefinition.addColumn(
-        "PREP-N-PRI",
+        "N-PRI",
         "Prisioners",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "prisioner=prisioner");
 
     dataSetDefinition.addColumn(
-        "PREP-N-FSW",
+        "N-FSW",
         "Sex Worker",
-        EptsReportUtils.map(clientsNewlyEnrolledInPrepIndicator, mappings),
+        EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "gender=F|sex-worker=sex-worker");
 
     return dataSetDefinition;
@@ -222,20 +223,20 @@ public class PrepNewDataset extends BaseDataSet {
       cohortIndicatorDataSetDefinition.addDimension(
           this.getColumnName(range, Gender.MALE),
           EptsReportUtils.map(
-              this.eptsCommonDimension.findClientsWhoAreNewlyEnrolledInPrepByGenderAndAgeRange(
-                  this.getColumnName(range, Gender.MALE), Gender.MALE.getName(), range),
+              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
+                  this.getColumnName(range, Gender.MALE), range, Gender.MALE.getName()),
               mappings));
 
       cohortIndicatorDataSetDefinition.addDimension(
           this.getColumnName(range, Gender.FEMALE),
           EptsReportUtils.map(
-              this.eptsCommonDimension.findClientsWhoAreNewlyEnrolledInPrepByGenderAndAgeRange(
-                  this.getColumnName(range, Gender.FEMALE), Gender.FEMALE.getName(), range),
+              this.eptsCommonDimension.findPatientsWhoAreNewlyEnrolledOnArtByAgeAndGender(
+                  this.getColumnName(range, Gender.FEMALE), range, Gender.FEMALE.getName()),
               mappings));
     }
   }
 
   private String getColumnName(final AgeRange range, final Gender gender) {
-    return range.getDesagregationColumnName("PREP-N", gender);
+    return range.getDesagregationColumnName("N", gender);
   }
 }
