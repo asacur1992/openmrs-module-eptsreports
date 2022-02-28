@@ -106,7 +106,10 @@ public interface PrEPPatientExpectedQueries {
           + ") sector on sector.patient_id=consulta_esperada.patient_id \n"
           + "\n"
           + "-- Junção para pegar dados do Utente ( idade e sexo)\n"
-          + " inner join person per on per.person_id=consulta_esperada.patient_id \n"
+          + "  inner join (\n" + 
+          " select person_id,gender,birthdate from person pe where \n" + 
+          " ((pe.birthdate is not null and timestampdiff(year,pe.birthdate,:startDate ) >= 15) or pe.birthdate is  null)\n" + 
+          " ) per on per.person_id=consulta_esperada.patient_id  \n"
           + " \n"
           + "left join \n"
           + "	(	select pid1.*\n"
