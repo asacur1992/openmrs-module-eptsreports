@@ -14,7 +14,6 @@
 package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
-
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.DsdQueriesInterface;
 import org.openmrs.module.eptsreports.reporting.library.queries.SearchPatientsQueries;
@@ -31,105 +30,101 @@ import org.springframework.stereotype.Component;
 @Component
 public class SearchPatientsCohortQueries {
 
-	@Autowired
-	private GenericCohortQueries genericCohorts;
+  @Autowired private GenericCohortQueries genericCohorts;
 
-	public CohortDefinition findFoundPatients() {
+  public CohortDefinition findFoundPatients() {
 
-		final SqlCohortDefinition cohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition cohortDefinition = new SqlCohortDefinition();
 
-		cohortDefinition.setName("FOUND PATIENTS");
-		cohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		cohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		cohortDefinition.addParameter(new Parameter("location", "location", Location.class));
+    cohortDefinition.setName("FOUND PATIENTS");
+    cohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    cohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    cohortDefinition.addParameter(new Parameter("location", "location", Location.class));
 
-		cohortDefinition.setQuery(SearchPatientsQueries.QUERY.findFoundPatients);
+    cohortDefinition.setQuery(SearchPatientsQueries.QUERY.findFoundPatients);
 
-		return cohortDefinition;
-	}
+    return cohortDefinition;
+  }
 
-	public CohortDefinition findPatientsNotfoundInSearch() {
+  public CohortDefinition findPatientsNotfoundInSearch() {
 
-		final SqlCohortDefinition cohortDefinition = new SqlCohortDefinition();
+    final SqlCohortDefinition cohortDefinition = new SqlCohortDefinition();
 
-		cohortDefinition.setName("PATIENTS NOT FOUND");
-		cohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		cohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		cohortDefinition.addParameter(new Parameter("location", "location", Location.class));
+    cohortDefinition.setName("PATIENTS NOT FOUND");
+    cohortDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    cohortDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    cohortDefinition.addParameter(new Parameter("location", "location", Location.class));
 
-		cohortDefinition.setQuery(SearchPatientsQueries.QUERY.findPatientNotFoundInSearch);
+    cohortDefinition.setQuery(SearchPatientsQueries.QUERY.findPatientNotFoundInSearch);
 
-		return cohortDefinition;
-	}
+    return cohortDefinition;
+  }
 
-	public CohortDefinitionDimension findPatientsByRange(final String name, final AgeRange range) {
-		final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
+  public CohortDefinitionDimension findPatientsByRange(final String name, final AgeRange range) {
+    final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
 
-		dimension.setName(name);
-		dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
-		dimension.addParameter(new Parameter("location", "location", Location.class));
+    dimension.setName(name);
+    dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
+    dimension.addParameter(new Parameter("location", "location", Location.class));
 
-		String query = DsdQueriesInterface.QUERY.findPatientsAgeRange;
-		query = String.format(query, range.getMin(), range.getMax());
+    String query = DsdQueriesInterface.QUERY.findPatientsAgeRange;
+    query = String.format(query, range.getMin(), range.getMax());
 
-		if (AgeRange.ADULT.equals(range)) {
+    if (AgeRange.ADULT.equals(range)) {
 
-			query = query.replace(
-					"BETWEEN " + range.getMin() + " AND " + range.getMax(), " >= " + range.getMax());
-		}
+      query =
+          query.replace(
+              "BETWEEN " + range.getMin() + " AND " + range.getMax(), " >= " + range.getMax());
+    }
 
-		dimension.addCohortDefinition(
-				name,
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql("findPatientsByRange", query),
-						"endDate=${endDate}"));
+    dimension.addCohortDefinition(
+        name,
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql("findPatientsByRange", query), "endDate=${endDate}"));
 
-		return dimension;
-	}
+    return dimension;
+  }
 
-	public CohortDefinitionDimension findPatientsByAbsenseReason(final String name, final SearchReason reason) {
+  public CohortDefinitionDimension findPatientsByAbsenseReason(
+      final String name, final SearchReason reason) {
 
-		final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
+    final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
 
-		dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
-		dimension.addParameter(new Parameter("location", "location", Location.class));
+    dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
+    dimension.addParameter(new Parameter("location", "location", Location.class));
 
-		String query = SearchPatientsQueries.QUERY.findFoundPatientsByAbsenseReason;
-		query = query.replace(":reason", String.valueOf(reason.getReason()));
+    String query = SearchPatientsQueries.QUERY.findFoundPatientsByAbsenseReason;
+    query = query.replace(":reason", String.valueOf(reason.getReason()));
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		dimension.addCohortDefinition(
-				name,
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql("PatientsByReason", query),
-						mappings));
+    dimension.addCohortDefinition(
+        name,
+        EptsReportUtils.map(this.genericCohorts.generalSql("PatientsByReason", query), mappings));
 
-		return dimension;
-	}
+    return dimension;
+  }
 
-	public CohortDefinitionDimension findPatientsNotFoundInSearchByReason(final String name, final SearchReason reason) {
+  public CohortDefinitionDimension findPatientsNotFoundInSearchByReason(
+      final String name, final SearchReason reason) {
 
-		final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
+    final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
 
-		dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
-		dimension.addParameter(new Parameter("location", "location", Location.class));
+    dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
+    dimension.addParameter(new Parameter("location", "location", Location.class));
 
-		String query = SearchPatientsQueries.QUERY.findPatientNotFoundInSearchByReason;
-		query = query.replace(":reason", String.valueOf(reason.getReason()));
+    String query = SearchPatientsQueries.QUERY.findPatientNotFoundInSearchByReason;
+    query = query.replace(":reason", String.valueOf(reason.getReason()));
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		dimension.addCohortDefinition(
-				name,
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql("PatientsByReason", query),
-						mappings));
+    dimension.addCohortDefinition(
+        name,
+        EptsReportUtils.map(this.genericCohorts.generalSql("PatientsByReason", query), mappings));
 
-		return dimension;
-	}
-
+    return dimension;
+  }
 }

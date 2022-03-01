@@ -29,102 +29,164 @@ import org.springframework.stereotype.Component;
 @Component
 public class FoundPatientsDataset extends BaseDataSet {
 
-	@Autowired
-	private SearchPatientsCohortQueries searchPatientsCohortQueries;
+  @Autowired private SearchPatientsCohortQueries searchPatientsCohortQueries;
 
-	@Autowired
-	private EptsGeneralIndicator eptsGeneralIndicator;
+  @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
-	public DataSetDefinition constructFoundPatientsDataset() {
+  public DataSetDefinition constructFoundPatientsDataset() {
 
-		final CohortIndicatorDataSetDefinition dataSetDefinition = new CohortIndicatorDataSetDefinition();
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
 
-		dataSetDefinition.setName("TX_NEW Data Set");
-		dataSetDefinition.addParameters(this.getParameters());
+    dataSetDefinition.setName("TX_NEW Data Set");
+    dataSetDefinition.addParameters(this.getParameters());
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		final CohortDefinition foundPatientsCohortDefinition = this.searchPatientsCohortQueries.findFoundPatients();
+    final CohortDefinition foundPatientsCohortDefinition =
+        this.searchPatientsCohortQueries.findFoundPatients();
 
-		final CohortIndicator patientFoundIndicator = this.eptsGeneralIndicator.getIndicator(
-				"patientsSerachedAndFound",
-				EptsReportUtils.map(foundPatientsCohortDefinition, mappings));
+    final CohortIndicator patientFoundIndicator =
+        this.eptsGeneralIndicator.getIndicator(
+            "patientsSerachedAndFound",
+            EptsReportUtils.map(foundPatientsCohortDefinition, mappings));
 
-		dataSetDefinition.addDimension(
-				"children",
-				EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsByRange("children", AgeRange.CHILDREN), "endDate=${endDate}"));
+    dataSetDefinition.addDimension(
+        "children",
+        EptsReportUtils.map(
+            this.searchPatientsCohortQueries.findPatientsByRange("children", AgeRange.CHILDREN),
+            "endDate=${endDate}"));
 
-		dataSetDefinition.addDimension(
-				"adult",
-				EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsByRange("adult", AgeRange.ADULT), "endDate=${endDate}"));
+    dataSetDefinition.addDimension(
+        "adult",
+        EptsReportUtils.map(
+            this.searchPatientsCohortQueries.findPatientsByRange("adult", AgeRange.ADULT),
+            "endDate=${endDate}"));
 
-		this.addDimensions(dataSetDefinition, mappings, SearchReason.FORGOT_DATE, SearchReason.WAS_SICK, SearchReason.LACK_OF_TRANSPORTATION,
-				SearchReason.BAD_SERVICE, SearchReason.PROVIDER_FEAR, SearchReason.PROVIDER_ABSENCE, SearchReason.SECONDARY_EFFECTS,
-				SearchReason.TRADITIONAL_TREATMENT, SearchReason.TRANSFERED_OUT, SearchReason.AUTO_TRANSFER, SearchReason.ART_ABANDONMENT,
-				SearchReason.OTHER_MISSING, SearchReason.PATIENT_IS_FINE, SearchReason.PATIENT_HAD_ISSUES, SearchReason.FAMILY_CONCERN,
-				SearchReason.MEDICATION_IS_DOING_BAD, SearchReason.LACK_OF_FAMILY_SUPPORT, SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
-				SearchReason.DIAGNOSIS_NOT_REVEALED, SearchReason.OTHER_REPORT);
+    this.addDimensions(
+        dataSetDefinition,
+        mappings,
+        SearchReason.FORGOT_DATE,
+        SearchReason.WAS_SICK,
+        SearchReason.LACK_OF_TRANSPORTATION,
+        SearchReason.BAD_SERVICE,
+        SearchReason.PROVIDER_FEAR,
+        SearchReason.PROVIDER_ABSENCE,
+        SearchReason.SECONDARY_EFFECTS,
+        SearchReason.TRADITIONAL_TREATMENT,
+        SearchReason.TRANSFERED_OUT,
+        SearchReason.AUTO_TRANSFER,
+        SearchReason.ART_ABANDONMENT,
+        SearchReason.OTHER_MISSING,
+        SearchReason.PATIENT_IS_FINE,
+        SearchReason.PATIENT_HAD_ISSUES,
+        SearchReason.FAMILY_CONCERN,
+        SearchReason.MEDICATION_IS_DOING_BAD,
+        SearchReason.LACK_OF_FAMILY_SUPPORT,
+        SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
+        SearchReason.DIAGNOSIS_NOT_REVEALED,
+        SearchReason.OTHER_REPORT);
 
-		dataSetDefinition.addColumn(
-				"PSF",
-				"PATIENTS SEARCH: FOUND",
-				EptsReportUtils.map(patientFoundIndicator, mappings),
-				"");
+    dataSetDefinition.addColumn(
+        "PSF", "PATIENTS SEARCH: FOUND", EptsReportUtils.map(patientFoundIndicator, mappings), "");
 
-		dataSetDefinition.addColumn(
-				"PSF_CH",
-				"PATIENTS SEARCH: FOUND",
-				EptsReportUtils.map(patientFoundIndicator, mappings),
-				"children=children");
+    dataSetDefinition.addColumn(
+        "PSF_CH",
+        "PATIENTS SEARCH: FOUND",
+        EptsReportUtils.map(patientFoundIndicator, mappings),
+        "children=children");
 
-		dataSetDefinition.addColumn(
-				"PSF_AD",
-				"PATIENTS SEARCH: FOUND",
-				EptsReportUtils.map(patientFoundIndicator, mappings),
-				"adult=adult");
+    dataSetDefinition.addColumn(
+        "PSF_AD",
+        "PATIENTS SEARCH: FOUND",
+        EptsReportUtils.map(patientFoundIndicator, mappings),
+        "adult=adult");
 
-		this.addColumns(dataSetDefinition, patientFoundIndicator, "CH", mappings, "children=children", SearchReason.FORGOT_DATE,
-				SearchReason.WAS_SICK,
-				SearchReason.LACK_OF_TRANSPORTATION,
-				SearchReason.BAD_SERVICE, SearchReason.PROVIDER_FEAR, SearchReason.PROVIDER_ABSENCE, SearchReason.SECONDARY_EFFECTS,
-				SearchReason.TRADITIONAL_TREATMENT, SearchReason.TRANSFERED_OUT, SearchReason.AUTO_TRANSFER, SearchReason.ART_ABANDONMENT,
-				SearchReason.OTHER_MISSING, SearchReason.PATIENT_IS_FINE, SearchReason.PATIENT_HAD_ISSUES, SearchReason.FAMILY_CONCERN,
-				SearchReason.MEDICATION_IS_DOING_BAD, SearchReason.LACK_OF_FAMILY_SUPPORT, SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
-				SearchReason.DIAGNOSIS_NOT_REVEALED, SearchReason.OTHER_REPORT);
+    this.addColumns(
+        dataSetDefinition,
+        patientFoundIndicator,
+        "CH",
+        mappings,
+        "children=children",
+        SearchReason.FORGOT_DATE,
+        SearchReason.WAS_SICK,
+        SearchReason.LACK_OF_TRANSPORTATION,
+        SearchReason.BAD_SERVICE,
+        SearchReason.PROVIDER_FEAR,
+        SearchReason.PROVIDER_ABSENCE,
+        SearchReason.SECONDARY_EFFECTS,
+        SearchReason.TRADITIONAL_TREATMENT,
+        SearchReason.TRANSFERED_OUT,
+        SearchReason.AUTO_TRANSFER,
+        SearchReason.ART_ABANDONMENT,
+        SearchReason.OTHER_MISSING,
+        SearchReason.PATIENT_IS_FINE,
+        SearchReason.PATIENT_HAD_ISSUES,
+        SearchReason.FAMILY_CONCERN,
+        SearchReason.MEDICATION_IS_DOING_BAD,
+        SearchReason.LACK_OF_FAMILY_SUPPORT,
+        SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
+        SearchReason.DIAGNOSIS_NOT_REVEALED,
+        SearchReason.OTHER_REPORT);
 
-		this.addColumns(dataSetDefinition, patientFoundIndicator, "AD", mappings, "adult=adult", SearchReason.FORGOT_DATE,
-				SearchReason.WAS_SICK,
-				SearchReason.LACK_OF_TRANSPORTATION,
-				SearchReason.BAD_SERVICE, SearchReason.PROVIDER_FEAR, SearchReason.PROVIDER_ABSENCE, SearchReason.SECONDARY_EFFECTS,
-				SearchReason.TRADITIONAL_TREATMENT, SearchReason.TRANSFERED_OUT, SearchReason.AUTO_TRANSFER,
-				SearchReason.ART_ABANDONMENT,
-				SearchReason.OTHER_MISSING, SearchReason.PATIENT_IS_FINE, SearchReason.PATIENT_HAD_ISSUES,
-				SearchReason.FAMILY_CONCERN,
-				SearchReason.MEDICATION_IS_DOING_BAD, SearchReason.LACK_OF_FAMILY_SUPPORT, SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
-				SearchReason.DIAGNOSIS_NOT_REVEALED, SearchReason.OTHER_REPORT);
+    this.addColumns(
+        dataSetDefinition,
+        patientFoundIndicator,
+        "AD",
+        mappings,
+        "adult=adult",
+        SearchReason.FORGOT_DATE,
+        SearchReason.WAS_SICK,
+        SearchReason.LACK_OF_TRANSPORTATION,
+        SearchReason.BAD_SERVICE,
+        SearchReason.PROVIDER_FEAR,
+        SearchReason.PROVIDER_ABSENCE,
+        SearchReason.SECONDARY_EFFECTS,
+        SearchReason.TRADITIONAL_TREATMENT,
+        SearchReason.TRANSFERED_OUT,
+        SearchReason.AUTO_TRANSFER,
+        SearchReason.ART_ABANDONMENT,
+        SearchReason.OTHER_MISSING,
+        SearchReason.PATIENT_IS_FINE,
+        SearchReason.PATIENT_HAD_ISSUES,
+        SearchReason.FAMILY_CONCERN,
+        SearchReason.MEDICATION_IS_DOING_BAD,
+        SearchReason.LACK_OF_FAMILY_SUPPORT,
+        SearchReason.ISSUES_TO_HAVE_MEDICATIONS,
+        SearchReason.DIAGNOSIS_NOT_REVEALED,
+        SearchReason.OTHER_REPORT);
 
-		return dataSetDefinition;
-	}
+    return dataSetDefinition;
+  }
 
-	private void addDimensions(final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings, final SearchReason... reasons) {
-		for (final SearchReason reason : reasons) {
-			dataSetDefinition.addDimension(
-					reason.getLabel(),
-					EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsByAbsenseReason(reason.getLabel(), reason),
-							mappings));
-		}
-	}
+  private void addDimensions(
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String mappings,
+      final SearchReason... reasons) {
+    for (final SearchReason reason : reasons) {
+      dataSetDefinition.addDimension(
+          reason.getLabel(),
+          EptsReportUtils.map(
+              this.searchPatientsCohortQueries.findPatientsByAbsenseReason(
+                  reason.getLabel(), reason),
+              mappings));
+    }
+  }
 
-	private void addColumns(final CohortIndicatorDataSetDefinition dataSetDefinition, final CohortIndicator cohortIndicator, final String label,
-			final String mappings,
-			final String dimension, final SearchReason... reasons) {
+  private void addColumns(
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final CohortIndicator cohortIndicator,
+      final String label,
+      final String mappings,
+      final String dimension,
+      final SearchReason... reasons) {
 
-		for (final SearchReason reason : reasons) {
-			dataSetDefinition.addColumn(
-					"PSF_" + label + "_" + reason.getLabel() + "_" + reason.ordinal(),
-					"PATIENTS SEARCH: FOUND " + label + " " + reason.ordinal(),
-					EptsReportUtils.map(cohortIndicator, mappings),
-					dimension + "|" + reason.getLabel() + "=" + reason.getLabel());
-		}
-	}
+    for (final SearchReason reason : reasons) {
+      dataSetDefinition.addColumn(
+          "PSF_" + label + "_" + reason.getLabel() + "_" + reason.ordinal(),
+          "PATIENTS SEARCH: FOUND " + label + " " + reason.ordinal(),
+          EptsReportUtils.map(cohortIndicator, mappings),
+          dimension + "|" + reason.getLabel() + "=" + reason.getLabel());
+    }
+  }
 }

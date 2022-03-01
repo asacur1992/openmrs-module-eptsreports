@@ -29,86 +29,122 @@ import org.springframework.stereotype.Component;
 @Component
 public class PatientsNotFoundDataset extends BaseDataSet {
 
-	@Autowired
-	private SearchPatientsCohortQueries searchPatientsCohortQueries;
+  @Autowired private SearchPatientsCohortQueries searchPatientsCohortQueries;
 
-	@Autowired
-	private EptsGeneralIndicator eptsGeneralIndicator;
+  @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
-	public DataSetDefinition constructPatientsNotFoundDataset() {
+  public DataSetDefinition constructPatientsNotFoundDataset() {
 
-		final CohortIndicatorDataSetDefinition dataSetDefinition = new CohortIndicatorDataSetDefinition();
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
 
-		dataSetDefinition.setName("Patient Not Found Data Set");
-		dataSetDefinition.addParameters(this.getParameters());
+    dataSetDefinition.setName("Patient Not Found Data Set");
+    dataSetDefinition.addParameters(this.getParameters());
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		final CohortDefinition patientsNotFoundCohortDefinition = this.searchPatientsCohortQueries.findPatientsNotfoundInSearch();
+    final CohortDefinition patientsNotFoundCohortDefinition =
+        this.searchPatientsCohortQueries.findPatientsNotfoundInSearch();
 
-		final CohortIndicator patientNotFoundIndicator = this.eptsGeneralIndicator.getIndicator(
-				"patientNotFoundIndicator",
-				EptsReportUtils.map(patientsNotFoundCohortDefinition, mappings));
+    final CohortIndicator patientNotFoundIndicator =
+        this.eptsGeneralIndicator.getIndicator(
+            "patientNotFoundIndicator",
+            EptsReportUtils.map(patientsNotFoundCohortDefinition, mappings));
 
-		dataSetDefinition.addDimension(
-				"children",
-				EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsByRange("children", AgeRange.CHILDREN), "endDate=${endDate}"));
+    dataSetDefinition.addDimension(
+        "children",
+        EptsReportUtils.map(
+            this.searchPatientsCohortQueries.findPatientsByRange("children", AgeRange.CHILDREN),
+            "endDate=${endDate}"));
 
-		dataSetDefinition.addDimension(
-				"adult",
-				EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsByRange("adult", AgeRange.ADULT), "endDate=${endDate}"));
+    dataSetDefinition.addDimension(
+        "adult",
+        EptsReportUtils.map(
+            this.searchPatientsCohortQueries.findPatientsByRange("adult", AgeRange.ADULT),
+            "endDate=${endDate}"));
 
-		this.addDimensions(dataSetDefinition, mappings, SearchReason.WRONG_ADDRESS, SearchReason.CHANGED_ADDRESS, SearchReason.TRAVELED,
-				SearchReason.DEAD, SearchReason.OTHER_NOT_FOUND);
+    this.addDimensions(
+        dataSetDefinition,
+        mappings,
+        SearchReason.WRONG_ADDRESS,
+        SearchReason.CHANGED_ADDRESS,
+        SearchReason.TRAVELED,
+        SearchReason.DEAD,
+        SearchReason.OTHER_NOT_FOUND);
 
-		dataSetDefinition.addColumn(
-				"PSNF",
-				"PATIENTS SEARCH: NOT FOUND",
-				EptsReportUtils.map(patientNotFoundIndicator, mappings),
-				"");
+    dataSetDefinition.addColumn(
+        "PSNF",
+        "PATIENTS SEARCH: NOT FOUND",
+        EptsReportUtils.map(patientNotFoundIndicator, mappings),
+        "");
 
-		dataSetDefinition.addColumn(
-				"PSNF_CH",
-				"PATIENTS SEARCH: NOT FOUND",
-				EptsReportUtils.map(patientNotFoundIndicator, mappings),
-				"children=children");
+    dataSetDefinition.addColumn(
+        "PSNF_CH",
+        "PATIENTS SEARCH: NOT FOUND",
+        EptsReportUtils.map(patientNotFoundIndicator, mappings),
+        "children=children");
 
-		dataSetDefinition.addColumn(
-				"PSNF_AD",
-				"PATIENTS SEARCH: NOT FOUND",
-				EptsReportUtils.map(patientNotFoundIndicator, mappings),
-				"adult=adult");
+    dataSetDefinition.addColumn(
+        "PSNF_AD",
+        "PATIENTS SEARCH: NOT FOUND",
+        EptsReportUtils.map(patientNotFoundIndicator, mappings),
+        "adult=adult");
 
-		this.addColumns(dataSetDefinition, patientNotFoundIndicator, "CH", mappings, "children=children", SearchReason.WRONG_ADDRESS,
-				SearchReason.CHANGED_ADDRESS, SearchReason.TRAVELED,
-				SearchReason.DEAD, SearchReason.OTHER_NOT_FOUND);
+    this.addColumns(
+        dataSetDefinition,
+        patientNotFoundIndicator,
+        "CH",
+        mappings,
+        "children=children",
+        SearchReason.WRONG_ADDRESS,
+        SearchReason.CHANGED_ADDRESS,
+        SearchReason.TRAVELED,
+        SearchReason.DEAD,
+        SearchReason.OTHER_NOT_FOUND);
 
-		this.addColumns(dataSetDefinition, patientNotFoundIndicator, "AD", mappings, "adult=adult", SearchReason.WRONG_ADDRESS,
-				SearchReason.CHANGED_ADDRESS, SearchReason.TRAVELED,
-				SearchReason.DEAD, SearchReason.OTHER_NOT_FOUND);
+    this.addColumns(
+        dataSetDefinition,
+        patientNotFoundIndicator,
+        "AD",
+        mappings,
+        "adult=adult",
+        SearchReason.WRONG_ADDRESS,
+        SearchReason.CHANGED_ADDRESS,
+        SearchReason.TRAVELED,
+        SearchReason.DEAD,
+        SearchReason.OTHER_NOT_FOUND);
 
-		return dataSetDefinition;
-	}
+    return dataSetDefinition;
+  }
 
-	private void addDimensions(final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings, final SearchReason... reasons) {
-		for (final SearchReason reason : reasons) {
-			dataSetDefinition.addDimension(
-					reason.getLabel(),
-					EptsReportUtils.map(this.searchPatientsCohortQueries.findPatientsNotFoundInSearchByReason(reason.getLabel(), reason),
-							mappings));
-		}
-	}
+  private void addDimensions(
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String mappings,
+      final SearchReason... reasons) {
+    for (final SearchReason reason : reasons) {
+      dataSetDefinition.addDimension(
+          reason.getLabel(),
+          EptsReportUtils.map(
+              this.searchPatientsCohortQueries.findPatientsNotFoundInSearchByReason(
+                  reason.getLabel(), reason),
+              mappings));
+    }
+  }
 
-	private void addColumns(final CohortIndicatorDataSetDefinition dataSetDefinition, final CohortIndicator cohortIndicator, final String label,
-			final String mappings,
-			final String dimension, final SearchReason... reasons) {
+  private void addColumns(
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final CohortIndicator cohortIndicator,
+      final String label,
+      final String mappings,
+      final String dimension,
+      final SearchReason... reasons) {
 
-		for (final SearchReason reason : reasons) {
-			dataSetDefinition.addColumn(
-					"PSNF_" + label + "_" + reason.getLabel() + "_" + reason.ordinal(),
-					"PATIENTS SEARCH: NOT FOUND " + label + " " + reason.ordinal(),
-					EptsReportUtils.map(cohortIndicator, mappings),
-					dimension + "|" + reason.getLabel() + "=" + reason.getLabel());
-		}
-	}
+    for (final SearchReason reason : reasons) {
+      dataSetDefinition.addColumn(
+          "PSNF_" + label + "_" + reason.getLabel() + "_" + reason.ordinal(),
+          "PATIENTS SEARCH: NOT FOUND " + label + " " + reason.ordinal(),
+          EptsReportUtils.map(cohortIndicator, mappings),
+          dimension + "|" + reason.getLabel() + "=" + reason.getLabel());
+    }
+  }
 }
