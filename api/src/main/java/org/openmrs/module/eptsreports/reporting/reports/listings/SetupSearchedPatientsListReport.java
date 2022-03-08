@@ -72,7 +72,7 @@ public class SetupSearchedPatientsListReport extends EptsDataExportManager {
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:6,dataset:PSL");
+      props.put("repeatingSections", "sheet:1,row:7,dataset:PSL");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {
