@@ -26,7 +26,7 @@ public class SetupSearchedPatientsListReport extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES BUSCADOS ";
+    return "LISTA DE PACIENTES BUSCADOS";
   }
 
   @Override

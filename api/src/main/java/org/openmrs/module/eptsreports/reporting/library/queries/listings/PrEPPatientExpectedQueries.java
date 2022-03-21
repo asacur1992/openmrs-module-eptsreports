@@ -19,7 +19,7 @@ public interface PrEPPatientExpectedQueries {
           + "        IF(patient_contact2.patient_contact  is not null, patient_contact2.patient_contact, '')) contacto,\n"
           + "		 pid.identifier as NID,\n"
           + "        per.gender,\n"
-          + " 		 concat(ifnull(pad3.address6,','),ifnull(concat(', ',pad3.address5), ' '),ifnull(concat(', ',pad3.address1), ' '),ifnull(concat(', ',pad3.address3), ' ')) endereco, \n "
+          + " 		 pad3.address5, pad3.address1, pad3.address3, \n "
           + "		 round(datediff(:endDate,per.birthdate)/365) idade_actual\n"
           + "		\n"
           + " FROM\n"
