@@ -86,7 +86,7 @@ public interface PrepNewStartingSectorQueries {
           break;
 
         case SPECIAL_CASE:
-          query = query.replace("in (1903,6332,165287,1902,1908,1995,1982)", "=165285");
+          query = query.replace("in (1903,6332,165287,1902,1908,1995,1982)", "=1065");
           break;
       }
 

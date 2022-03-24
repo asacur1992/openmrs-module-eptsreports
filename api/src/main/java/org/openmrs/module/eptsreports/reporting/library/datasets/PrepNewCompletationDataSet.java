@@ -22,6 +22,7 @@ import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/** @author Abdul Sacur */
 @Component
 public class PrepNewCompletationDataSet extends BaseDataSet {
 
@@ -29,42 +30,90 @@ public class PrepNewCompletationDataSet extends BaseDataSet {
 
   @Autowired private PrepNewCohortQueries prepNew;
 
+  /**
+   * @param nomeSector
+   * @param conceitoSector
+   * @return
+   */
   public DataSetDefinition constructDatset(final String nomeSector, final Integer conceitoSector) {
     CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
     String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
     definition.setName("PrEP NEW Data Set Start Sector and Key Population");
     definition.addParameters(getParameters());
 
-    definition.addColumn(
-        nomeSector + ".CS",
-        "PrEP_NEW_CPN_"
-            + PrepNewKeyPopType.CASAIS_SERODISCORDANTE.toString()
-            + ""
-            + ""
-            + ": Number of clients new on PrEP at CPN "
-            + PrepNewKeyPopType.CASAIS_SERODISCORDANTE.toString(),
-        EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
-                "PrEP_NEW_CPN_Sero_Discordante: Number of clients new on PrEP at CPN Sero Discordante",
-                EptsReportUtils.map(
-                    prepNew.getSectorClientsNewlyEnrolledInPrep(
-                        conceitoSector, 165196, PrepNewKeyPopType.CASAIS_SERODISCORDANTE),
-                    mappings)),
-            mappings),
-        "");
+    /*
+     * Metodo para adicionar e calcular de forma dinamica as desagregações do
+     * conceito grupo ALVO PREP
+     */
+    addColumns(
+        nomeSector, "MG", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.PREGNANT);
+    addColumns(
+        nomeSector,
+        "ML",
+        conceitoSector,
+        165196,
+        definition,
+        mappings,
+        PrepNewKeyPopType.LACTATION);
+    addColumns(
+        nomeSector,
+        "AJ",
+        conceitoSector,
+        165196,
+        definition,
+        mappings,
+        PrepNewKeyPopType.ADOLESCENTS_YOUTH_RISK);
+    addColumns(
+        nomeSector, "HM", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.MILITARY);
+    addColumns(
+        nomeSector, "HMO", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.MINER);
+    addColumns(
+        nomeSector, "HC", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.DRIVER);
+    addColumns(
+        nomeSector,
+        "CS",
+        conceitoSector,
+        165196,
+        definition,
+        mappings,
+        PrepNewKeyPopType.CASAIS_SERODISCORDANTE);
 
-    definition.addColumn(
-        nomeSector + ".MG",
-        "PrEP_NEW_CPN_GRAVIDA: Number of clients new on PrEP at CPN Sero Discordante",
-        EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
-                "TX_CURR: Number of patients currently receiving ART",
-                EptsReportUtils.map(
-                    prepNew.getSectorClientsNewlyEnrolledInPrep(
-                        conceitoSector, 165196, PrepNewKeyPopType.PREGNANT),
-                    mappings)),
-            mappings),
-        "");
+    /*
+     * Metodo para adicionar e calcular de forma dinamica as desagregações do
+     * conceito Populacao CHAVE
+     */
+    addColumns(
+        nomeSector, "RE", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.PRISIONER);
+    addColumns(
+        nomeSector,
+        "HSH",
+        conceitoSector,
+        23703,
+        definition,
+        mappings,
+        PrepNewKeyPopType.HOMOSEXUAL);
+    addColumns(
+        nomeSector,
+        "HT",
+        conceitoSector,
+        23703,
+        definition,
+        mappings,
+        PrepNewKeyPopType.TRANSGENDER);
+    addColumns(
+        nomeSector, "TS", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.SEXWORKER);
+    addColumns(
+        nomeSector, "PID", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.DRUGUSER);
+
+    // Caso Especial
+    addColumns(
+        nomeSector,
+        "CE",
+        conceitoSector,
+        165285,
+        definition,
+        mappings,
+        PrepNewKeyPopType.SPECIAL_CASE);
 
     definition.addColumn(
         nomeSector + "All",
@@ -76,5 +125,40 @@ public class PrepNewCompletationDataSet extends BaseDataSet {
         "");
 
     return definition;
+  }
+
+  private void addColumns(
+      final String nomeSector,
+      String prefixo,
+      final Integer conceitoSector,
+      Integer conceitoPopulacao,
+      CohortIndicatorDataSetDefinition definition,
+      String mappings,
+      final PrepNewKeyPopType keypop) {
+
+    definition.addColumn(
+        nomeSector + prefixo,
+        nomeDataSet(nomeSector, keypop),
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                nomeDataSet(nomeSector, keypop),
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledInPrep(
+                        conceitoSector, conceitoPopulacao, keypop),
+                    mappings)),
+            mappings),
+        "");
+  }
+
+  private String nomeDataSet(final String nomeSector, final PrepNewKeyPopType keypop) {
+    return "PrEP_NEW_"
+        + nomeSector
+        + "_"
+        + keypop.toString()
+        + ": "
+        + "Number of new clients in PrEP_NEW_"
+        + nomeSector
+        + "_"
+        + keypop.toString();
   }
 }
