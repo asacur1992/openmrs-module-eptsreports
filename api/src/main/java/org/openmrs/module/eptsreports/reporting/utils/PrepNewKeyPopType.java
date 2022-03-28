@@ -13,5 +13,6 @@ public enum PrepNewKeyPopType {
   SEXWORKER,
   DRUGUSER,
   TRANSGENDER,
-  SPECIAL_CASE
+  SPECIAL_CASE,
+  OTHER
 }

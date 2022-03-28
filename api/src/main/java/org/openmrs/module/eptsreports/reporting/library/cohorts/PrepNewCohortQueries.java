@@ -113,7 +113,7 @@ public class PrepNewCohortQueries {
         "SECTOR",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findCommunityPatientsDispensation",
+                "findPrEPNewBySector",
                 PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepAtCPN(
                     sector, conceitoKeyPop, keyPop)),
             mappings));

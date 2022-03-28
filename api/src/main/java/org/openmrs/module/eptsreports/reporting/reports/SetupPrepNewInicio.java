@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewCompletationDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewSectorDataSet;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -21,7 +21,7 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
 
   @Autowired private GenericCohortQueries genericCohortQueries;
 
-  @Autowired private PrepNewCompletationDataSet tPTCompletationDataSet;
+  @Autowired private PrepNewSectorDataSet prepNew;
 
   @Override
   public String getExcelDesignUuid() {
@@ -54,11 +54,18 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
     rd.setUuid(getUuid());
     rd.setName(getName());
     rd.setDescription(getDescription());
-    rd.setParameters(tPTCompletationDataSet.getParameters());
+    rd.setParameters(prepNew.getParameters());
     rd.addDataSetDefinition(
-        "PREP", Mapped.mapStraightThrough(tPTCompletationDataSet.constructDatset("CPN", 1978)));
+        "PREP", Mapped.mapStraightThrough(prepNew.constructDatset("CPN", 1978)));
     rd.addDataSetDefinition(
-        "PREPCPF", Mapped.mapStraightThrough(tPTCompletationDataSet.constructDatset("CPF", 5483)));
+        "PREPCPF", Mapped.mapStraightThrough(prepNew.constructDatset("CPF", 5483)));
+    rd.addDataSetDefinition(
+        "PREPCD", Mapped.mapStraightThrough(prepNew.constructDatset("DC", 165206)));
+    rd.addDataSetDefinition(
+        "PREPSAAJ", Mapped.mapStraightThrough(prepNew.constructDatset("SAAJ", 1987)));
+    rd.addDataSetDefinition(
+        "PREPTA", Mapped.mapStraightThrough(prepNew.constructDatset("TA", 23873)));
+    rd.addDataSetDefinition("PREPOUTRO", Mapped.mapStraightThrough(prepNew.OtherDatset(23873)));
 
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(

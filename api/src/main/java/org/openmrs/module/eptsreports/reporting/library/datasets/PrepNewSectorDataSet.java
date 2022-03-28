@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 /** @author Abdul Sacur */
 @Component
-public class PrepNewCompletationDataSet extends BaseDataSet {
+public class PrepNewSectorDataSet extends BaseDataSet {
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
@@ -32,10 +32,10 @@ public class PrepNewCompletationDataSet extends BaseDataSet {
 
   /**
    * @param nomeSector
-   * @param conceitoSector
+   * @param conceitokeypop
    * @return
    */
-  public DataSetDefinition constructDatset(final String nomeSector, final Integer conceitoSector) {
+  public DataSetDefinition constructDatset(final String nomeSector, final Integer conceitokeypop) {
     CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
     String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
     definition.setName("PrEP NEW Data Set Start Sector and Key Population");
@@ -46,33 +46,39 @@ public class PrepNewCompletationDataSet extends BaseDataSet {
      * conceito grupo ALVO PREP
      */
     addColumns(
-        nomeSector, "MG", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.PREGNANT);
+        nomeSector, "MG", conceitokeypop, 165196, definition, mappings, PrepNewKeyPopType.PREGNANT);
+
     addColumns(
         nomeSector,
         "ML",
-        conceitoSector,
+        conceitokeypop,
         165196,
         definition,
         mappings,
         PrepNewKeyPopType.LACTATION);
+
     addColumns(
         nomeSector,
         "AJ",
-        conceitoSector,
+        conceitokeypop,
         165196,
         definition,
         mappings,
         PrepNewKeyPopType.ADOLESCENTS_YOUTH_RISK);
+
     addColumns(
-        nomeSector, "HM", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.MILITARY);
+        nomeSector, "HM", conceitokeypop, 165196, definition, mappings, PrepNewKeyPopType.MILITARY);
+
     addColumns(
-        nomeSector, "HMO", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.MINER);
+        nomeSector, "HMO", conceitokeypop, 165196, definition, mappings, PrepNewKeyPopType.MINER);
+
     addColumns(
-        nomeSector, "HC", conceitoSector, 165196, definition, mappings, PrepNewKeyPopType.DRIVER);
+        nomeSector, "HC", conceitokeypop, 165196, definition, mappings, PrepNewKeyPopType.DRIVER);
+
     addColumns(
         nomeSector,
         "CS",
-        conceitoSector,
+        conceitokeypop,
         165196,
         definition,
         mappings,
@@ -83,44 +89,64 @@ public class PrepNewCompletationDataSet extends BaseDataSet {
      * conceito Populacao CHAVE
      */
     addColumns(
-        nomeSector, "RE", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.PRISIONER);
+        nomeSector, "RE", conceitokeypop, 23703, definition, mappings, PrepNewKeyPopType.PRISIONER);
+
     addColumns(
         nomeSector,
         "HSH",
-        conceitoSector,
+        conceitokeypop,
         23703,
         definition,
         mappings,
         PrepNewKeyPopType.HOMOSEXUAL);
+
     addColumns(
         nomeSector,
         "HT",
-        conceitoSector,
+        conceitokeypop,
         23703,
         definition,
         mappings,
         PrepNewKeyPopType.TRANSGENDER);
-    addColumns(
-        nomeSector, "TS", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.SEXWORKER);
-    addColumns(
-        nomeSector, "PID", conceitoSector, 23703, definition, mappings, PrepNewKeyPopType.DRUGUSER);
 
-    // Caso Especial
     addColumns(
-        nomeSector,
-        "CE",
-        conceitoSector,
-        165285,
-        definition,
-        mappings,
-        PrepNewKeyPopType.SPECIAL_CASE);
+        nomeSector, "TS", conceitokeypop, 23703, definition, mappings, PrepNewKeyPopType.SEXWORKER);
+
+    addColumns(
+        nomeSector, "PID", conceitokeypop, 23703, definition, mappings, PrepNewKeyPopType.DRUGUSER);
+
+    /* TO BE USED IF NECESSARY Caso Especial
+     * addColumns( nomeSector, "CE", conceitokeypop, 165285, definition, mappings,
+     * PrepNewKeyPopType.SPECIAL_CASE);
+     */
+
+    /*
+     * TO BE USED IF NECESSARY definition .addColumn(nomeSector + "All",
+     * "PrEP_NEW_", EptsReportUtils.map(
+     * eptsGeneralIndicator.getIndicator("PREP NEW",
+     * EptsReportUtils.map(prepNew.getClientsNewlyEnrolledInPrep(), mappings)),
+     * mappings), "");
+     */
+
+    return definition;
+  }
+
+  public DataSetDefinition OtherDatset(final Integer conceitoSector) {
+    CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
+    String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    definition.setName("PrEP NEW Data Set Start Sector and Key Population");
+    definition.addParameters(getParameters());
 
     definition.addColumn(
-        nomeSector + "All",
-        "PrEP_NEW_",
+        "OUTRO",
+        "PrEP_NEW_Outro",
         EptsReportUtils.map(
             eptsGeneralIndicator.getIndicator(
-                "PREP NEW", EptsReportUtils.map(prepNew.getClientsNewlyEnrolledInPrep(), mappings)),
+                "PREP_NEW_Outro",
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledInPrep(
+                        23913, null, PrepNewKeyPopType.OTHER),
+                    mappings)),
             mappings),
         "");
 
