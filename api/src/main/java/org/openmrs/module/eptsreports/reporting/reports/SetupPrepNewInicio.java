@@ -40,12 +40,12 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "PREP NEW SECTOR INICIO";
+    return "Relatório de PrEP New por Sector e População Chave";
   }
 
   @Override
   public String getDescription() {
-    return "PREP NEW SECTOR INICIO Report";
+    return "Relatório de PrEP New por Sector e População Chave Report";
   }
 
   @Override
@@ -83,7 +83,7 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
           createXlsReportDesign(
               reportDefinition,
               "PREP_NEW_Sector.xls",
-              "PREP NEW SECTOR INICIO Report",
+              "Relatório de PrEP New por Sector e População Chave Report",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
