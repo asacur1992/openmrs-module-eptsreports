@@ -18,21 +18,21 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
 
   @Override
   public CalculationResultMap evaluate(
-      Map<String, Object> parameterValues, EvaluationContext context) {
+      final Map<String, Object> parameterValues, final EvaluationContext context) {
     return super.evaluate(parameterValues, context);
   }
 
   @Override
   protected void evaluateDisaggregatedPatients(
-      Integer patientId,
-      CalculationResultMap resultMap,
+      final Integer patientId,
+      final CalculationResultMap resultMap,
       List<PatientDisaggregated> allPatientDisaggregated) {
 
     allPatientDisaggregated = super.getMaximumPatientDisaggregatedByDate(allPatientDisaggregated);
 
     if (allPatientDisaggregated.size() > 1) {
 
-      for (PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
+      for (final PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
         if (DisaggregationSourceTypes.FILA.equals(
             patientDisaggregated.getDisaggregationSourceType())) {
           if (this.isInExpectedFilaDisaggregationInterval(
@@ -43,14 +43,14 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
         }
       }
 
-      for (PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
+      for (final PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
         if (Arrays.asList(DisaggregationSourceTypes.DISPENSA_SEMESTRAL)
             .contains(patientDisaggregated.getDisaggregationSourceType())) {
           return;
         }
       }
 
-      for (PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
+      for (final PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
         if (DisaggregationSourceTypes.DISPENSA_TRIMESTRAL.equals(
             patientDisaggregated.getDisaggregationSourceType())) {
           resultMap.put(patientId, new BooleanResult(Boolean.TRUE, this));
@@ -58,7 +58,7 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
         }
       }
 
-      for (PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
+      for (final PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
         if (Arrays.asList(
                 DisaggregationSourceTypes.DISPENSA_MENSAL,
                 DisaggregationSourceTypes.MODELO_DIFERENCIADO_SEMESTRAL)
@@ -67,7 +67,7 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
         }
       }
 
-      for (PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
+      for (final PatientDisaggregated patientDisaggregated : allPatientDisaggregated) {
 
         if (DisaggregationSourceTypes.MODELO_DIFERENCIADO_TRIMESTRAL.equals(
             patientDisaggregated.getDisaggregationSourceType())) {
@@ -78,7 +78,8 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
 
     } else if (!allPatientDisaggregated.isEmpty()) {
 
-      PatientDisaggregated maxPatientDisaggregated = allPatientDisaggregated.iterator().next();
+      final PatientDisaggregated maxPatientDisaggregated =
+          allPatientDisaggregated.iterator().next();
 
       if (maxPatientDisaggregated != null) {
         if (DisaggregationSourceTypes.FILA.equals(
@@ -114,9 +115,12 @@ public class TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation
   }
 
   private boolean isInExpectedFilaDisaggregationInterval(
-      FilaPatientDisaggregated filaDisaggregation) {
-    int daysBetween =
+      final FilaPatientDisaggregated filaDisaggregation) {
+    final int daysBetween =
         EptsDateUtil.getDaysBetween(filaDisaggregation.getDate(), filaDisaggregation.getNextFila());
-    return daysBetween >= DAYS_LESS_THAN_3_MONTHS && daysBetween <= DAYS_BETWEEN_3_AND_5_MONTHS;
+    return daysBetween
+            >= TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation.DAYS_LESS_THAN_3_MONTHS
+        && daysBetween
+            <= TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation.DAYS_BETWEEN_3_AND_5_MONTHS;
   }
 }

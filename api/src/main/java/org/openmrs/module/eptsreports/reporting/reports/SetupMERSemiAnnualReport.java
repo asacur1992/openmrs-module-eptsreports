@@ -65,18 +65,22 @@ public class SetupMERSemiAnnualReport extends EptsDataExportManager {
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    ReportDefinition rd = new ReportDefinition();
-    rd.setUuid(getUuid());
-    rd.setName(getName());
-    rd.setDescription(getDescription());
-    rd.setParameters(txMlDataset.getParameters());
+    final ReportDefinition rd = new ReportDefinition();
+    rd.setUuid(this.getUuid());
+    rd.setName(this.getName());
+    rd.setDescription(this.getDescription());
+    rd.setParameters(this.txMlDataset.getParameters());
 
-    rd.addDataSetDefinition("T", Mapped.mapStraightThrough(txTBDataset.constructTxTBDataset()));
+    rd.addDataSetDefinition(
+        "T", Mapped.mapStraightThrough(this.txTBDataset.constructTxTBDataset(Boolean.FALSE)));
 
-    rd.addDataSetDefinition("TBPREV", Mapped.mapStraightThrough(tbPrevDataset.constructDatset()));
+    rd.addDataSetDefinition(
+        "TBPREV", Mapped.mapStraightThrough(this.tbPrevDataset.constructDatset(Boolean.FALSE)));
 
-    rd.addDataSetDefinition("CX", Mapped.mapStraightThrough(cxCaSCRNDataSet.constructDatset()));
-    rd.addDataSetDefinition("CXT", Mapped.mapStraightThrough(cxCaTXDataSet.constructDatset()));
+    rd.addDataSetDefinition(
+        "CX", Mapped.mapStraightThrough(this.cxCaSCRNDataSet.constructDatset(Boolean.FALSE)));
+    rd.addDataSetDefinition(
+        "CXT", Mapped.mapStraightThrough(this.cxCaTXDataSet.constructDatset(Boolean.FALSE)));
     rd.addDataSetDefinition(
         "D",
         Mapped.mapStraightThrough(this.datimCodeDataSet.constructDataset(this.getParameters())));
@@ -90,20 +94,20 @@ public class SetupMERSemiAnnualReport extends EptsDataExportManager {
   }
 
   @Override
-  public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
+  public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
     ReportDesign reportDesign = null;
     try {
       reportDesign =
-          createXlsReportDesign(
+          this.createXlsReportDesign(
               reportDefinition,
               "PEPFAR_MER_2.6_Semiannual.xls",
               "PEPFAR MER 2.6 Semi-Annual Report",
-              getExcelDesignUuid(),
+              this.getExcelDesignUuid(),
               null);
-      Properties props = new Properties();
+      final Properties props = new Properties();
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new ReportingException(e.toString());
     }
 
