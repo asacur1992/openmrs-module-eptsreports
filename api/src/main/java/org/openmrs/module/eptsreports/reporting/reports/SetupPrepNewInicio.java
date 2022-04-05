@@ -40,32 +40,33 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "Relatório de PrEP New por Sector e População Chave";
+    return "Relatório de PrEP New por Sector e Sub População";
   }
 
   @Override
   public String getDescription() {
-    return "Relatório de PrEP New por Sector e População Chave Report";
+    return "Relatório de PrEP New por Sector e Sub População Report";
   }
 
   @Override
   public ReportDefinition constructReportDefinition() {
-    ReportDefinition rd = new ReportDefinition();
-    rd.setUuid(getUuid());
-    rd.setName(getName());
-    rd.setDescription(getDescription());
-    rd.setParameters(prepNew.getParameters());
+    final ReportDefinition rd = new ReportDefinition();
+    rd.setUuid(this.getUuid());
+    rd.setName(this.getName());
+    rd.setDescription(this.getDescription());
+    rd.setParameters(this.prepNew.getParameters());
     rd.addDataSetDefinition(
-        "PREP", Mapped.mapStraightThrough(prepNew.constructDatset("CPN", 1978)));
+        "PREP", Mapped.mapStraightThrough(this.prepNew.constructDatset("CPN", 1978)));
     rd.addDataSetDefinition(
-        "PREPCPF", Mapped.mapStraightThrough(prepNew.constructDatset("CPF", 5483)));
+        "PREPCPF", Mapped.mapStraightThrough(this.prepNew.constructDatset("CPF", 5483)));
     rd.addDataSetDefinition(
-        "PREPCD", Mapped.mapStraightThrough(prepNew.constructDatset("DC", 165206)));
+        "PREPCD", Mapped.mapStraightThrough(this.prepNew.constructDatset("DC", 165206)));
     rd.addDataSetDefinition(
-        "PREPSAAJ", Mapped.mapStraightThrough(prepNew.constructDatset("SAAJ", 1987)));
+        "PREPSAAJ", Mapped.mapStraightThrough(this.prepNew.constructDatset("SAAJ", 1987)));
     rd.addDataSetDefinition(
-        "PREPTA", Mapped.mapStraightThrough(prepNew.constructDatset("TA", 23873)));
-    rd.addDataSetDefinition("PREPOUTRO", Mapped.mapStraightThrough(prepNew.OtherDatset(23873)));
+        "PREPTA", Mapped.mapStraightThrough(this.prepNew.constructDatset("TA", 23873)));
+    rd.addDataSetDefinition(
+        "PREPOUTRO", Mapped.mapStraightThrough(this.prepNew.OtherDatset(23873)));
 
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(
@@ -76,20 +77,20 @@ public class SetupPrepNewInicio extends EptsDataExportManager {
   }
 
   @Override
-  public List<ReportDesign> constructReportDesigns(ReportDefinition reportDefinition) {
+  public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
     ReportDesign reportDesign = null;
     try {
       reportDesign =
-          createXlsReportDesign(
+          this.createXlsReportDesign(
               reportDefinition,
               "PREP_NEW_Sector.xls",
               "Relatório de PrEP New por Sector e População Chave Report",
-              getExcelDesignUuid(),
+              this.getExcelDesignUuid(),
               null);
-      Properties props = new Properties();
+      final Properties props = new Properties();
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new ReportingException(e.toString());
     }
 

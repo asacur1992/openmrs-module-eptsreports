@@ -359,7 +359,7 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
                     TxCombinadoQueries.QUERY
                         .findPatientsWhoWhereTransferredOutDeathOrSuspendedTreatmentInSpecificPeriodAndStage(
                             erimType))),
-            "startDate=${endDate+1d},endDate=${startDate-1d},location=${location},months=${months}"));
+            mappings));
 
     compositionCohort.setCompositionString("DENOMINATOR AND EXIT-TYPE");
 
