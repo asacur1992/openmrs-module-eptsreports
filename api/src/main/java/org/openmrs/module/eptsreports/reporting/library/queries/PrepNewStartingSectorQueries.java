@@ -1,5 +1,6 @@
 package org.openmrs.module.eptsreports.reporting.library.queries;
 
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewEligibilidadeSectorType;
 import org.openmrs.module.eptsreports.reporting.utils.PrepNewKeyPopType;
 
 public interface PrepNewStartingSectorQueries {
@@ -109,6 +110,76 @@ public interface PrepNewStartingSectorQueries {
 
         return query;
       }
+    }
+
+    public static String findClientsNewlyEnrolledInPrepbyEligibility(
+        Integer sectorElegibilidade, PrepNewEligibilidadeSectorType keyPop) {
+
+      String query =
+          "   SELECT sector_elegivel.patient_id                                                                   	"
+              + " 	 FROM                                                                                               "
+              + "																									    "
+              + "                                                               										"
+              + " (select p.patient_id, min(encounter_datetime) data_sector_elegivel                                    "
+              + " from patient p                                                                                        "
+              + " inner join encounter e on p.patient_id=e.patient_id                                                   "
+              + " inner join obs  o on e.encounter_id=o.encounter_id                                                    "
+              + " where e.voided=0 and o.voided=0 and p.voided=0 and	                                                "
+              + " e.encounter_type = 80 and o.concept_id = 23783 and o.value_coded ="
+              + sectorElegibilidade
+              + "  and        "
+              + " o.obs_datetime between :startDate and :endDate and e.location_id=:location                            "
+              + " group by p.patient_id) sector_elegivel                                                                "
+              + "																									    "
+              + " inner join                                                                                            "
+              + " (                                                                                                     "
+              + "                                                                										"
+              + " select p.patient_id, min(encounter_datetime) data_keypop                                              "
+              + " from patient p                                                                                        "
+              + " inner join encounter e on p.patient_id=e.patient_id                                                   "
+              + " inner join obs  o on e.encounter_id=o.encounter_id                                                    "
+              + " where e.voided=0 and o.voided=0 and p.voided=0 and                                                    "
+              + " e.encounter_type = 80 and o.concept_id = 165196 and o.value_coded =1995    and                        "
+              + " o.obs_datetime between :startDate and :endDate and e.location_id=:location                            "
+              + " group by p.patient_id  ) keypop on sector_elegivel.patient_id = keypop.patient_id                     "
+              + " and sector_elegivel.data_sector_elegivel=keypop.data_keypop                                           "
+              + " 																									    "
+              + " 																									    "
+              + " inner join                                                                                            "
+              + " (                                                                                                     "
+              + "                                                                             							"
+              + " select p.patient_id, min(encounter_datetime) data_inicio                                              "
+              + " from patient p                                                                                        "
+              + " inner join encounter e on p.patient_id=e.patient_id                                                   "
+              + " inner join obs  o on e.encounter_id=o.encounter_id                                                    "
+              + " where e.voided=0 and o.voided=0 and p.voided=0 and                                                    "
+              + " e.encounter_type = 80 and o.concept_id=165291 and o.value_coded=23913  and                            "
+              + " o.obs_datetime between :startDate and :endDate and e.location_id=:location                            "
+              + " group by p.patient_id) inicio on sector_elegivel.patient_id = inicio.patient_id                       "
+              + "  and sector_elegivel.data_sector_elegivel=inicio.data_inicio                                          ";
+
+      switch (keyPop) {
+        case SAAJ:
+          query = query.replace("23913", "1987");
+          break;
+        case TRIAGEM_ADULTO:
+          query = query.replace("23913", "23873");
+          break;
+        case DOENCAS_CRONICAS:
+          query = query.replace("23913", "165206");
+          break;
+        case CPN:
+          query = query.replace("23913", "1978");
+          break;
+        case CPF:
+          query = query.replace("23913", "5483");
+          break;
+
+        default:
+          return query;
+      }
+
+      return query;
     }
   }
 }
