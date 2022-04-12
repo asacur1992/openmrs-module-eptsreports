@@ -57,6 +57,20 @@ public class SetupPrepCasalSeroDescordante extends EptsDataExportManager {
     rd.setParameters(this.prepNew.getParameters());
     rd.addDataSetDefinition(
         "PREP", Mapped.mapStraightThrough(this.prepNew.constructDatset("ATSC", 6245)));
+    rd.addDataSetDefinition(
+        "PREPCPN", Mapped.mapStraightThrough(this.prepNew.constructDatset("CPN", 1978)));
+    rd.addDataSetDefinition(
+        "PREPUATS", Mapped.mapStraightThrough(this.prepNew.constructDatset("UATS", 1597)));
+
+    // Se aceita ou não entrar na PREP
+    rd.addDataSetDefinition(
+        "ATSC",
+        Mapped.mapStraightThrough(this.prepNew.constructDatasetEnrollemntPrep("ATSC", 6245)));
+    rd.addDataSetDefinition(
+        "CPN", Mapped.mapStraightThrough(this.prepNew.constructDatasetEnrollemntPrep("CPN", 1978)));
+    rd.addDataSetDefinition(
+        "UATS",
+        Mapped.mapStraightThrough(this.prepNew.constructDatasetEnrollemntPrep("UATS", 1597)));
 
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(

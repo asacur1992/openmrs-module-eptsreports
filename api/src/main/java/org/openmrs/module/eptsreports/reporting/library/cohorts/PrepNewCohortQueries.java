@@ -20,6 +20,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.PrepNewStartingS
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.PrepNewEligibilidadeSectorType;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewEnrollemntStatus;
 import org.openmrs.module.eptsreports.reporting.utils.PrepNewKeyPopType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -136,6 +137,22 @@ public class PrepNewCohortQueries {
 
     definition.setQuery(
         PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade, keyPop));
+
+    return definition;
+  }
+
+  public CohortDefinition getSectorClientsNewlybyEnrollmentStatus(
+      Integer sectorElegibilidade, PrepNewEnrollemntStatus keyPop) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsbyEnrollmentStatus(
             sectorElegibilidade, keyPop));
 
     return definition;

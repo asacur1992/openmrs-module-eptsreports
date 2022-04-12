@@ -17,6 +17,7 @@ import org.openmrs.module.eptsreports.reporting.library.cohorts.PrepNewCohortQue
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.PrepNewEligibilidadeSectorType;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewEnrollemntStatus;
 import org.openmrs.module.reporting.dataset.definition.CohortIndicatorDataSetDefinition;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
 
   @Autowired private PrepNewCohortQueries prepNew;
 
+  private final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
   /**
    * @param nomeSector
    * @param conceitoSectorInicio
@@ -38,7 +41,6 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
   public DataSetDefinition constructDatset(
       final String nomeSector, final Integer conceitoSectorInicio) {
     CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
-    String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
     definition.setName("PrEP NEW Data Set Start Sector and Key Population");
     definition.addParameters(getParameters());
 
@@ -96,29 +98,25 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
 
     return definition;
   }
-  /*
-    public DataSetDefinition OtherDatset(final Integer conceitoSector) {
-      CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
-      String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-      definition.setName("PrEP NEW Data Set Start Sector and Key Population");
-      definition.addParameters(getParameters());
 
-      definition.addColumn(
-          "OUTRO",
-          "PrEP_NEW_Outro",
-          EptsReportUtils.map(
-              eptsGeneralIndicator.getIndicator(
-                  "PREP_NEW_Outro",
-                  EptsReportUtils.map(
-                      prepNew.getSectorClientsNewlyEnrolledInPrep(
-                          23913, null, PrepNewKeyPopType.OTHER),
-                      mappings)),
-              mappings),
-          "");
+  public DataSetDefinition constructDatasetEnrollemntPrep(
+      final String nomeSector, final Integer conceitoSectorInicio) {
+    CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
+    definition.setName("PrEP NEW by Enrollment Status");
+    definition.addParameters(getParameters());
 
-      return definition;
-    }
-  */
+    addColumns(
+        nomeSector, "YES", conceitoSectorInicio, definition, mappings, PrepNewEnrollemntStatus.SIM);
+
+    addColumns(
+        nomeSector, "NO", conceitoSectorInicio, definition, mappings, PrepNewEnrollemntStatus.NAO);
+    
+    addColumns(
+         nomeSector, "MAYBE", conceitoSectorInicio, definition, mappings, PrepNewEnrollemntStatus.TALVEZ);
+
+    return definition;
+  }
+
   private void addColumns(
       final String nomeSector,
       String prefixo,
@@ -140,7 +138,28 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
         "");
   }
 
-  private String nomeDataSet(final String nomeSector, final PrepNewEligibilidadeSectorType porta) {
+  private void addColumns(
+      final String nomeSector,
+      String prefixo,
+      final Integer conceitoSector,
+      CohortIndicatorDataSetDefinition definition,
+      String mappings,
+      final PrepNewEnrollemntStatus status) {
+
+    definition.addColumn(
+        nomeSector + prefixo,
+        nomeDataSet(nomeSector, status),
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                nomeDataSet(nomeSector, status),
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlybyEnrollmentStatus(conceitoSector, status),
+                    mappings)),
+            mappings),
+        "");
+  }
+
+  private String nomeDataSet(final String nomeSector, final Enum<?> porta) {
     return "PrEP_NEW_"
         + nomeSector
         + "_"
