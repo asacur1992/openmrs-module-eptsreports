@@ -142,6 +142,37 @@ public class PrepNewCohortQueries {
     return definition;
   }
 
+  // SubPopulation
+  public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(Integer sectorElegibilidade) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade));
+
+    return definition;
+  }
+
+  // TOTAL Sero Descordante
+  public CohortDefinition getSectorClientsNewlyEnrolledInPrepSeroDescordante() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepSeroDescordante());
+
+    return definition;
+  }
+
   public CohortDefinition getSectorClientsNewlybyEnrollmentStatus(
       Integer sectorElegibilidade, PrepNewEnrollemntStatus keyPop) {
     final SqlCohortDefinition definition = new SqlCohortDefinition();

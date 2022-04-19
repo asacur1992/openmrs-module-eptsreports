@@ -99,6 +99,58 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
     return definition;
   }
 
+  public DataSetDefinition constructDatasetSubTotal() {
+    CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
+    definition.setName("PrEP NEW SubTotal");
+    definition.addParameters(getParameters());
+
+    definition.addColumn(
+        "ATSC",
+        "PrEP_NEW_ATSC_Subtotal",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "PrEP_NEW_ATSC_Subtotal",
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledbyEligibility(6245), mappings)),
+            mappings),
+        "");
+
+    definition.addColumn(
+        "UATS",
+        "PrEP_NEW_UATS_Subtotal",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "PrEP_NEW_UATS_Subtotal",
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledbyEligibility(1597), mappings)),
+            mappings),
+        "");
+
+    definition.addColumn(
+        "CPN",
+        "PrEP_NEW_CPN_Subtotal",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "PrEP_NEW_CPN_Subtotal",
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledbyEligibility(1978), mappings)),
+            mappings),
+        "");
+
+    definition.addColumn(
+        "TOTAL",
+        "PrEP_NEW_Sero_Descordante_TOTAL",
+        EptsReportUtils.map(
+            eptsGeneralIndicator.getIndicator(
+                "PrEP_NEW_Sero_Descordante_TOTAL",
+                EptsReportUtils.map(
+                    prepNew.getSectorClientsNewlyEnrolledInPrepSeroDescordante(), mappings)),
+            mappings),
+        "");
+
+    return definition;
+  }
+
   public DataSetDefinition constructDatasetEnrollemntPrep(
       final String nomeSector, final Integer conceitoSectorInicio) {
     CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
@@ -110,9 +162,14 @@ public class PrepNewLigacaoCPNeATSDataSet extends BaseDataSet {
 
     addColumns(
         nomeSector, "NO", conceitoSectorInicio, definition, mappings, PrepNewEnrollemntStatus.NAO);
-    
+
     addColumns(
-         nomeSector, "MAYBE", conceitoSectorInicio, definition, mappings, PrepNewEnrollemntStatus.TALVEZ);
+        nomeSector,
+        "MAYBE",
+        conceitoSectorInicio,
+        definition,
+        mappings,
+        PrepNewEnrollemntStatus.TALVEZ);
 
     return definition;
   }

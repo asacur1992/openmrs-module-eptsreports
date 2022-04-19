@@ -72,6 +72,10 @@ public class SetupPrepCasalSeroDescordante extends EptsDataExportManager {
         "UATS",
         Mapped.mapStraightThrough(this.prepNew.constructDatasetEnrollemntPrep("UATS", 1597)));
 
+    // SubTotais e Total
+    rd.addDataSetDefinition(
+        "PREPSub", Mapped.mapStraightThrough(this.prepNew.constructDatasetSubTotal()));
+
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
