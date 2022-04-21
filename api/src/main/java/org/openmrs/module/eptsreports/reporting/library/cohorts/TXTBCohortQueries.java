@@ -1255,7 +1255,8 @@ public class TXTBCohortQueries {
         "tb-positive-result-laboratorio",
         EptsReportUtils.map(tbPositiveResultsInFichaLaboratorio, generalParameterMapping));
     cd.addSearch(
-        "DENOMINATOR", this.map(this.getDenominator(isCommunity), this.generalParameterMapping));
+        "DENOMINATOR",
+        EptsReportUtils.map(this.getDenominator(isCommunity), generalParameterMapping));
 
     cd.setCompositionString(
         "(tb-positive-result-ficha-clinica OR tb-positive-result-laboratorio) AND DENOMINATOR");
