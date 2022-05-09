@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TXTBMontlyCascadeReportDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityDataset;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -21,18 +21,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 /** @author Stélio Moiane */
 public class MerCommunityDataSetTest extends DefinitionsFGHLiveTest {
 
-  @Autowired private TXTBMontlyCascadeReportDataSet dataset;
+  @Autowired private TxCurrCommunityDataset dataset;
 
   private Map<Parameter, Object> parameters;
 
   @Before
   public void setup() {
-    final Location location = Context.getLocationService().getLocation(297);
-    // final Date startDate = DateUtil.getDateTime(2022, 02, 21);
-    final Date endDate = DateUtil.getDateTime(2022, 03, 20);
+    final Location location = Context.getLocationService().getLocation(212);
+    final Date startDate = DateUtil.getDateTime(2022, 03, 21);
+    final Date endDate = DateUtil.getDateTime(2022, 04, 20);
 
     this.parameters = new HashMap<>();
-    // this.parameters.put(new Parameter("startDate", "Start Date", Date.class), startDate);
+    this.parameters.put(new Parameter("startDate", "Start Date", Date.class), startDate);
     this.parameters.put(new Parameter("endDate", "End Date", Date.class), endDate);
     this.parameters.put(new Parameter("location", "Location", Location.class), location);
   }
@@ -40,8 +40,7 @@ public class MerCommunityDataSetTest extends DefinitionsFGHLiveTest {
   @Test
   public void shoulEvaluateDataSet() throws EvaluationException {
 
-    final DataSetDefinition numeratorDataset =
-        this.dataset.constructDatset(this.dataset.getParameters());
+    final DataSetDefinition numeratorDataset = this.dataset.constructTxCurrDataset(true);
 
     final DataSet evaluateDatasetDefinition =
         this.evaluateDatasetDefinition(numeratorDataset, this.parameters);

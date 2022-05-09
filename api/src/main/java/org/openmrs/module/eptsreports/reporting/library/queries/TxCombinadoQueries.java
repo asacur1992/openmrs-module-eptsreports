@@ -128,7 +128,8 @@ public interface TxCombinadoQueries {
             query.replace(
                 "between :startDate and :endDate",
                 "BETWEEN ( :startDate - INTERVAL ( :months) MONTH) AND ( :endDate - INTERVAL ( :months) MONTH)");
-        query = query.replace("<=:endDate", "<= ( :endDate - INTERVAL ( :months) MONTH)");
+
+        return query;
       }
 
       return query;
@@ -142,7 +143,8 @@ public interface TxCombinadoQueries {
             query.replace(
                 "between :startDate and :endDate",
                 "BETWEEN ( :startDate - INTERVAL ( :months) MONTH) AND ( :endDate - INTERVAL ( :months) MONTH)");
-        query = query.replace("<=:endDate", "<= ( :endDate - INTERVAL ( :months) MONTH)");
+
+        return query;
       }
 
       return query;
