@@ -201,46 +201,146 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
             + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
             + "|breastfeeding=breastfeeding");
 
+    final CohortIndicator dead =
+        this.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
+                "Dead",
+                EptsReportUtils.map(
+                    this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(ErimType.DEAD),
+                    mappings)));
+    definition.addColumn("CB_NUM_DEAD", "Numerator Dead", EptsReportUtils.map(dead, mappings), "");
+
+    this.addColums(
+        "DE",
+        definition,
+        mappings,
+        dead,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
     definition.addColumn(
-        "CB_NUM_DEAD",
-        "Numerator Dead",
-        EptsReportUtils.map(
-            this.getIndicator(
-                this.eptsGeneralIndicator.getIndicator(
-                    "Dead",
-                    EptsReportUtils.map(
-                        this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(ErimType.DEAD),
-                        mappings))),
-            mappings),
-        "");
+        "DE-malesUnknownM",
+        "DE unknownM",
+        EptsReportUtils.map(dead, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE));
+
+    definition.addColumn(
+        "DE-femalesUnknownF",
+        "DE unknownF",
+        EptsReportUtils.map(dead, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE));
+
+    final CohortIndicator tranferedOut =
+        this.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
+                "Tranfered out",
+                EptsReportUtils.map(
+                    this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(
+                        ErimType.TRANFERED_OUT),
+                    mappings)));
 
     definition.addColumn(
         "CB_NUM_TRANFERED_OUT",
         "Numerator Tranfered out",
-        EptsReportUtils.map(
-            this.getIndicator(
-                this.eptsGeneralIndicator.getIndicator(
-                    "Tranfered out",
-                    EptsReportUtils.map(
-                        this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(
-                            ErimType.TRANFERED_OUT),
-                        mappings))),
-            mappings),
+        EptsReportUtils.map(tranferedOut, mappings),
         "");
+
+    this.addColums(
+        "TO",
+        definition,
+        mappings,
+        tranferedOut,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "TO-malesUnknownM",
+        "TO unknownM",
+        EptsReportUtils.map(tranferedOut, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE));
+
+    definition.addColumn(
+        "TO-femalesUnknownF",
+        "TO unknownF",
+        EptsReportUtils.map(tranferedOut, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE));
+
+    final CohortIndicator stopTreatment =
+        this.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
+                "Stopped Treatment",
+                EptsReportUtils.map(
+                    this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(
+                        ErimType.SPTOPPED_TREATMENT),
+                    mappings)));
 
     definition.addColumn(
         "CB_NUM_SPTOPPED_TREATMENT",
         "Numerator Stopped Treatment",
-        EptsReportUtils.map(
-            this.getIndicator(
-                this.eptsGeneralIndicator.getIndicator(
-                    "Stopped Treatment",
-                    EptsReportUtils.map(
-                        this.patientsWhoWhereTransferredOutDeathOrSuspendedTreatment(
-                            ErimType.SPTOPPED_TREATMENT),
-                        mappings))),
-            mappings),
+        EptsReportUtils.map(stopTreatment, mappings),
         "");
+
+    this.addColums(
+        "ST",
+        definition,
+        mappings,
+        stopTreatment,
+        UNDER_ONE,
+        ONE_TO_FOUR,
+        FIVE_TO_NINE,
+        TEN_TO_FOURTEEN,
+        FIFTEEN_TO_NINETEEN,
+        TWENTY_TO_TWENTY_FOUR,
+        TWENTY_FIVE_TO_TWENTY_NINE,
+        THIRTY_TO_THRITY_FOUR,
+        THIRTY_FIVE_TO_THIRTY_NINE,
+        FORTY_TO_FORTY_FOUR,
+        FORTY_FIVE_TO_FORTY_NINE,
+        ABOVE_FIFTY);
+
+    definition.addColumn(
+        "ST-malesUnknownM",
+        "ST unknownM",
+        EptsReportUtils.map(stopTreatment, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.MALE));
+
+    definition.addColumn(
+        "ST-femalesUnknownF",
+        "ST unknownF",
+        EptsReportUtils.map(stopTreatment, mappings),
+        EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE)
+            + "="
+            + EptsListUtils.getColumnName(this.numeratorPrefix, AgeRange.UNKNOWN, Gender.FEMALE));
 
     this.addColums(
         definition,
@@ -420,6 +520,36 @@ public class TxCombinadoNumeratorDataset extends BaseDataSet {
           femaleName.replace("-", " "),
           EptsReportUtils.map(cohortIndicator, mappings),
           femaleName + "=" + femaleName);
+    }
+  }
+
+  private void addColums(
+      final String name,
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String mappings,
+      final CohortIndicator cohortIndicator,
+      final AgeRange... ranges) {
+
+    for (final AgeRange range : ranges) {
+
+      final String maleName = EptsListUtils.getColumnName(name, range, Gender.MALE);
+      final String femaleName = EptsListUtils.getColumnName(name, range, Gender.FEMALE);
+
+      dataSetDefinition.addColumn(
+          maleName,
+          maleName.replace("-", " "),
+          EptsReportUtils.map(cohortIndicator, mappings),
+          maleName.replace(name, this.numeratorPrefix)
+              + "="
+              + maleName.replace(name, this.numeratorPrefix));
+
+      dataSetDefinition.addColumn(
+          femaleName,
+          femaleName.replace("-", " "),
+          EptsReportUtils.map(cohortIndicator, mappings),
+          femaleName.replace(name, this.numeratorPrefix)
+              + "="
+              + femaleName.replace(name, this.numeratorPrefix));
     }
   }
 }

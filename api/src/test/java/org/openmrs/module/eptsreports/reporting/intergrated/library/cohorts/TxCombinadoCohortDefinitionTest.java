@@ -36,7 +36,7 @@ public class TxCombinadoCohortDefinitionTest extends DefinitionsFGHLiveTest {
 
   @Before
   public void setup() {
-    final Location location = Context.getLocationService().getLocation(271);
+    final Location location = Context.getLocationService().getLocation(290);
     final Date startDate = DateUtil.getDateTime(2020, 9, 21);
     final Date endDate = DateUtil.getDateTime(2021, 9, 20);
     final Integer month = 12;

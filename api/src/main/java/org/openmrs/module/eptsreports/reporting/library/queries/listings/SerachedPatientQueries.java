@@ -6,7 +6,7 @@ public interface SerachedPatientQueries {
 
   class QUERY {
     public static final String findSearchedPatientsList =
-        "SELECT p.patient_id, pi.identifier, CONCAT(pn.given_name, ' ', COALESCE(pn.middle_name, ''), ' ', pn.family_name)name, pe.gender, (YEAR( :endDate) - YEAR(pe.birthdate)) age, patient_contact, pa.address1, pa.address3, pa.address5, sector, type_of_visit, start_art.art_start_date, expected_date, IF(type_of_visit = 'Visita Preventiva' OR type_of_visit = 'Visita aos Casos Especiais','NA', IF(last_encounter.encounter_date = 'NULL', DATEDIFF(NOW(), expected_date), DATEDIFF(last_encounter.encounter_date, expected_date))) missing_days, patients_found.last_visit, last_encounter.encounter_date, volunteer, agreed_date FROM patient p\n"
+        "SELECT p.patient_id, pi.identifier, CONCAT(pn.given_name, ' ', COALESCE(pn.middle_name, ''), ' ', pn.family_name)name, pe.gender, (YEAR( :endDate) - YEAR(pe.birthdate)) age, patient_contact, pa.address1, pa.address3, pa.address5, sector, type_of_visit, start_art.art_start_date, expected_date, IF(type_of_visit = 'Visita Preventiva' OR type_of_visit = 'Visita aos Casos Especiais','NA', IF(last_encounter.encounter_date IS NULL, DATEDIFF(NOW(), expected_date), DATEDIFF(last_encounter.encounter_date, expected_date))) missing_days, patients_found.last_visit, last_encounter.encounter_date, volunteer, agreed_date FROM patient p\n"
             + "            	INNER JOIN patient_identifier pi ON p.patient_id = pi.patient_id\n"
             + "            	INNER JOIN person_name pn ON pn.person_id = p.patient_id\n"
             + "            	INNER JOIN person pe ON pe.person_id = p.patient_id\n"
@@ -319,14 +319,14 @@ public interface SerachedPatientQueries {
             + "            )expected ON expected.patient_id = p.patient_id\n"
             + "			LEFT JOIN \n"
             + "			(\n"
-            + "				SELECT p.patient_id, MAX(o.value_datetime) agreed_date FROM patient p\n"
+            + "				SELECT p.patient_id, MAX(o.value_datetime) agreed_date, o.encounter_id FROM patient p\n"
             + "					INNER JOIN encounter e ON e.patient_id = p.patient_id\n"
             + "					INNER JOIN obs o ON e.encounter_id = o.encounter_id\n"
             + "						WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0\n"
             + "							AND encounter_type = 21 AND o.concept_id IN (23933, 23934, 23935)\n"
-            + "							AND o.value_datetime IS NOT NULL AND e.location_id = :location AND o.value_datetime BETWEEN ( :startDate - INTERVAL 15 DAY) AND ( :endDate - INTERVAL 15 DAY)\n"
+            + "							AND o.value_datetime IS NOT NULL AND e.location_id = :location\n"
             + "								GROUP BY p.patient_id\n"
-            + "			)agreed_date ON agreed_date.patient_id = p.patient_id\n"
+            + "			)agreed_date ON agreed_date.patient_id = p.patient_id AND patients_found.encounter_id = agreed_date.encounter_id\n"
             + "            WHERE p.voided = 0 AND pi.voided = 0 AND pi.identifier_type = 2 AND pn.voided = 0 AND pe.voided = 0\n"
             + "            	GROUP BY p.patient_id\n"
             + "            	ORDER BY pi.identifier";
