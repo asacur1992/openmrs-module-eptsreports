@@ -2,7 +2,6 @@
 package org.openmrs.module.eptsreports.reporting.library.datasets.listings;
 
 import java.util.List;
-
 import org.openmrs.module.eptsreports.reporting.library.datasets.BaseDataSet;
 import org.openmrs.module.eptsreports.reporting.library.queries.listings.ExpectedChildrenQueries;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -19,7 +18,7 @@ public class ExpectedChildrenListDataset extends BaseDataSet {
     SqlDataSetDefinition dataSetDefinition = new SqlDataSetDefinition();
     dataSetDefinition.setName("Expected Children List");
     dataSetDefinition.addParameters(parameters);
-    dataSetDefinition.setSqlQuery(ExpectedChildrenQueries.QUERY.findExpectedPatientsList);
+    dataSetDefinition.setSqlQuery(ExpectedChildrenQueries.QUERY.findExpectedPatientsList());
 
     return dataSetDefinition;
   }
