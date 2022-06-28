@@ -29,35 +29,39 @@ public class CxCaSCRNDataSet extends BaseDataSet {
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  public DataSetDefinition constructDatset() {
+  public DataSetDefinition constructDatset(final Boolean isCommunity) {
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
-    dataSetDefinition.setParameters(getParameters());
+    dataSetDefinition.setParameters(this.getParameters());
 
-    String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     dataSetDefinition.addDimension(
         "age",
         EptsReportUtils.map(
-            eptsCommonDimension.ageCX(ageDimensionCohort), "effectiveDate=${endDate}"));
+            this.eptsCommonDimension.ageCX(this.ageDimensionCohort), "effectiveDate=${endDate}"));
 
-    dataSetDefinition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
+    dataSetDefinition.addDimension(
+        "gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
 
-    this.constructCxCaDataSet(dataSetDefinition, mappings);
-    this.constructPositiveDataSet(dataSetDefinition, mappings);
+    this.constructCxCaDataSet(dataSetDefinition, mappings, isCommunity);
+    this.constructPositiveDataSet(dataSetDefinition, mappings, isCommunity);
 
     return dataSetDefinition;
   }
 
   private void constructCxCaDataSet(
-      CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String mappings,
+      final Boolean isCommunity) {
     dataSetDefinition.addColumn(
         "CXTOTAL",
         "Number of individual HIV-positive women on ART who received a screening test for cervical cancer",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "CXCA_SCRN: Number of individual HIV-positive women on ART who received a screening test for cervical cancer",
-                EptsReportUtils.map(this.cxCaSCRNCohortQueries.getTotalNumerator(), mappings)),
+                EptsReportUtils.map(
+                    this.cxCaSCRNCohortQueries.getTotalNumerator(isCommunity), mappings)),
             mappings),
         "gender=F|age=15+");
 
@@ -65,112 +69,114 @@ public class CxCaSCRNDataSet extends BaseDataSet {
         "CXFRT",
         "1st time screened  total",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "1st time screened  total",
                 EptsReportUtils.map(
-                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreening(), mappings)),
+                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreening(isCommunity),
+                    mappings)),
             mappings),
         "gender=F|age=15+");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXN",
         "1st time screened (Negative)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "1st time screened (Negative)",
                 EptsReportUtils.map(
-                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningNegative(),
+                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningNegative(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXP",
         "1st time screened (Positive)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "1st time screened (Positive)",
                 EptsReportUtils.map(
-                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningPositive(),
+                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningPositive(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXS",
         "1st time screened (Suspect Cancer)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "1st time screened (Suspect Cancer)",
                 EptsReportUtils.map(
-                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningSuspectCancer(),
+                    this.cxCaSCRNCohortQueries.getTotalNumeratorFirstScreeningSuspectCancer(
+                        isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
     dataSetDefinition.addColumn(
         "CXRNT",
         "Rescreened after previous negative (Total)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Rescreened after previous negative (Total)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousNegativeTotal(),
+                        .getTotalNumeratorRescreenedAfterPreviousNegativeTotal(isCommunity),
                     mappings)),
             mappings),
         "gender=F|age=15+");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RNN",
         "Rescreened after previous negative (Negative)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Rescreened after previous negative (Negative)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousNegativeNegative(),
+                        .getTotalNumeratorRescreenedAfterPreviousNegativeNegative(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RNP",
         "Rescreened after previous negative (Positive)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Rescreened after previous negative (Positive)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousNegativePositive(),
+                        .getTotalNumeratorRescreenedAfterPreviousNegativePositive(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RNS",
         "Rescreened after previous negative (Suspect Cancer)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Suspect Cancer Numerator",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousNegativeSuspectCancer(),
+                        .getTotalNumeratorRescreenedAfterPreviousNegativeSuspectCancer(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
     dataSetDefinition.addColumn(
         "CXPTT",
         "Post-treatment follow-up (Total)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Total)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
@@ -179,178 +185,182 @@ public class CxCaSCRNDataSet extends BaseDataSet {
             mappings),
         "gender=F|age=15+");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "PTN",
         "Post-treatment follow-up (Negative)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Negative)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
                         .getTotalNumeratorfindpatientwithScreeningTypeVisitAsPostTreatmentFollowUpNegative(),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "PTP",
         "Post-treatment follow-up (Positive)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Positive)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
                         .getTotalNumeratorfindpatientwithScreeningTypeVisitAsPostTreatmentFollowUpPositive(),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "PTS",
         "Post-treatment follow-up (Suspect Cancer)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Suspect Cancer)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
                         .getTotalNumeratorfindpatientwithScreeningTypeVisitAsPostTreatmentFollowUpSuspectCancer(),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    //    Recreated after screening positive
+    // Recreated after screening positive
 
     dataSetDefinition.addColumn(
         "CXRPT",
         "Rescreened after previous positive (Total)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Total)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousPositiveTotal(),
+                        .getTotalNumeratorRescreenedAfterPreviousPositiveTotal(isCommunity),
                     mappings)),
             mappings),
         "gender=F|age=15+");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RSPN",
         "Rescreened after previous positive (Negative)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Rescreened after previous positive (Negative)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousPositiveNegative(),
+                        .getTotalNumeratorRescreenedAfterPreviousPositiveNegative(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RSPP",
         "Rescreened after previous positive (Positive)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Positive)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousPositivePositive(),
+                        .getTotalNumeratorRescreenedAfterPreviousPositivePositive(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "RSPS",
         "Rescreened after previous positive (Suspect Cancer)",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up (Suspect Cancer)",
                 EptsReportUtils.map(
                     this.cxCaSCRNCohortQueries
-                        .getTotalNumeratorRescreenedAfterPreviousPositiveSuspectCancer(),
+                        .getTotalNumeratorRescreenedAfterPreviousPositiveSuspectCancer(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
   }
 
   private void constructPositiveDataSet(
-      CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String mappings,
+      final Boolean isCommunity) {
     dataSetDefinition.addColumn(
         "CXPTTL",
         "Number of HIV-positive women on ART screened for cervical cancer with a positive result",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "CXCA_SCRN_POS: Number of HIV-positive women on ART screened for cervical cancer with a positive result",
                 EptsReportUtils.map(
-                    this.CxCxSRNPositiveCohortQueries.findpatientwithCxCaPositiveTotal(),
+                    this.CxCxSRNPositiveCohortQueries.findpatientwithCxCaPositiveTotal(isCommunity),
                     mappings)),
             mappings),
         "gender=F|age=15+");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXPFR",
         "1st time screened ",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "1st time screened positive",
                 EptsReportUtils.map(
-                    this.CxCxSRNPositiveCohortQueries.findpatientwithCxCaPositiveFirstScreen(),
+                    this.CxCxSRNPositiveCohortQueries.findpatientwithCxCaPositiveFirstScreen(
+                        isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXPRN",
         "Rescreened after previous negative",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Rescreened after previous negative",
                 EptsReportUtils.map(
                     this.CxCxSRNPositiveCohortQueries
-                        .findpatientwithCxCaRescreenedAfterPreviousNegative(),
+                        .findpatientwithCxCaRescreenedAfterPreviousNegative(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXPPF",
         "Post-treatment follow-up",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up",
                 EptsReportUtils.map(
                     this.CxCxSRNPositiveCohortQueries
-                        .findpatientwithCxPositivePostTreatmentFollowUp(),
+                        .findpatientwithCxPositivePostTreatmentFollowUp(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "CXPRSP",
         "Rescreened after previous positive",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Post-treatment follow-up",
                 EptsReportUtils.map(
                     this.CxCxSRNPositiveCohortQueries
-                        .findpatientwithCxPositiveRescreenedAfterPreviousPositive(),
+                        .findpatientwithCxPositiveRescreenedAfterPreviousPositive(isCommunity),
                     mappings)),
             mappings),
-        getCXColumns());
+        this.getCXColumns());
   }
 
+  @Override
   public List<Parameter> getParameters() {
-    List<Parameter> parameters = new ArrayList<Parameter>();
+    final List<Parameter> parameters = new ArrayList<Parameter>();
     parameters.add(ReportingConstants.START_DATE_PARAMETER);
     parameters.add(ReportingConstants.END_DATE_PARAMETER);
     parameters.add(ReportingConstants.LOCATION_PARAMETER);
@@ -359,20 +369,25 @@ public class CxCaSCRNDataSet extends BaseDataSet {
 
   private List<ColumnParameters> getCXColumns() {
 
-    ColumnParameters a1 = new ColumnParameters("15-19", "15-19", "gender=F|age=15-19", "01");
-    ColumnParameters a2 =
+    final ColumnParameters a1 = new ColumnParameters("15-19", "15-19", "gender=F|age=15-19", "01");
+    final ColumnParameters a2 =
         new ColumnParameters("20-24", "20-24 years female", "gender=F|age=20-24", "02");
-    ColumnParameters a3 =
+    final ColumnParameters a3 =
         new ColumnParameters("25-29", "25-29 years female", "gender=F|age=25-29", "03");
-    ColumnParameters a4 = new ColumnParameters("30-34", "30-34 female", "gender=F|age=30-34", "04");
-    ColumnParameters a5 = new ColumnParameters("35-39", "35-39 female", "gender=F|age=35-39", "05");
-    ColumnParameters a6 = new ColumnParameters("40-44", "40-44 female", "gender=F|age=40-44", "06");
-    ColumnParameters a7 = new ColumnParameters("45-49", "45-49 female", "gender=F|age=45-49", "07");
-    ColumnParameters a8 = new ColumnParameters("50+", "50+ female", "gender=F|age=50+", "08");
-    ColumnParameters unknownF =
+    final ColumnParameters a4 =
+        new ColumnParameters("30-34", "30-34 female", "gender=F|age=30-34", "04");
+    final ColumnParameters a5 =
+        new ColumnParameters("35-39", "35-39 female", "gender=F|age=35-39", "05");
+    final ColumnParameters a6 =
+        new ColumnParameters("40-44", "40-44 female", "gender=F|age=40-44", "06");
+    final ColumnParameters a7 =
+        new ColumnParameters("45-49", "45-49 female", "gender=F|age=45-49", "07");
+    final ColumnParameters a8 = new ColumnParameters("50+", "50+ female", "gender=F|age=50+", "08");
+    final ColumnParameters unknownF =
         new ColumnParameters("unknownF", "Unknown age", "gender=F|age=UK", "09");
 
-    ColumnParameters a9 = new ColumnParameters("subTotal", "subTotal", "gender=F|age=15+", "10");
+    final ColumnParameters a9 =
+        new ColumnParameters("subTotal", "subTotal", "gender=F|age=15+", "10");
 
     return Arrays.asList(a1, a2, a3, a4, a5, a6, a7, a8, unknownF, a9);
   }
