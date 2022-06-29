@@ -815,7 +815,7 @@ public class TXTBCohortQueries {
 
       definition.setCompositionString(
           "(art-list AND COMMUNITY-DISPENSATION AND"
-              + " ( tb-screening OR tb-investigation OR started-tb-treatment OR in-tb-program OR ficha-resumo-master-card OR ficha-clinica-master-card OR all-tb-symptoms OR ficha-laboratorio-results)) "
+              + " ( tb-screening OR tb-investigation OR started-tb-treatment OR in-tb-program OR ficha-clinica-master-card OR all-tb-symptoms OR ficha-laboratorio-results)) "
               + " NOT ((transferred-out NOT (started-tb-treatment OR in-tb-program)) OR started-tb-treatment-previous-period OR in-tb-program-previous-period)");
     }
 
