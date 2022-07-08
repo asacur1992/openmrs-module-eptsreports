@@ -13,7 +13,7 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/** @author Stélio Moiane */
+/** @author Abdul Sacur */
 @Component
 public class SetupExpectedChildrenListReport extends EptsDataExportManager {
 
