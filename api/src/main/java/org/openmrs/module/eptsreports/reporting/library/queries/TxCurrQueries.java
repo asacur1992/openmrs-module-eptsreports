@@ -280,7 +280,7 @@ public interface TxCurrQueries {
               + "ON FILA.patient_id = PROX.patient_id\n"
               + "\n"
               + "WHERE  PROX.patient_id is NULL) lista_prox_consulta\n"
-              + " ON obs_final.encounter_id = lista_prox_consulta.codigo AND obs_final.concept_id=1088 AND obs_final.value_coded =23784\n"
+              + " ON obs_final.encounter_id = lista_prox_consulta.codigo AND obs_final.concept_id=1088 AND obs_final.value_coded =23784 AND obs_final.voided = 0\n"
               + "";
 
       switch (regimenType) {
