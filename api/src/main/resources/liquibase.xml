@@ -6,11 +6,7 @@
 
 	<!-- eSaude Release 3.10.0 -->
 	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease310_PlatformVersion_2x_20092022">
-
-		<sql>INSERT INTO role_privilege (role, privilege) VALUES ('Data Assistant', 'Manage Scheduler')</sql>
-		
-		<sql>INSERT INTO role_privilege (role, privilege) VALUES ('Data Assistant', 'Manage Search Index')</sql>
-
+	
 		<sql>DELETE FROM global_property WHERE property = 'eptsreports.datareconstructionlocationids'</sql>
 
 		<sql>INSERT INTO global_property VALUES ('eptsreports.datareconstructionlocationids',NULL,'Set Locations ID separated by comma. Used to reconstruct data (MDC and TPT)','08f9abd7-f0ac-11ec-82c2-0242ac130002',NULL,NULL,NULL,NULL,NULL,NULL)</sql>
