@@ -5,47 +5,5 @@
 
 
 	<!-- eSaude Release 3.10.0 -->
-	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease310_PlatformVersion_2x_20092022">
-	
-		<sql>DELETE FROM global_property WHERE property = 'eptsreports.datareconstructionlocationids'</sql>
-
-		<sql>INSERT INTO global_property VALUES ('eptsreports.datareconstructionlocationids',NULL,'Set Locations ID separated by comma. Used to reconstruct data (MDC and TPT)','08f9abd7-f0ac-11ec-82c2-0242ac130002',NULL,NULL,NULL,NULL,NULL,NULL)</sql>
-
-		<sql>UPDATE global_property gp SET gp.property_value = (SELECT location_id FROM location) WHERE gp.property = 'eptsreports.datareconstructionlocationids'</sql>
-
-		<!-- Table structure for temp_location -->
-		<sql>DROP TABLE IF EXISTS `temp_location`</sql>
-		<sql>CREATE TABLE `temp_location`(`location_id` int(11) NOT NULL, PRIMARY KEY (`location_id`))</sql>
-
-		<!-- DATA RECONSTRACTIONS PROCEDURES -->
-		<sqlFile path="scripts/reconstraction/procedure1.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-		<sqlFile path="scripts/reconstraction/procedure2.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-		<sqlFile path="scripts/reconstraction/procedure3.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-		<sqlFile path="scripts/reconstraction/procedure4.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-		<sqlFile path="scripts/reconstraction/procedure5.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-		<sqlFile path="scripts/reconstraction/procedure6.sql" encoding="UTF-8" splitStatements="true" endDelimiter="/" />
-		<sqlFile path="scripts/reconstraction/procedure7.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
-
-		<sql>CALL DataReconstruct()</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS DataRecontructMDS</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS DataRecontructTPTFichaClinica</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS DataRecontructTPTFichaResumo</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS DataRecontructTPTSeguimento</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS FillTEMPLOCATION</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS DataReconstruct</sql>
-
-		<sql>DROP PROCEDURE IF EXISTS SWAPCONCEPTSANDDATA</sql>
-
-		<sql>DROP TABLE IF EXISTS temp_location</sql>
-
-		<sqlFile path="scripts/EPTSMetadataForRelease310_PlatformVersion_2x_20092022.sql" encoding="UTF-8" />
-
-	</changeSet>
 
 </databaseChangeLog>
