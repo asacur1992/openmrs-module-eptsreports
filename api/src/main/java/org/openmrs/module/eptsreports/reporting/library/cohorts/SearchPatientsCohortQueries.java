@@ -15,7 +15,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
 import org.openmrs.Location;
-import org.openmrs.module.eptsreports.reporting.library.queries.DsdQueriesInterface;
+import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterface;
 import org.openmrs.module.eptsreports.reporting.library.queries.SearchPatientsQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.SearchReason;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
@@ -68,7 +68,7 @@ public class SearchPatientsCohortQueries {
     dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
     dimension.addParameter(new Parameter("location", "location", Location.class));
 
-    String query = DsdQueriesInterface.QUERY.findPatientsAgeRange;
+    String query = DSDQueriesInterface.QUERY.findPatientsAgeRange;
     query = String.format(query, range.getMin(), range.getMax());
 
     if (AgeRange.ADULT.equals(range)) {

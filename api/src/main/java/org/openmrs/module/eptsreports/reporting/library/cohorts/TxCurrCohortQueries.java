@@ -15,13 +15,9 @@ import java.util.Arrays;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Location;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.metadata.HivMetadata;
-import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispense6OrMoreMonthsCalculation;
-import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation;
-import org.openmrs.module.eptsreports.reporting.calculation.txcurr.TxCurrPatientsOnArvDispenseLessThan3MonthCalculation;
-import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseFghCalculationCohortDefinition;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries.QUERY.DispensationIntervalType;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.RegeminType;
@@ -614,8 +610,7 @@ public class TxCurrCohortQueries {
         EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mapping));
     cd.addSearch(
         "arvDispenseForLessThan3Months",
-        EptsReportUtils.map(
-            this.getPatientsOnArtOnArvDispenseForLessThan3MonthsCalculation(), mapping));
+        EptsReportUtils.map(this.findPatientsOnArtOnArvDispenseForLessThan3Months(), mapping));
 
     cd.setCompositionString("patientsWhoAreActiveOnART AND arvDispenseForLessThan3Months");
     return cd;
@@ -635,8 +630,7 @@ public class TxCurrCohortQueries {
 
     cd.addSearch(
         "arvDispenseBetween3And5Months",
-        EptsReportUtils.map(
-            this.getPatientsOnArtOnArvDispenseBetween3And5MonthsCalculation(), mapping));
+        EptsReportUtils.map(this.findPatientsOnArtOnArvDispenseBetween3And5Months(), mapping));
 
     cd.setCompositionString("patientsWhoAreActiveOnART AND arvDispenseBetween3And5Months");
     return cd;
@@ -656,54 +650,51 @@ public class TxCurrCohortQueries {
 
     cd.addSearch(
         "arvDispenseFor6OrMoreMonths",
-        EptsReportUtils.map(
-            this.getPatientsOnArtOnArvDispenseFor6OrMoreMonthsCalculation(), mapping));
+        EptsReportUtils.map(this.findPatientsOnArtOnArvDispenseFor6OrMoreMonths(), mapping));
 
     cd.setCompositionString("patientsWhoAreActiveOnART AND arvDispenseFor6OrMoreMonths");
     return cd;
   }
 
-  @DocumentedDefinition(value = "patientsOnArtOnArvDispenseForLessThan3Months")
-  private CohortDefinition getPatientsOnArtOnArvDispenseForLessThan3MonthsCalculation() {
-    final BaseFghCalculationCohortDefinition cd =
-        new BaseFghCalculationCohortDefinition(
-            "patientsOnArtOnArvDispenseForLessThan3Months",
-            Context.getRegisteredComponents(
-                    TxCurrPatientsOnArvDispenseLessThan3MonthCalculation.class)
-                .get(0));
+  @DocumentedDefinition(value = "findPatientsOnArtOnArvDispenseFor6OrMoreMonths")
+  public CohortDefinition findPatientsOnArtOnArvDispenseFor6OrMoreMonths() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-    cd.addParameter(new Parameter("endDate", "end Date", Date.class));
-    cd.addParameter(new Parameter("location", "Location", Location.class));
+    definition.setName("findPatientsOnArtOnArvDispenseFor6OrMoreMonths");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-    return cd;
+    definition.setQuery(
+        TxCurrQueries.QUERY.findPatientsWhoAreInDispenseType(DispensationIntervalType.SEMI_ANNUAL));
+
+    return definition;
   }
 
-  @DocumentedDefinition(value = "patientsOnArtOnArvDispenseBetween3And5Months")
-  private CohortDefinition getPatientsOnArtOnArvDispenseBetween3And5MonthsCalculation() {
-    final BaseFghCalculationCohortDefinition cd =
-        new BaseFghCalculationCohortDefinition(
-            "patientsOnArtOnArvDispenseBetween3And5Months",
-            Context.getRegisteredComponents(
-                    TxCurrPatientsOnArvDispenseBetween3And5MonthsCalculation.class)
-                .get(0));
+  @DocumentedDefinition(value = "findPatientsOnArtOnArvDispenseBetween3And5Months")
+  public CohortDefinition findPatientsOnArtOnArvDispenseBetween3And5Months() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-    cd.addParameter(new Parameter("endDate", "end Date", Date.class));
-    cd.addParameter(new Parameter("location", "Location", Location.class));
+    definition.setName("findPatientsOnArtOnArvDispenseBetween3And5Months");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-    return cd;
+    definition.setQuery(
+        TxCurrQueries.QUERY.findPatientsWhoAreInDispenseType(DispensationIntervalType.QUARTERLY));
+
+    return definition;
   }
 
-  @DocumentedDefinition(value = "patientsOnArtOnArvDispenseFor6OrMoreMonths")
-  private CohortDefinition getPatientsOnArtOnArvDispenseFor6OrMoreMonthsCalculation() {
-    final BaseFghCalculationCohortDefinition cd =
-        new BaseFghCalculationCohortDefinition(
-            "patientsOnArtOnArvDispenseFor6OrMoreMonths",
-            Context.getRegisteredComponents(
-                    TxCurrPatientsOnArvDispense6OrMoreMonthsCalculation.class)
-                .get(0));
-    cd.addParameter(new Parameter("endDate", "end Date", Date.class));
-    cd.addParameter(new Parameter("location", "Location", Location.class));
+  @DocumentedDefinition(value = "findPatientsOnArtOnArvDispenseForLessThan3Months")
+  public CohortDefinition findPatientsOnArtOnArvDispenseForLessThan3Months() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-    return cd;
+    definition.setName("findPatientsOnArtOnArvDispenseForLessThan3Months");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        TxCurrQueries.QUERY.findPatientsWhoAreInDispenseType(DispensationIntervalType.MONTHLY));
+
+    return definition;
   }
 }

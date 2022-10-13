@@ -249,6 +249,46 @@ public class ResumoMensalCohortQueries {
     return definition;
   }
 
+  public CohortDefinition getSumB3() {
+
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setName("Number Of Patients Transferred In From Other Health Facilities");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "B13",
+        EptsReportUtils.map(
+            this.genericCohortQueries.generalSql(
+                "B13", ResumoMensalQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13()),
+            mappings));
+
+    definition.addSearch("B9", EptsReportUtils.map(this.getSumPatientsB9(), mappings));
+
+    definition.addSearch(
+        "B12",
+        EptsReportUtils.map(
+            this.findPatientsWhoAreCurrentlyEnrolledOnArtMOHLastMonthB12(), mappings));
+
+    definition.addSearch(
+        "B1",
+        EptsReportUtils.map(
+            this.getPatientsWhoInitiatedTarvAtThisFacilityDuringCurrentMonthB1(), mappings));
+
+    definition.addSearch(
+        "B2",
+        EptsReportUtils.map(
+            this.getNumberOfPatientsTransferredInFromOtherHealthFacilitiesDuringCurrentMonthB2(),
+            mappings));
+
+    definition.setCompositionString("(B13 OR B9) NOT (B12 OR B1 OR B2)");
+
+    return definition;
+  }
+
   /**
    * B.5: Number of patients transferred-out from another HFs during the current month
    *
@@ -629,22 +669,14 @@ public class ResumoMensalCohortQueries {
         "VL",
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "VL",
-                ResumoMensalQueries.findPatientWithVlResult(
-                    this.hivMetadata.getHivViralLoadConcept().getConceptId(),
-                    this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-                    this.hivMetadata.getHivViralLoadQualitative().getConceptId())),
+                "VL", ResumoMensalQueries.findPatientWithVlResult()),
             mappings));
 
     definition.addSearch(
         "Ex2",
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "Ex2",
-                ResumoMensalQueries.getE2ExclusionCriteria(
-                    this.hivMetadata.getHivViralLoadConcept().getConceptId(),
-                    this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-                    this.hivMetadata.getHivViralLoadQualitative().getConceptId())),
+                "Ex2", ResumoMensalQueries.getE2ExclusionCriteria()),
             mappings));
 
     definition.setCompositionString("(B13 AND VL) NOT Ex2");
@@ -669,22 +701,14 @@ public class ResumoMensalCohortQueries {
         "VL",
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "VL",
-                ResumoMensalQueries.findPatientWithVlResulLessThan1000(
-                    this.hivMetadata.getHivViralLoadConcept().getConceptId(),
-                    this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-                    this.hivMetadata.getHivViralLoadQualitative().getConceptId())),
+                "VL", ResumoMensalQueries.findPatientWithVlResulLessThan1000()),
             mappings));
 
     definition.addSearch(
         "Ex3",
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "Ex3",
-                ResumoMensalQueries.getE3ExclusionCriteria(
-                    this.hivMetadata.getHivViralLoadConcept().getConceptId(),
-                    this.hivMetadata.getAdultoSeguimentoEncounterType().getEncounterTypeId(),
-                    this.hivMetadata.getHivViralLoadQualitative().getConceptId())),
+                "Ex3", ResumoMensalQueries.getE3ExclusionCriteria()),
             mappings));
 
     definition.setCompositionString("(B13 AND VL) NOT Ex3");
