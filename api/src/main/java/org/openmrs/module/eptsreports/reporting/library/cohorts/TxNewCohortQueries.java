@@ -202,6 +202,32 @@ public class TxNewCohortQueries {
     return txNewCompositionCohort;
   }
 
+  public CohortDefinition getTxNewCommunityBMCompositionCohort(final String cohortName) {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName(cohortName);
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "START-ART", EptsReportUtils.map(this.getTxNewCompositionCohort(cohortName), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "WITH-COMMUNITY-DISPENSATION-BM",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityBM),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString("START-ART AND WITH-COMMUNITY-DISPENSATION-BM");
+
+    return txNewCompositionCohort;
+  }
+
   public CohortDefinition getTxNewCommunityCompositionTypeCohort(
       final String cohortName, final CommunityType ct) {
     final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();

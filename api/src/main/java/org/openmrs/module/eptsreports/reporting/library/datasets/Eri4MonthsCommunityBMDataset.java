@@ -15,7 +15,7 @@ package org.openmrs.module.eptsreports.reporting.library.datasets;
 
 import java.util.Arrays;
 import java.util.List;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.Eri4MonthsCommunityCMCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.cohorts.Eri4MonthsCommunityBMCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.Eri4MonthsDimensions;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.library.queries.ErimType;
@@ -28,13 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
+public class Eri4MonthsCommunityBMDataset extends BaseDataSet {
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
   @Autowired private Eri4MonthsDimensions eri4MonthsDimensions;
 
-  @Autowired private Eri4MonthsCommunityCMCohortQueries eri4MonthsCohortQueries;
+  @Autowired private Eri4MonthsCommunityBMCohortQueries eri4MonthsCohortQueries;
 
   public DataSetDefinition constructEri4MonthsDataset() {
 
@@ -57,7 +57,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "01",
+        "010",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "All patients",
@@ -70,7 +70,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "02",
+        "020",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "All patients in treatment",
@@ -83,7 +83,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "03",
+        "030",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "all patients dead",
@@ -96,7 +96,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "04",
+        "040",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "all patients lftu",
@@ -109,7 +109,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "05",
+        "050",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "all patients in tranferred out",
@@ -122,7 +122,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "06",
+        "060",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "all patients who stopped treatment",
@@ -135,7 +135,7 @@ public class Eri4MonthsCommunityCMDataset extends BaseDataSet {
 
     this.addColumns(
         dataSetDefinition,
-        "07",
+        "070",
         EptsReportUtils.map(
             this.eptsGeneralIndicator.getIndicator(
                 "all patients defaulters",

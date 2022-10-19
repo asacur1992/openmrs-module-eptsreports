@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.Eri2MonthsCommunityBMDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.Eri2MonthsCommunityCMDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.Eri4MonthsCommunityBMDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.Eri4MonthsCommunityCMDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityBMDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityCMDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityBMDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityCMDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
@@ -27,11 +31,19 @@ public class SetupImErCommunityCMBMReport extends EptsDataExportManager {
 
   @Autowired private Eri2MonthsCommunityCMDataset eri2MonthsDataset;
 
+  @Autowired private Eri2MonthsCommunityBMDataset eri2MonthsBMDataset;
+
   @Autowired private Eri4MonthsCommunityCMDataset eri4MonthsDataset;
+
+  @Autowired private Eri4MonthsCommunityBMDataset eri4MonthsBMDataset;
 
   @Autowired private TxNewCommunityCMDataset txNewDataset;
 
+  @Autowired private TxNewCommunityBMDataset txNewBMDataset;
+
   @Autowired private TxCurrCommunityCMDataset txCurrDataset;
+
+  @Autowired private TxCurrCommunityBMDataset txCurrBMDataset;
 
   @Autowired private DatimCodeDataSet datimCodeDataSet;
 
@@ -68,13 +80,25 @@ public class SetupImErCommunityCMBMReport extends EptsDataExportManager {
         "N", Mapped.mapStraightThrough(this.txNewDataset.constructTxNewDataset()));
 
     rd.addDataSetDefinition(
+        "NN", Mapped.mapStraightThrough(this.txNewBMDataset.constructTxNewDataset()));
+
+    rd.addDataSetDefinition(
         "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true)));
+
+    rd.addDataSetDefinition(
+        "CC", Mapped.mapStraightThrough(this.txCurrBMDataset.constructTxCurrDataset(true)));
 
     rd.addDataSetDefinition(
         "ERI2", Mapped.mapStraightThrough(this.eri2MonthsDataset.constructEri2MonthsDatset()));
 
     rd.addDataSetDefinition(
+        "ERI2BM", Mapped.mapStraightThrough(this.eri2MonthsBMDataset.constructEri2MonthsDatset()));
+
+    rd.addDataSetDefinition(
         "ERI4", Mapped.mapStraightThrough(this.eri4MonthsDataset.constructEri4MonthsDataset()));
+
+    rd.addDataSetDefinition(
+        "ERI4BM", Mapped.mapStraightThrough(this.eri4MonthsBMDataset.constructEri4MonthsDataset()));
 
     rd.addDataSetDefinition(
         "D",
