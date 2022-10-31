@@ -39,7 +39,7 @@ public class Eri2MonthsCommunityBMDataset extends BaseDataSet {
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    dsd.setName("ERI-2months-BM Data Set");
+    dsd.setName("ERI-2months Data Set - BM");
     dsd.addParameters(this.getParameters());
 
     dsd.addDimension(

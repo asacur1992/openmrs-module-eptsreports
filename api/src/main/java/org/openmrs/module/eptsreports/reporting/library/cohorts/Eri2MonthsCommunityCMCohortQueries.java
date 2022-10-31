@@ -105,8 +105,8 @@ public class Eri2MonthsCommunityCMCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
-            mappings));
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityCM),
+            cohortMappings));
 
     eri2MonthsCompositionCohort.setCompositionString(
         "START-ART-2-MONTHS AND PREGNANT AND COMMUNITY-DISPENSATION-CM");
@@ -151,8 +151,8 @@ public class Eri2MonthsCommunityCMCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
-            mappings));
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityCM),
+            cohortMappings));
 
     eri2MonthsCompositionCohort.setCompositionString(
         "START-ART-2-MONTHS AND BREASTFEEDING AND COMMUNITY-DISPENSATION-CM");
@@ -211,8 +211,8 @@ public class Eri2MonthsCommunityCMCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
-            mappings));
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityCM),
+            cohortMappings));
 
     eri2MonthsCompositionCohort.setCompositionString(
         "((START-ART-2-MONTHS AND ADULT) NOT (PREGNANT OR BREASTFEEDING)) AND COMMUNITY-DISPENSATION-CM ");
@@ -272,8 +272,8 @@ public class Eri2MonthsCommunityCMCohortQueries {
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
-            mappings));
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityCM),
+            cohortMappings));
 
     eri2MonthsCompositionCohort.setCompositionString(
         "((START-ART-2-MONTHS AND CHILDREN) NOT (PREGNANT OR BREASTFEEDING)) AND COMMUNITY-DISPENSATION-CM");
@@ -302,13 +302,16 @@ public class Eri2MonthsCommunityCMCohortQueries {
                         ErimType.TOTAL)),
             mappings));
 
+    final String cohortMappings =
+        "startDate=${endDate-2m+1d},endDate=${endDate-1m},location=${location}";
+
     eri2MonthsCompositionCohort.addSearch(
         "COMMUNITY-DISPENSATION-CM",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
                 "findCommunityPatientsDispensation",
-                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
-            mappings));
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnityCM),
+            cohortMappings));
 
     eri2MonthsCompositionCohort.setCompositionString(
         "START-ART-2-MONTHS AND COMMUNITY-DISPENSATION-CM");

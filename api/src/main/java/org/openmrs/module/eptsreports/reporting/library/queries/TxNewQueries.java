@@ -228,9 +228,9 @@ public interface TxNewQueries {
             + "                       ) todas_fontes                                                                                                                  \n"
             + "                       order by patient_id,data_consulta desc, fonte, ordem_mdc                                                                        \n"
             + "                   ) primeira_fonte                                                                                                                    \n"
-            + "                   group by patient_id                                                                                                                 \n"
+            + "                                                                                                                                  \n"
             + "               ) dispensa                                                                                                                              \n"
-            + "               where dispensa.tipo_dispensa = 5   ";
+            + "               where dispensa.tipo_dispensa = 5   group by patient_id   ";
 
     // IM-ER Comunitario Brigada Movel(Fila+Ficha Clinica)
     public static final String findPatientsWhoStartedARTAtComunnityBM =
@@ -319,9 +319,9 @@ public interface TxNewQueries {
             + "                       ) todas_fontes                                                                                                                  \n"
             + "                       order by patient_id,data_consulta desc, fonte, ordem_mdc                                                                        \n"
             + "                   ) primeira_fonte                                                                                                                    \n"
-            + "                   group by patient_id                                                                                                                 \n"
+            + "                                                                                                                                 \n"
             + "               ) dispensa                                                                                                                              \n"
-            + "               where dispensa.tipo_dispensa = 4   ";
+            + "               where dispensa.tipo_dispensa = 4   group by patient_id   ";
 
     public static String findPatientsInComunnityDispensationByType(
         final CommunityType comunityType) {

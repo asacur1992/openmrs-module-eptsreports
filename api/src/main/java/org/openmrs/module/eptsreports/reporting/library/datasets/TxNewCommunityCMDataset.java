@@ -64,7 +64,7 @@ public class TxNewCommunityCMDataset extends BaseDataSet {
     final CohortIndicatorDataSetDefinition dataSetDefinition =
         new CohortIndicatorDataSetDefinition();
 
-    dataSetDefinition.setName("TX_NEW Data Set");
+    dataSetDefinition.setName("TX_NEW Data Set - CM");
     dataSetDefinition.addParameters(this.getParameters());
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";

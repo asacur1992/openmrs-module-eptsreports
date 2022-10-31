@@ -47,7 +47,7 @@ public class Eri4MonthsCommunityBMDataset extends BaseDataSet {
     final String reportingPeriodMappings =
         "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    dataSetDefinition.setName("ERI-4months Data Set");
+    dataSetDefinition.setName("ERI-4months Data Set - BM");
 
     dataSetDefinition.addParameters(this.getParameters());
 
