@@ -397,6 +397,58 @@ public class TxCurrCohortQueries {
   }
 
   @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
+  public CohortDefinition findCommunityCMPatientsWhoAreActiveOnART() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("CommunityCMPatientsWhoAreActiveOnART");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION-CM",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityCMDispensation),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND COMMUNITY-DISPENSATION-CM");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
+  public CohortDefinition findCommunityBMPatientsWhoAreActiveOnART() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("CommunityCMPatientsWhoAreActiveOnART");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION-BM",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityBMDispensation),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND COMMUNITY-DISPENSATION-BM");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
   public CohortDefinition findCommunityPatientsWhoAreActiveOnART() {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
