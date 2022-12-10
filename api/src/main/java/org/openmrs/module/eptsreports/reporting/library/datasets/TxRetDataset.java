@@ -38,72 +38,116 @@ public class TxRetDataset extends BaseDataSet {
 
   @Autowired private TxRetDimensionCohort txRetDimensionCohort;
 
-  private CohortIndicator cohortIndicator(CohortDefinition cd, String mapping) {
-    CohortIndicator cohortIndicator =
-        eptsGeneralIndicator.getIndicator(cd.getName(), EptsReportUtils.map(cd, mapping));
+  private CohortIndicator cohortIndicator(final CohortDefinition cd, final String mapping) {
+    final CohortIndicator cohortIndicator =
+        this.eptsGeneralIndicator.getIndicator(cd.getName(), EptsReportUtils.map(cd, mapping));
     cohortIndicator.addParameter(new Parameter("months", "Months", Integer.class));
     return cohortIndicator;
   }
 
   public DataSetDefinition constructTxRetDataset() {
-    String mappings =
+    final String mappings =
         "startDate=${startDate},endDate=${endDate},location=${location},months=${months}";
-    String mappings12MonthsBefore =
+    final String mappings12MonthsBefore =
         "startDate=${startDate-12m},endDate=${endDate-12m},location=${location},months=${months}";
-    CohortIndicatorDataSetDefinition dataSetDefinition = new CohortIndicatorDataSetDefinition();
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
     dataSetDefinition.setName("TX_Ret Data Set");
-    dataSetDefinition.addParameters(getParameters());
+    dataSetDefinition.addParameters(this.getParameters());
     dataSetDefinition.addDimension(
         "onArtByGenderAndAge",
         EptsReportUtils.map(
-            txRetDimensionCohort.genderOnArtByAge(), "endDate=${endDate},location=${location}"));
+            this.txRetDimensionCohort.genderOnArtByAge(),
+            "endDate=${endDate},location=${location}"));
 
     dataSetDefinition.addDimension(
         "0009",
         EptsReportUtils.map(
-            txRetDimensionCohort.startedTargetAtARTInitiation(),
+            this.txRetDimensionCohort.startedTargetAtARTInitiation(),
             "endDate=${endDate},location=${location}"));
     dataSetDefinition.addDimension(
         "pregnantOrBreastFeeding",
         EptsReportUtils.map(
-            txRetDimensionCohort.pregnantOrBreastFeeding(),
+            this.txRetDimensionCohort.pregnantOrBreastFeeding(),
             "startDate=${endDate-24m+1d},endDate=${endDate-12m},location=${location}"));
     dataSetDefinition.addDimension(
         "pregnantOrBreastFeeding24",
         EptsReportUtils.map(
-            txRetDimensionCohort.pregnantOrBreastFeeding(),
+            this.txRetDimensionCohort.pregnantOrBreastFeeding(),
             "startDate=${endDate-27m+1d},endDate=${endDate-24m},location=${location}"));
     dataSetDefinition.addDimension(
         "pregnantOrBreastFeeding36",
         EptsReportUtils.map(
-            txRetDimensionCohort.pregnantOrBreastFeeding(),
+            this.txRetDimensionCohort.pregnantOrBreastFeeding(),
             "startDate=${endDate-39m+1d},endDate=${endDate-36m},location=${location}"));
 
-    Mapped<CohortIndicator> numerator =
+    final Mapped<CohortIndicator> numerator =
         EptsReportUtils.map(
-            cohortIndicator(txRetCohortQueries.inCourtForTwelveMonths(), mappings),
+            this.cohortIndicator(this.txRetCohortQueries.inCourtForTwelveMonths(), mappings),
             mappings12MonthsBefore);
+
     dataSetDefinition.addColumn("T04SA-ALL", "TX_RET: Numerator total", numerator, "");
-    addRow(
+
+    this.addRow(
         dataSetDefinition,
         "T04SA",
         "TX_RET Numerator (inCourtForTwelveMonths)",
         numerator,
-        dissagregations());
+        this.dissagregations());
 
-    Mapped<CohortIndicator> denominator =
+    final Mapped<CohortIndicator> denominator =
         EptsReportUtils.map(
-            cohortIndicator(txRetCohortQueries.courtNotTransferredTwelveMonths(), mappings),
+            this.cohortIndicator(
+                this.txRetCohortQueries.courtNotTransferredTwelveMonths(), mappings),
             mappings12MonthsBefore);
+
     dataSetDefinition.addColumn("T04SI-ALL", "TX_RET: Denominator total", denominator, "");
-    addRow(
+
+    this.addRow(
         dataSetDefinition,
         "T04SI",
         "TX_RET Denominator (courtNotTransferredTwelveMonths)",
         denominator,
-        dissagregations());
+        this.dissagregations());
+
+    final Mapped<CohortIndicator> died =
+        EptsReportUtils.map(
+            this.cohortIndicator(this.txRetCohortQueries.obitoTwelveMonths(), mappings),
+            mappings12MonthsBefore);
+
+    dataSetDefinition.addColumn("TXRTD-ALL", "TX_RET_DIED: from denominator", died, "");
+
+    this.addRow(
+        dataSetDefinition, "TXRTD", "TX_RET_DIED: Denominator", died, this.dissagregations());
+
+    final Mapped<CohortIndicator> stoppedART =
+        EptsReportUtils.map(
+            this.cohortIndicator(this.txRetCohortQueries.suspensoTwelveMonths(), mappings),
+            mappings12MonthsBefore);
+
+    dataSetDefinition.addColumn(
+        "TXRTS-ALL", "TX_RET_STOPPED_ART: from denominator", stoppedART, "");
+
+    this.addRow(
+        dataSetDefinition,
+        "TXRTS",
+        "TX_RET_STOPPED_ART: Denominator",
+        stoppedART,
+        this.dissagregations());
+
+    final Mapped<CohortIndicator> lfu =
+        EptsReportUtils.map(
+            this.cohortIndicator(this.txRetCohortQueries.abandonoTwelveMonths(), mappings),
+            mappings12MonthsBefore);
+
+    dataSetDefinition.addColumn("TXRTLFU-ALL", "TX_RET_LFU: from denominator", lfu, "");
+
+    this.addRow(
+        dataSetDefinition, "TXRTLFU", "TX_RET_LFU: Denominator", lfu, this.dissagregations());
+
     dataSetDefinition.addParameter(
         new Parameter("months", "Número de Meses (12, 24, 36)", Integer.class));
+
     return dataSetDefinition;
   }
 
