@@ -21,12 +21,12 @@ public class ResumoMensalQueries {
    * @return String
    */
   public static String getAllPatientsWithPreArtStartDateLessThanReportingStartDateA1(
-      int encouterTypeFichaResumo,
-      int conceptDataInicioPreTart,
-      int encounterTypeAdultoInicialA,
-      int encounterTypePediatriaInicialA,
-      int programServicoTarvCuidado) {
-    String query =
+      final int encouterTypeFichaResumo,
+      final int conceptDataInicioPreTart,
+      final int encounterTypeAdultoInicialA,
+      final int encounterTypePediatriaInicialA,
+      final int programServicoTarvCuidado) {
+    final String query =
         "SELECT InitArt.patient_id FROM (SELECT p.patient_id,MIN(o.value_datetime) AS initialDate FROM patient p  "
             + "INNER JOIN encounter e  ON e.patient_id=p.patient_id "
             + "INNER JOIN obs o on o.encounter_id=e.encounter_id "
@@ -58,12 +58,12 @@ public class ResumoMensalQueries {
    * @return String
    */
   public static String getAllPatientsWithPreArtStartDateWithBoundariesA2(
-      int encouterTypeFichaResumo,
-      int conceptDataInicioPreTart,
-      int encounterTypeAdultoInicialA,
-      int encounterTypePediatriaInicialA,
-      int programServicoTarvCuidado) {
-    String query =
+      final int encouterTypeFichaResumo,
+      final int conceptDataInicioPreTart,
+      final int encounterTypeAdultoInicialA,
+      final int encounterTypePediatriaInicialA,
+      final int programServicoTarvCuidado) {
+    final String query =
         "SELECT preTarvFinal.patient_id FROM ( "
             + "SELECT preTarv.patient_id, MIN(preTarv.initialDate) initialDate FROM ( "
             + "SELECT p.patient_id,min(o.value_datetime) AS initialDate FROM patient p  "
@@ -97,7 +97,7 @@ public class ResumoMensalQueries {
    */
   public static String getPatientsTransferredFromAnotherHealthFacilityDuringTheCurrentMonth() {
 
-    String query =
+    final String query =
         "SELECT trasferedPatients.patient_id FROM ( "
             + "select minState.patient_id,minState.minStateDate as initialDate from( "
             + "SELECT p.patient_id, pg.patient_program_id, MIN(ps.start_date) as minStateDate FROM patient p  "
@@ -131,7 +131,7 @@ public class ResumoMensalQueries {
   public static String
       getPatientsTransferredFromAnotherHealthFacilityDuringTheCurrentStartDateEndDate() {
 
-    String query =
+    final String query =
         "SELECT trasferedPatients.patient_id FROM ( "
             + "select minState.patient_id,minState.minStateDate as initialDate from( "
             + "SELECT p.patient_id, pg.patient_program_id, MIN(ps.start_date) as minStateDate FROM patient p  "
@@ -164,7 +164,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsTransferredFromAnotherHealthFacilityB5() {
-    String query =
+    final String query =
         "select transferidopara.patient_id from ( "
             + "select patient_id,max(data_transferidopara) data_transferidopara from ( "
             + "select maxEstado.patient_id,maxEstado.data_transferidopara from ( "
@@ -210,7 +210,7 @@ public class ResumoMensalQueries {
 
   public static String getPatientsWhoSuspendTratmentB6() {
 
-    String query =
+    final String query =
         "select suspenso1.patient_id from ( "
             + "select patient_id,max(data_suspencao) data_suspencao from ( "
             + "select maxEstado.patient_id,maxEstado.data_suspencao from( "
@@ -254,7 +254,7 @@ public class ResumoMensalQueries {
 
   public static String getPatientsWhoSuspendTratmentLastMonth() {
 
-    String query =
+    final String query =
         "select suspenso1.patient_id from  "
             + "( "
             + "select patient_id,max(data_suspencao) data_suspencao from ( "
@@ -318,7 +318,7 @@ public class ResumoMensalQueries {
 
   public static String getPatientsWhoDiedTratmentLastMonth() {
 
-    String query =
+    final String query =
         "select obito.patient_id from ( "
             + "select patient_id,max(data_obito) data_obito from"
             + "( "
@@ -385,7 +385,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsTransferredFromAnotherHealthFacilityLastMonth() {
-    String query =
+    final String query =
         "select transferidopara.patient_id from ( "
             + "select patient_id,max(data_transferidopara) data_transferidopara from "
             + "( "
@@ -449,7 +449,7 @@ public class ResumoMensalQueries {
 
   public static String getPatientsWhoHaveDrugPickup() {
 
-    String query =
+    final String query =
         "select pickup.patient_id from ( "
             + "Select p.patient_id,value_datetime data_recepcao_levantou from patient p  "
             + "inner join encounter e on p.patient_id=e.patient_id  "
@@ -468,7 +468,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoAbandonedTratmentB7() {
-    String query =
+    final String query =
         "Select B7.patient_id from (select patient_id,max(data_levantamento) data_levantamento,max(data_proximo_levantamento) data_proximo_levantamento, date_add(max(data_proximo_levantamento), INTERVAL 60 day) data_proximo_levantamento60 "
             + "from(select p.patient_id,max(o.value_datetime) data_levantamento, date_add(max(o.value_datetime), INTERVAL 30 day)  data_proximo_levantamento "
             + "from patient p inner "
@@ -493,7 +493,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoAbandonedTratmentToBeExclude() {
-    String query =
+    final String query =
         "Select B7.patient_id from (select patient_id,max(data_levantamento) data_levantamento,max(data_proximo_levantamento) data_proximo_levantamento, date_add(max(data_proximo_levantamento), INTERVAL 60 day) data_proximo_levantamento60 "
             + "from( "
             + "select p.patient_id,max(o.value_datetime) data_levantamento, date_add(max(o.value_datetime), INTERVAL 30 day)  data_proximo_levantamento  "
@@ -536,7 +536,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoAbandonedTratmentB7Exclusion() {
-    String query =
+    final String query =
         "Select B7.patient_id from (select patient_id,max(data_levantamento) data_levantamento,max(data_proximo_levantamento) data_proximo_levantamento, date_add(max(data_proximo_levantamento), INTERVAL 60 day) data_proximo_levantamento60 "
             + "from(select p.patient_id,max(o.value_datetime) data_levantamento, date_add(max(o.value_datetime), INTERVAL 30 day)  data_proximo_levantamento "
             + "from patient p inner "
@@ -562,7 +562,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoSuspendAndDiedAndTransferedOutTratmentB7ExclusionEndDate() {
-    String query =
+    final String query =
         "select saida.patient_id from (select patient_id,max(data_estado) data_estado from ( "
             + "select maxEstado.patient_id,maxEstado.data_transferidopara data_estado from ( "
             + "select pg.patient_id,max(ps.start_date) data_transferidopara from  patient p "
@@ -604,7 +604,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoSuspendAndDiedAndTransferedOutTratment() {
-    String query =
+    final String query =
         "select saida.patient_id from (select patient_id,max(data_estado) data_estado from ( "
             + "select maxEstado.patient_id,maxEstado.data_transferidopara data_estado from ( "
             + "select pg.patient_id,max(ps.start_date) data_transferidopara from  patient p "
@@ -647,7 +647,7 @@ public class ResumoMensalQueries {
 
   public static String getPatientsWhoDiedTratmentB8() {
 
-    String query =
+    final String query =
         "select obito.patient_id from ( "
             + "select patient_id,max(data_obito) data_obito from ( "
             + "select maxEstado.patient_id,maxEstado.data_obito from ( "
@@ -741,7 +741,7 @@ public class ResumoMensalQueries {
 
   public static String findPatientsWhoAreCurrentlyEnrolledOnArtMOHLastMonthB12() {
 
-    String query =
+    final String query =
         "select patient_id from (select  inicio_fila_seg_prox.*,GREATEST(COALESCE(data_fila,data_seguimento,data_recepcao_levantou),COALESCE(data_seguimento,data_fila,data_recepcao_levantou),COALESCE(data_recepcao_levantou,data_seguimento,data_fila))  data_usar_c, "
             + "GREATEST(COALESCE(data_proximo_lev,data_recepcao_levantou30),COALESCE(data_recepcao_levantou30,data_proximo_lev)) data_usar from (select inicio_fila_seg.*, "
             + "max(obs_fila.value_datetime) data_proximo_lev, "
@@ -940,7 +940,7 @@ public class ResumoMensalQueries {
 
   public static String findPatientWhoHaveTbSymthomsC1() {
 
-    String query =
+    final String query =
         "select tb.patient_id from ( "
             + "select p.patient_id,min(e.encounter_datetime) data_tb from patient p "
             + "inner join encounter e on p.patient_id=e.patient_id "
@@ -954,7 +954,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoMarkedINHC2() {
-    String query =
+    final String query =
         "select INH_3HP.patient_id,INH_3HP.dataInicioTPI,INH_3HP.value_coded from (  "
             + "select p.patient_id,obsEstado.obs_datetime dataInicioTPI,obsEstado.value_coded    "
             + "from patient p     "
@@ -1003,7 +1003,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoMarkedINHC2ToBeExclude() {
-    String query =
+    final String query =
         "select f.patient_id from (  "
             + "SELECT preTarvFinal.patient_id, preTarvFinal.initialDate FROM  (   "
             + "SELECT preTarv.patient_id, MIN(preTarv.initialDate) initialDate FROM (   "
@@ -1054,7 +1054,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoMarkedTbActiveC3() {
-    String query =
+    final String query =
         "SELECT tb.patient_id, tb.encounter_datetime,tb.concept_id FROM  (  "
             + "select encounter.patient_id, encounter.encounter_datetime, obs.concept_id from encounter  "
             + "inner join patient on patient.patient_id = encounter.patient_id  "
@@ -1089,7 +1089,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getPatientsWhoMarkedTbActiveC3ToBeExclude() {
-    String query =
+    final String query =
         "SELECT tb.patient_id FROM  (  "
             + "select encounter.patient_id, encounter.encounter_datetime, obs.concept_id from encounter  "
             + "inner join patient on patient.patient_id = encounter.patient_id  "
@@ -1123,9 +1123,9 @@ public class ResumoMensalQueries {
   }
 
   public static String findPatietWithRequestForVL(
-      int encounterType, int questionConceptId, int answerConceptId) {
+      final int encounterType, final int questionConceptId, final int answerConceptId) {
 
-    String query =
+    final String query =
         "SELECT pat.patient_id AS patient_id FROM patient pat "
             + " JOIN encounter enc ON pat.patient_id=enc.patient_id JOIN obs ob ON enc.encounter_id=ob.encounter_id "
             + " WHERE pat.voided = 0 AND enc.voided = 0 AND ob.voided = 0 AND enc.location_id = :location "
@@ -1136,7 +1136,7 @@ public class ResumoMensalQueries {
   }
 
   public static String findPatientWithVlResult() {
-    String query =
+    final String query =
         "SELECT pat.patient_id FROM patient pat "
             + "JOIN encounter enc ON pat.patient_id=enc.patient_id "
             + "JOIN obs ob "
@@ -1148,7 +1148,7 @@ public class ResumoMensalQueries {
   }
 
   public static String findPatientWithVlResulLessThan1000() {
-    String query =
+    final String query =
         "SELECT pat.patient_id FROM patient pat "
             + " JOIN encounter enc ON pat.patient_id=enc.patient_id JOIN obs ob ON enc.encounter_id=ob.encounter_id "
             + " WHERE pat.voided=0 AND enc.voided=0 AND ob.voided=0 AND enc.location_id=:location "
@@ -1169,8 +1169,8 @@ public class ResumoMensalQueries {
    * @return String
    */
   public static String getE1ExclusionCriteria(
-      int encounterType, int questionConceptId, int answerConceptId) {
-    String query =
+      final int encounterType, final int questionConceptId, final int answerConceptId) {
+    final String query =
         "SELECT p.patient_id FROM patient p JOIN encounter e ON p.patient_id=e.patient_id JOIN obs o ON e.encounter_id=o.encounter_id "
             + " JOIN ( "
             + " SELECT pat.patient_id AS patient_id, enc.encounter_datetime AS endDate FROM patient pat "
@@ -1302,7 +1302,7 @@ public class ResumoMensalQueries {
    */
   public static String getE2ExclusionCriteria() {
 
-    String query =
+    final String query =
         "SELECT p.patient_id FROM patient p "
             + "JOIN encounter e ON p.patient_id=e.patient_id "
             + "JOIN obs o ON e.encounter_id=o.encounter_id "
@@ -1325,7 +1325,7 @@ public class ResumoMensalQueries {
 
   public static String getE3ExclusionCriteria() {
 
-    String query =
+    final String query =
         "SELECT pat.patient_id FROM patient pat "
             + " JOIN encounter enc ON pat.patient_id=enc.patient_id JOIN obs ob ON enc.encounter_id=ob.encounter_id "
             + " WHERE pat.voided=0 AND enc.voided=0 AND ob.voided=0 AND enc.location_id=:location "
@@ -1343,7 +1343,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getNumberOfPatientsWhoHadClinicalAppointmentF1() {
-    String query =
+    final String query =
         "SELECT patient_id from (  "
             + "SELECT e.patient_id  FROM encounter e   "
             + "WHERE e.encounter_type=6 AND e.location_id=:location   "
@@ -1359,8 +1359,8 @@ public class ResumoMensalQueries {
    * @param encounterType
    * @return
    */
-  public static String getF3Exclusion(int encounterType) {
-    String query =
+  public static String getF3Exclusion(final int encounterType) {
+    final String query =
         " SELECT p.patient_id FROM patient p JOIN encounter e ON p.patient_id=e.patient_id JOIN ( "
             + " SELECT pat.patient_id AS patient_id, enc.encounter_datetime AS endDate FROM encounter enc JOIN patient pat "
             + " ON enc.patient_id=pat.patient_id WHERE enc.encounter_type=%d AND enc.location_id=:location "
@@ -1375,7 +1375,7 @@ public class ResumoMensalQueries {
   }
 
   public static String getF3ExclusionTransferedIn() {
-    String query =
+    final String query =
         "SELECT trasferedPatients.patient_id FROM ( "
             + "select minState.patient_id,minState.minStateDate as initialDate from  ("
             + "SELECT p.patient_id, pg.patient_program_id, MIN(ps.start_date) as minStateDate  FROM  patient p  "
@@ -1414,7 +1414,7 @@ public class ResumoMensalQueries {
    * @return String
    */
   public static String getNumberOfPatientsWhoHadClinicalAppointmentDuringTheReportingMonthF1() {
-    String query =
+    final String query =
         "SELECT f.encounter_id  from (   "
             + "SELECT e.encounter_id,e.patient_id  FROM encounter e    "
             + "WHERE e.encounter_type=6 AND e.location_id=:location    "
@@ -1427,7 +1427,7 @@ public class ResumoMensalQueries {
 
   public static String findPatientWhoHaveTbSymthomsF2() {
 
-    String query =
+    final String query =
         "SELECT f.encounter_id from   (   "
             + "SELECT e.encounter_id  FROM encounter e    "
             + "inner join obs o on o.encounter_id=e.encounter_id  "
@@ -1445,7 +1445,7 @@ public class ResumoMensalQueries {
 
   public static String findPatientWhoHaveTbActiveF2() {
 
-    String query =
+    final String query =
         "select p.patient_id from patient p "
             + "inner join encounter e on p.patient_id=e.patient_id "
             + "inner join obs o on o.encounter_id=e.encounter_id "
@@ -1456,7 +1456,7 @@ public class ResumoMensalQueries {
 
   public static String findPatientWhoHaveTbSymthomsAndTbActive() {
 
-    String query =
+    final String query =
         "select TbSynthoms.patient_id, TbSynthoms.data_tb,TbActive.tb_active_concept from ( "
             + "select p.patient_id,e.encounter_datetime as data_tb  from patient p "
             + "inner join encounter e on p.patient_id=e.patient_id "

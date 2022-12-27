@@ -40,120 +40,132 @@ public class TxTBDataset extends BaseDataSet {
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  public DataSetDefinition constructTxTBDataset() {
-    String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-    CohortIndicatorDataSetDefinition dataSetDefinition = new CohortIndicatorDataSetDefinition();
-    dataSetDefinition.setName("TX_TB Data Set");
-    dataSetDefinition.addParameters(getParameters());
+  private Boolean isCommunity;
 
-    dataSetDefinition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
+  public DataSetDefinition constructTxTBDataset(final Boolean isCommunity) {
+    this.isCommunity = isCommunity;
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
+    dataSetDefinition.setName("TX_TB Data Set");
+    dataSetDefinition.addParameters(this.getParameters());
+
+    dataSetDefinition.addDimension(
+        "gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
     dataSetDefinition.addDimension(
         "age",
         EptsReportUtils.map(
-            eptsCommonDimension.age(ageDimensionCohort), "effectiveDate=${endDate}"));
+            this.eptsCommonDimension.age(this.ageDimensionCohort), "effectiveDate=${endDate}"));
 
-    addTXTBDenominator(mappings, dataSetDefinition);
+    this.addTXTBDenominator(mappings, dataSetDefinition);
 
-    addTXTBNumerator(mappings, dataSetDefinition);
-    addSpecimenSentDisaggregation(mappings, dataSetDefinition);
-    addDiagnositcTestDisaggregation(mappings, dataSetDefinition);
-    addPositiveResultsDisaggregation(mappings, dataSetDefinition);
-
+    this.addTXTBNumerator(mappings, dataSetDefinition);
+    this.addSpecimenSentDisaggregation(mappings, dataSetDefinition);
+    this.addDiagnositcTestDisaggregation(mappings, dataSetDefinition);
+    this.addPositiveResultsDisaggregation(mappings, dataSetDefinition);
     return dataSetDefinition;
   }
 
   private void addTXTBNumerator(
-      String mappings, CohortIndicatorDataSetDefinition dataSetDefinition) {
-    CohortIndicator numerator =
-        eptsGeneralIndicator.getIndicator(
-            "NUMERATOR", EptsReportUtils.map(txTbCohortQueries.txTbNumerator(), mappings));
-    CohortIndicator patientsPreviouslyOnARTNumerator =
-        eptsGeneralIndicator.getIndicator(
+      final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
+    final CohortIndicator numerator =
+        this.eptsGeneralIndicator.getIndicator(
+            "NUMERATOR", EptsReportUtils.map(this.txTbCohortQueries.txTbNumerator(), mappings));
+    final CohortIndicator patientsPreviouslyOnARTNumerator =
+        this.eptsGeneralIndicator.getIndicator(
             "patientsPreviouslyOnARTNumerator",
-            EptsReportUtils.map(txTbCohortQueries.patientsPreviouslyOnARTNumerator(), mappings));
-    CohortIndicator patientsNewOnARTNumerator =
-        eptsGeneralIndicator.getIndicator(
+            EptsReportUtils.map(
+                this.txTbCohortQueries.patientsPreviouslyOnARTNumerator(), mappings));
+    final CohortIndicator patientsNewOnARTNumerator =
+        this.eptsGeneralIndicator.getIndicator(
             "patientsNewOnARTNumerator",
-            EptsReportUtils.map(txTbCohortQueries.patientsNewOnARTNumerator(), mappings));
+            EptsReportUtils.map(this.txTbCohortQueries.patientsNewOnARTNumerator(), mappings));
 
     dataSetDefinition.addColumn(
         "TXB_NUM", "TX_TB: Numerator total", EptsReportUtils.map(numerator, mappings), "");
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "TXB_NUM_PREV",
         "Numerator (patientsPreviouslyOnARTNumerator)",
         EptsReportUtils.map(patientsPreviouslyOnARTNumerator, mappings),
-        dissagregations());
-    addRow(
+        this.dissagregations());
+    this.addRow(
         dataSetDefinition,
         "TXB_NUM_NEW",
         "Numerator (patientsNewOnARTNumerator)",
         EptsReportUtils.map(patientsNewOnARTNumerator, mappings),
-        dissagregations());
+        this.dissagregations());
   }
 
   private void addTXTBDenominator(
-      String mappings, CohortIndicatorDataSetDefinition dataSetDefinition) {
-    CohortIndicator previouslyOnARTPostiveScreening =
-        eptsGeneralIndicator.getIndicator(
+      final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
+    final CohortIndicator previouslyOnARTPostiveScreening =
+        this.eptsGeneralIndicator.getIndicator(
             "previouslyOnARTPositiveScreening",
-            EptsReportUtils.map(txTbCohortQueries.previouslyOnARTPositiveScreening(), mappings));
-    CohortIndicator previouslyOnARTNegativeScreening =
-        eptsGeneralIndicator.getIndicator(
+            EptsReportUtils.map(
+                this.txTbCohortQueries.previouslyOnARTPositiveScreening(Boolean.FALSE), mappings));
+    final CohortIndicator previouslyOnARTNegativeScreening =
+        this.eptsGeneralIndicator.getIndicator(
             "previouslyOnARTNegativeScreening",
-            EptsReportUtils.map(txTbCohortQueries.previouslyOnARTNegativeScreening(), mappings));
-    CohortIndicator newOnARTPositiveScreening =
-        eptsGeneralIndicator.getIndicator(
+            EptsReportUtils.map(
+                this.txTbCohortQueries.previouslyOnARTNegativeScreening(Boolean.FALSE), mappings));
+    final CohortIndicator newOnARTPositiveScreening =
+        this.eptsGeneralIndicator.getIndicator(
             "newOnARTPositiveScreening",
-            EptsReportUtils.map(txTbCohortQueries.newOnARTPositiveScreening(), mappings));
-    CohortIndicator newOnARTNegativeScreening =
-        eptsGeneralIndicator.getIndicator(
+            EptsReportUtils.map(
+                this.txTbCohortQueries.newOnARTPositiveScreening(Boolean.FALSE), mappings));
+    final CohortIndicator newOnARTNegativeScreening =
+        this.eptsGeneralIndicator.getIndicator(
             "newOnARTNegativeScreening",
-            EptsReportUtils.map(txTbCohortQueries.newOnARTNegativeScreening(), mappings));
+            EptsReportUtils.map(
+                this.txTbCohortQueries.newOnARTNegativeScreening(Boolean.FALSE), mappings));
 
     dataSetDefinition.addColumn(
         "TXB_DEN",
         "TX_TB: Denominator total",
         EptsReportUtils.map(
-            eptsGeneralIndicator.getIndicator(
+            this.eptsGeneralIndicator.getIndicator(
                 "Denominator Total",
-                EptsReportUtils.map(txTbCohortQueries.getDenominator(), mappings)),
+                EptsReportUtils.map(
+                    this.txTbCohortQueries.getDenominator(Boolean.FALSE), mappings)),
             mappings),
         "");
 
-    addRow(
+    this.addRow(
         dataSetDefinition,
         "TXB_DEN_NEW_POS",
         "Denominator (newOnARTPositiveScreening)",
         EptsReportUtils.map(newOnARTPositiveScreening, mappings),
-        dissagregations());
-    addRow(
+        this.dissagregations());
+    this.addRow(
         dataSetDefinition,
         "TXB_DEN_NEW_NEG",
         "Denominator (newOnARTNegativeScreening)",
         EptsReportUtils.map(newOnARTNegativeScreening, mappings),
-        dissagregations());
-    addRow(
+        this.dissagregations());
+    this.addRow(
         dataSetDefinition,
         "TXB_DEN_PREV_POS",
         "Denominator (previouslyOnARTPositiveScreening)",
         EptsReportUtils.map(previouslyOnARTPostiveScreening, mappings),
-        dissagregations());
-    addRow(
+        this.dissagregations());
+    this.addRow(
         dataSetDefinition,
         "TXB_DEN_PREV_NEG",
         "Denominator (previouslyOnARTNegativeScreening)",
         EptsReportUtils.map(previouslyOnARTNegativeScreening, mappings),
-        dissagregations());
+        this.dissagregations());
   }
 
   private void addSpecimenSentDisaggregation(
-      String mappings, CohortIndicatorDataSetDefinition dataSetDefinition) {
+      final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
 
-    CohortIndicator specimentSent =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator specimentSent =
+        this.eptsGeneralIndicator.getIndicator(
             "SPECIMEN-SENT",
-            EptsReportUtils.map(txTbCohortQueries.getSpecimenSentCohortDefinition(), mappings));
+            EptsReportUtils.map(
+                this.txTbCohortQueries.getSpecimenSentCohortDefinition(this.isCommunity),
+                mappings));
 
     dataSetDefinition.addColumn(
         "TX_TB_TOTAL_SPECIMEN_SENT",
@@ -163,25 +175,30 @@ public class TxTBDataset extends BaseDataSet {
   }
 
   private void addDiagnositcTestDisaggregation(
-      String mappings, CohortIndicatorDataSetDefinition dataSetDefinition) {
+      final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
 
-    CohortIndicator geneExpert =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator geneExpert =
+        this.eptsGeneralIndicator.getIndicator(
             "GENEXPERT-DIAGNOSTIC-TEST",
             EptsReportUtils.map(
-                txTbCohortQueries.getGeneXpertMTBDiagnosticTestCohortDefinition(), mappings));
+                this.txTbCohortQueries.getGeneXpertMTBDiagnosticTestCohortDefinition(
+                    this.isCommunity),
+                mappings));
 
-    CohortIndicator smearOnly =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator smearOnly =
+        this.eptsGeneralIndicator.getIndicator(
             "SMEAR-ONLY-DIAGNOSTIC-TEST",
             EptsReportUtils.map(
-                txTbCohortQueries.getSmearMicroscopyOnlyDiagnosticTestCohortDefinition(),
+                this.txTbCohortQueries.getSmearMicroscopyOnlyDiagnosticTestCohortDefinition(
+                    this.isCommunity),
                 mappings));
-    CohortIndicator otherNoExpert =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator otherNoExpert =
+        this.eptsGeneralIndicator.getIndicator(
             "OTHER-NO-EXPERT-DIAGNOSTIC-TEST",
             EptsReportUtils.map(
-                txTbCohortQueries.getAdditionalOtherThanGenExpertTestCohortDefinition(), mappings));
+                this.txTbCohortQueries.getAdditionalOtherThanGenExpertTestCohortDefinition(
+                    this.isCommunity),
+                mappings));
     dataSetDefinition.addColumn(
         "TX_TB_TOTAL_GENEXPERT_DIAGNOSTIC",
         "TX_TB: Total Gene Xpert MTB/RIF Assay (Diagnostic Test)",
@@ -200,14 +217,14 @@ public class TxTBDataset extends BaseDataSet {
   }
 
   private void addPositiveResultsDisaggregation(
-      String mappings, CohortIndicatorDataSetDefinition dataSetDefinition) {
+      final String mappings, final CohortIndicatorDataSetDefinition dataSetDefinition) {
 
-    CohortIndicator positiveResults =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator positiveResults =
+        this.eptsGeneralIndicator.getIndicator(
             "POSITIVE-RESULT",
             EptsReportUtils.map(
-                txTbCohortQueries.getPositiveResultCohortDefinition(
-                    txTbCohortQueries.getDenominator(), mappings),
+                this.txTbCohortQueries.getPositiveResultCohortDefinition(
+                    mappings, this.isCommunity),
                 mappings));
 
     dataSetDefinition.addColumn(

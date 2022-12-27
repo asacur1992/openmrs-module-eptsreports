@@ -14,17 +14,17 @@ public abstract class ResumoTrimestralDateRangesCalculation extends BaseFghCalcu
 
   @Override
   public CalculationResultMap evaluate(
-      Map<String, Object> parameterValues, EvaluationContext context) {
+      final Map<String, Object> parameterValues, final EvaluationContext context) {
 
-    CalculationResultMap resultMap = new CalculationResultMap();
+    final CalculationResultMap resultMap = new CalculationResultMap();
 
-    String year =
+    final String year =
         (String) context.getParameterValues().get(SetupResumoTrimestralReport.YEAR_PARAMETER);
-    String quarterDescription =
+    final String quarterDescription =
         (String) context.getParameterValues().get(SetupResumoTrimestralReport.QUARTER_PARAMETER);
 
     resultMap.put(
-        ALL_EXCUTIONS_PERIOD,
+        ResumoTrimestralDateRangesCalculation.ALL_EXCUTIONS_PERIOD,
         new SimpleResult(
             ResumoTrimestralUtil.getDisaggregatedDates(Integer.valueOf(year), quarterDescription),
             this));

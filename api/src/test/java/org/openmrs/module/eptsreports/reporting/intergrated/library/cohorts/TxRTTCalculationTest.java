@@ -1,17 +1,13 @@
 package org.openmrs.module.eptsreports.reporting.intergrated.library.cohorts;
 
-import static org.junit.Assert.assertFalse;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.ResumoTrimestralAPSSCohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.TPTCompletationCohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.TXTBCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.TxRTTCohortQueries;
 import org.openmrs.module.reporting.cohort.EvaluatedCohort;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -24,12 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
 
   @Autowired private TxRTTCohortQueries txRTTCohortQueries;
-
-  @Autowired private ResumoTrimestralAPSSCohortQueries resumoMensalAPSSCohortQueries;
-
-  @Autowired private TXTBCohortQueries txTBCohortQueries;
-
-  @Autowired private TPTCompletationCohortQueries tptCompletationCohortQueries;
 
   @Test
   public void shouldFindPatientsNewlyEnrolledInART() throws EvaluationException {
@@ -48,16 +38,17 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     parameters.put(new Parameter("endDate", "End Date", Date.class), endDate);
     parameters.put(new Parameter("location", "Location", Location.class), location);
 
-    CohortDefinition definition = txRTTCohortQueries.getPatientsOnRTT();
+    final CohortDefinition definition = this.txRTTCohortQueries.getPatientsOnRTT();
+
     final EvaluatedCohort evaluateCohortDefinition =
         this.evaluateCohortDefinition(definition, parameters);
 
     System.out.println(evaluateCohortDefinition.getMemberIds().size());
-    assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
+    Assert.assertFalse(evaluateCohortDefinition.getMemberIds().isEmpty());
 
     System.out.println("----------------------------------");
 
-    for (int t : evaluateCohortDefinition.getMemberIds()) {
+    for (final int t : evaluateCohortDefinition.getMemberIds()) {
       System.out.println(t);
     }
   }
@@ -82,10 +73,10 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     return "dBernardo1";
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
 
-    Date sstartDate = DateUtil.getDateTime(2018, 11, 14);
-    Date lastDate = DateUtil.adjustDate(sstartDate, 7, DurationUnit.MONTHS);
+    final Date sstartDate = DateUtil.getDateTime(2018, 11, 14);
+    final Date lastDate = DateUtil.adjustDate(sstartDate, 7, DurationUnit.MONTHS);
 
     System.out.println(lastDate);
   }

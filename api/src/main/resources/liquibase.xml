@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
 	<!-- See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
@@ -25,13 +22,11 @@
 		/> </changeSet> -->
 
 
-	<changeSet id="20221220-1630" author="guimino"
-		runAlways="true">
+	<changeSet id="20221220-1630" author="guimino" runAlways="true">
 		<comment>
 			SESP Release version 3.11.0
 		</comment>
-		<sqlFile
-			path="_metadata/EPTSMetadataForRelease311_PlatformVersion_2x_20122022.sql" />
+		<sqlFile path="_metadata/EPTSMetadataForRelease311_PlatformVersion_2x_20122022.sql" />
 	</changeSet>
 
 </databaseChangeLog>
