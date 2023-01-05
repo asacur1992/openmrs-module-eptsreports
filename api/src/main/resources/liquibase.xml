@@ -29,4 +29,9 @@
 		<sqlFile path="_metadata/EPTSMetadataForRelease311_PlatformVersion_2x_20122022.sql" />
 	</changeSet>
 
+	<!-- eSaude Release 3.11.0 USES PRIVILEGES -->
+	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease311_PlatformVersion_2x_28122022">
+		<sql>INSERT INTO role_role VALUES ('Privilege Level: Full','Data Assistant')</sql>
+	</changeSet>
+
 </databaseChangeLog>

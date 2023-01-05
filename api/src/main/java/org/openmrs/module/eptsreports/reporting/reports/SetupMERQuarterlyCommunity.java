@@ -77,7 +77,7 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "PEPFAR MER 2.6 Quarterly - Comunidade";
+    return "PEPFAR MER 2.6.1 Quarterly - Comunidade";
   }
 
   @Override
@@ -138,8 +138,8 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PEPFAR_MER_2.6_QUARTERLY.xls",
-              "PEPFAR MER 2.6 Quarterly Report",
+              "PEPFAR_MER_2.6.1_Quarterly.xls",
+              "PEPFAR MER 2.6.1 Quarterly Report",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
