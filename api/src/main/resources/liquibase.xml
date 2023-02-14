@@ -22,16 +22,18 @@
 		/> </changeSet> -->
 
 
-	<changeSet id="20221220-1630" author="guimino" runAlways="true">
+	<!-- <changeSet id="20221220-1630" author="guimino" runAlways="true">
 		<comment>
 			SESP Release version 3.11.0
 		</comment>
 		<sqlFile path="_metadata/EPTSMetadataForRelease311_PlatformVersion_2x_20122022.sql" />
 	</changeSet>
+	-->
 
-	<!-- eSaude Release 3.11.0 USES PRIVILEGES -->
-	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease311_PlatformVersion_2x_28122022">
-		<sql>INSERT INTO role_role VALUES ('Privilege Level: Full','Data Assistant')</sql>
+	<!-- eSaude Release 3.11.1 REMOVE USES PRIVILEGES AND DISA SCRIPT -->
+	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease311_PlatformVersion_2x_13022022">
+		<sql>DELETE FROM role_role WHERE parent_role = 'Privilege Level: Full' AND child_role = 'Data Assistant'</sql>
+		<sqlFile path="scripts/FSRList.sql" />
 	</changeSet>
 
 </databaseChangeLog>

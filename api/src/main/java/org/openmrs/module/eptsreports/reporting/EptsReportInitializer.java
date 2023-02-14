@@ -56,31 +56,30 @@ public class EptsReportInitializer {
     ReportUtil.updateGlobalProperty(
         ReportingConstants.GLOBAL_PROPERTY_DATA_EVALUATION_BATCH_SIZE, "-1");
 
-    this.setUpKeyPopMisauEncoder();
+    this.updateFSRTemplate();
   }
 
-  private void setUpKeyPopMisauEncoder() {
+  private void updateFSRTemplate() {
     final ReportService reportService = Context.getService(ReportService.class);
     final ReportDesign reportDesign =
-        reportService.getReportDesignByUuid("eb02a0d7-64dd-48e7-bdab-a30e9e4e56d2");
+        reportService.getReportDesignByUuid("03375b3c-8770-4c63-a371-e832a41e388f");
 
     if (reportDesign == null) {
       return;
     }
 
     final ReportDesignResource resource =
-        reportDesign.getResourceByUuid("83157bb7-ef92-4df3-b106-f5ec535cbc63");
-    resource.setName("KEY_POP_MISAU_INDICATORS.xls");
+        reportDesign.getResourceByUuid("38db6bdc-e57d-401c-a9d7-d65be11cd9cc");
 
-    final InputStream is = OpenmrsClassLoader.getInstance().getResourceAsStream(resource.getName());
-    try {
+    try (final InputStream is =
+        OpenmrsClassLoader.getInstance()
+            .getResourceAsStream("LISTA_DE_PACIENTES_COM_EXAME_DE_CARGA_VIRAL_FSR.xls")) {
       resource.setContents(IOUtils.toByteArray(is));
     } catch (final IOException e) {
       e.printStackTrace();
     }
 
     reportDesign.addResource(resource);
-
     reportService.saveReportDesign(reportDesign);
   }
 
