@@ -31,9 +31,9 @@
 	-->
 
 	<!-- eSaude Release 3.11.1 REMOVE USES PRIVILEGES AND DISA SCRIPT -->
-	<changeSet author="icap-mozambique" id="EPTSMetadataForRelease311_PlatformVersion_2x_13022022">
+	<!--<changeSet author="icap-mozambique" id="EPTSMetadataForRelease311_PlatformVersion_2x_13022022">
 		<sql>DELETE FROM role_role WHERE parent_role = 'Privilege Level: Full' AND child_role = 'Data Assistant'</sql>
 		<sqlFile path="scripts/FSRList.sql" />
-	</changeSet>
+	</changeSet> -->
 
 </databaseChangeLog>
