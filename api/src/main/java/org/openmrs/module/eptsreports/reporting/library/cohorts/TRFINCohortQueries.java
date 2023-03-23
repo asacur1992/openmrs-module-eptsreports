@@ -14,6 +14,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 import java.util.Date;
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -29,8 +30,11 @@ public class TRFINCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohorts;
 
+
   private static final String FIND_PATIENTS_WHO_ARE_TRANSFERRED_IN =
       "TX_TRANSFERRED_IN/FIND_PATIENTS_WHO_ARE_TRANSFERRED_IN.sql";
+
+
 
   @DocumentedDefinition(value = "patientsWhoAreTransferedIn")
   public CohortDefinition getPatiensWhoAreTransferredIn() {
@@ -62,4 +66,34 @@ public class TRFINCohortQueries {
 
     return compositionDefinition;
   }
+
+  @DocumentedDefinition(value = "communityPatientsWhoAreTransferedIn")
+  public CohortDefinition getCommunityPatiensWhoAreTransferredIn() {
+
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("TRF-IN-NUMERATOR");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "TRF-IN", EptsReportUtils.map(this.getPatiensWhoAreTransferredIn(), mappings));
+
+    compositionDefinition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    compositionDefinition.setCompositionString("(TRF-IN AND COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
+
 }

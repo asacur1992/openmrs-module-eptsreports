@@ -14,9 +14,9 @@ public interface DSDQueriesInterface {
 
       BIMONTHLY(4);
 
-      private Integer intervalValue;
+      private final Integer intervalValue;
 
-      private DSDDispensationInterval(Integer intervalValue) {
+      private DSDDispensationInterval(final Integer intervalValue) {
         this.intervalValue = intervalValue;
       }
 
@@ -42,9 +42,9 @@ public interface DSDQueriesInterface {
 
       CM_NOTURNA(8);
 
-      private Integer value;
+      private final Integer value;
 
-      private DSDModeTypeLevel1(Integer value) {
+      private DSDModeTypeLevel1(final Integer value) {
         this.value = value;
       }
 
@@ -72,9 +72,9 @@ public interface DSDQueriesInterface {
 
       FR(23729);
 
-      private Integer conceptId;
+      private final Integer conceptId;
 
-      private DSDModelTypeLevel2(Integer conceptId) {
+      private DSDModelTypeLevel2(final Integer conceptId) {
         this.conceptId = conceptId;
       }
 
@@ -184,7 +184,9 @@ public interface DSDQueriesInterface {
             + "    and obsOpenDate.value_datetime >=:startDate and obsOpenDate.value_datetime < :endDate and e.location_id=:location group by p.patient_id  "
             + ") transferido_de                                                                                                                                ";
 
-    public static String findPatientsWhoAreIncludedInDSDModel(DSDDispensationInterval dsdInterval) {
+    public static String findPatientsWhoAreIncludedInDSDModel(
+        final DSDDispensationInterval dsdInterval) {
+
 
       String sql =
           "select patient_id "
@@ -287,10 +289,13 @@ public interface DSDQueriesInterface {
               + ") dispensa "
               + "where dispensa.tipo_dispensa = %s ";
 
+
       return String.format(sql, dsdInterval.getIntervalValue());
     }
 
-    public static final String findPatientsWhoAreIncludedInDSDModel(DSDModeTypeLevel1 dsdMode) {
+    public static final String findPatientsWhoAreIncludedInDSDModel(
+        final DSDModeTypeLevel1 dsdMode) {
+
 
       String sql =
           "select patient_id "
@@ -428,8 +433,8 @@ public interface DSDQueriesInterface {
     }
 
     public static final String findPatientsWhoAreIncludedInDSDModel(
-        DSDModelTypeLevel2 dsdModelType) {
-      String sql =
+        final DSDModelTypeLevel2 dsdModelType) {
+      final String sql =
           ""
               + "select ultima_ficha.patient_id							 																										"
               + "from   																																							"
@@ -459,7 +464,7 @@ public interface DSDQueriesInterface {
           + "	and floor(datediff(:endDate,person.birthdate)/365) 			    ";
     }
 
-    public static String findPatientsWhoArePregnantsAndBreastFeeding(TypePTV typePTV) {
+    public static String findPatientsWhoArePregnantsAndBreastFeeding(final TypePTV typePTV) {
 
       String query =
           "select patient_id from ( select inicio_real.patient_id,gravida_real.data_gravida, lactante_real.data_parto, "
@@ -573,6 +578,7 @@ public interface DSDQueriesInterface {
       return query;
     }
 
+
     public static final String findPatientsWhoAreOnARTForAtLeastSixMonths =
         "SELECT patient_id FROM "
             + "(SELECT patient_id, MIN(art_start_date) art_start_date FROM "
@@ -619,5 +625,12 @@ public interface DSDQueriesInterface {
             + "group by p.patient_id "
             + ")maxEnc on maxEnc.patient_id = breastfeeding.patient_id "
             + "where TIMESTAMPDIFF(month,breastfeeding.encounter_datetime,maxEnc.encounter_datetime) >= 11 ";
+
+    // TODO: Por rever
+    public static final String findPatientsAgeRange =
+        "SELECT patient_id FROM patient "
+            + "INNER JOIN person ON patient_id = person_id WHERE patient.voided=0 AND person.voided=0 "
+            + "AND TIMESTAMPDIFF(year,birthdate,:endDate) BETWEEN %d AND %d AND birthdate IS NOT NULL";
+
   }
 }

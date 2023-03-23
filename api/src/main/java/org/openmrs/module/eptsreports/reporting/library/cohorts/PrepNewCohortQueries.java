@@ -16,9 +16,15 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 import java.util.Date;
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.PrepNewQueries;
+import org.openmrs.module.eptsreports.reporting.library.queries.PrepNewStartingSectorQueries;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewEligibilidadeSectorType;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewEnrollemntStatus;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewKeyPopType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
+import org.openmrs.module.reporting.cohort.definition.SqlCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -61,8 +67,125 @@ public class PrepNewCohortQueries {
                 PrepNewQueries.QUERY.findClientsWhoWhereTransferredIn),
             mappings));
 
-    txNewCompositionCohort.setCompositionString("START-PREP NOT TRANSFERED-IN ");
+    txNewCompositionCohort.setCompositionString("START-PREP NOT TRANSFERED-IN");
 
     return txNewCompositionCohort;
+  }
+
+  public CohortDefinition getCommnunityClientsNewlyEnrolledInPrep() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("ENROLLED-IN-PREP AND COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  public CohortDefinition getSectorClientsNewlyEnrolledInPrep(
+      Integer sector, Integer conceitoKeyPop, PrepNewKeyPopType keyPop) {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+
+    definition.addSearch(
+        "SECTOR",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPrEPNewBySector",
+                PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepAtCPN(
+                    sector, conceitoKeyPop, keyPop)),
+            mappings));
+
+    definition.setCompositionString("ENROLLED-IN-PREP AND SECTOR");
+
+    return definition;
+  }
+
+  public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(
+      Integer sectorElegibilidade, PrepNewEligibilidadeSectorType keyPop) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade, keyPop));
+
+    return definition;
+  }
+
+  // SubPopulation
+  public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(Integer sectorElegibilidade) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade));
+
+    return definition;
+  }
+
+  // TOTAL Sero Descordante
+  public CohortDefinition getSectorClientsNewlyEnrolledInPrepSeroDescordante() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepSeroDescordante());
+
+    return definition;
+  }
+
+  public CohortDefinition getSectorClientsNewlybyEnrollmentStatus(
+      Integer sectorElegibilidade, PrepNewEnrollemntStatus keyPop) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsbyEnrollmentStatus(
+            sectorElegibilidade, keyPop));
+
+    return definition;
   }
 }
