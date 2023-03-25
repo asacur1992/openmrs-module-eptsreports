@@ -25,12 +25,10 @@ public class ResumoMensalQueries {
    *
    * @return String
    */
-
   public static String getAllPatientsWithPreArtStartDateLessThanReportingStartDateA1() {
     String query = EptsQuerysUtils.loadQuery(FIND_PRE_TARV_PATIENT_A1);
     return query;
   }
-
 
   /**
    * All patients with encounter type 53, and Pre-ART Start Date that falls between startDate and
@@ -38,12 +36,9 @@ public class ResumoMensalQueries {
    *
    * @return String
    */
-
   public static String getAllPatientsWithPreArtStartDateWithBoundariesA2() {
     String query = EptsQuerysUtils.loadQuery(FIND_PRE_TARV_PATIENT_A2);
     return query;
-
-
   }
 
   /**
@@ -696,11 +691,9 @@ public class ResumoMensalQueries {
 
   public static String findPatientsWhoAreCurrentlyEnrolledOnArtMOHLastMonthB12() {
 
-
     String query =
         "select patient_id from ( "
             + "select  inicio_fila_seg_prox.*,GREATEST(COALESCE(data_fila,data_seguimento),COALESCE(data_seguimento,data_fila),COALESCE(data_seguimento,data_fila))  data_usar_c, "
-
             + "GREATEST(COALESCE(data_proximo_lev,data_recepcao_levantou30),COALESCE(data_recepcao_levantou30,data_proximo_lev)) data_usar from (select inicio_fila_seg.*, "
             + "max(obs_fila.value_datetime) data_proximo_lev, "
             + "max(obs_seguimento.value_datetime) data_proximo_seguimento, "

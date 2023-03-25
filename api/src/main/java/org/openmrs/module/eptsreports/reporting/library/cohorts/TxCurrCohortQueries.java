@@ -11,13 +11,12 @@
  */
 package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
-
 import java.util.Date;
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCurrQueries.QUERY.DispensationIntervalType;
-import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
+import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.RegeminType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -32,12 +31,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class TxCurrCohortQueries {
 
-
   private static final String FIND_PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART =
       "TX_CURR/PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART.sql";
 
   @Autowired private GenericCohortQueries genericCohorts;
-
 
   @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
   public CohortDefinition findPatientsWhoAreActiveOnART() {

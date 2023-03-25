@@ -13,8 +13,8 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
 import org.openmrs.Location;
-import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
+import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -30,11 +30,8 @@ public class TRFINCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohorts;
 
-
   private static final String FIND_PATIENTS_WHO_ARE_TRANSFERRED_IN =
       "TX_TRANSFERRED_IN/FIND_PATIENTS_WHO_ARE_TRANSFERRED_IN.sql";
-
-
 
   @DocumentedDefinition(value = "patientsWhoAreTransferedIn")
   public CohortDefinition getPatiensWhoAreTransferredIn() {
@@ -94,6 +91,4 @@ public class TRFINCohortQueries {
 
     return compositionDefinition;
   }
-
-
 }

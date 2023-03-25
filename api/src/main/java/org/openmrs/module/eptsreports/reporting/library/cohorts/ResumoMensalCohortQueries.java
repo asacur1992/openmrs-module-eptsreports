@@ -71,7 +71,6 @@ public class ResumoMensalCohortQueries {
                 "getNumberOfPatientsWhoInitiatedPreTarvByEndOfPreviousMonthA1",
                 ResumoMensalQueries
                     .getAllPatientsWithPreArtStartDateLessThanReportingStartDateA1()),
-
             mappings));
 
     definition.addSearch(
@@ -110,7 +109,6 @@ public class ResumoMensalCohortQueries {
             this.genericCohortQueries.generalSql(
                 "patientsWhoInitiatedPreTarvAtAfacilityDuringCurrentMonthA2",
                 ResumoMensalQueries.getAllPatientsWithPreArtStartDateWithBoundariesA2()),
-
             mappings));
 
     definition.addSearch(

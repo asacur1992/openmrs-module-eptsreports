@@ -103,7 +103,6 @@ public class SetupMERSemiAnnualReport extends EptsDataExportManager {
               "PEPFAR_MER_2.6.1_Semiannual.xls",
               "PEPFAR MER 2.6.1 Semi-Annual Report",
               getExcelDesignUuid(),
-
               null);
       final Properties props = new Properties();
       props.put("sortWeight", "5000");

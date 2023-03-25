@@ -26,7 +26,7 @@ public interface TxCurrQueries {
       }
     }
 
-    //TODO : REVER QUERIE TX_CURR INTERNO
+    // TODO : REVER QUERIE TX_CURR INTERNO
     public static final String findPatientsWhoAreCurrentlyEnrolledOnART =
         "	select patient_id                                                                          							"
             + "	from                                                                                        							"
@@ -232,7 +232,6 @@ public interface TxCurrQueries {
             /* -- Verificação qual é o estado final */
             /* -- where estado_final=6 */
             + " where (data_estado is null or (data_estado is not null and  data_usar_c>data_estado)) and date_add(data_usar, interval 28 day) >=:endDate             ";
-
 
     public static final String findPatientsByGenderAndRage =
         "SELECT patient_id FROM patient "

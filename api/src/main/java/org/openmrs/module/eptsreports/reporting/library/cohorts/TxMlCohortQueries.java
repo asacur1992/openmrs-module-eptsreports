@@ -202,8 +202,6 @@ public class TxMlCohortQueries {
 
     definition.setCompositionString("(TXML and REFUSEDTREATMENT) NOT REFUSEDTREATMENT");
     return definition;
-
- 
   }
 
   @DocumentedDefinition(value = "PatientsWhoAreIITLessThan3MonthsCalculation")

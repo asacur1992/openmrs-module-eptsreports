@@ -187,7 +187,6 @@ public interface DSDQueriesInterface {
     public static String findPatientsWhoAreIncludedInDSDModel(
         final DSDDispensationInterval dsdInterval) {
 
-
       String sql =
           "select patient_id "
               + "from "
@@ -289,13 +288,11 @@ public interface DSDQueriesInterface {
               + ") dispensa "
               + "where dispensa.tipo_dispensa = %s ";
 
-
       return String.format(sql, dsdInterval.getIntervalValue());
     }
 
     public static final String findPatientsWhoAreIncludedInDSDModel(
         final DSDModeTypeLevel1 dsdMode) {
-
 
       String sql =
           "select patient_id "
@@ -578,7 +575,6 @@ public interface DSDQueriesInterface {
       return query;
     }
 
-
     public static final String findPatientsWhoAreOnARTForAtLeastSixMonths =
         "SELECT patient_id FROM "
             + "(SELECT patient_id, MIN(art_start_date) art_start_date FROM "
@@ -631,6 +627,5 @@ public interface DSDQueriesInterface {
         "SELECT patient_id FROM patient "
             + "INNER JOIN person ON patient_id = person_id WHERE patient.voided=0 AND person.voided=0 "
             + "AND TIMESTAMPDIFF(year,birthdate,:endDate) BETWEEN %d AND %d AND birthdate IS NOT NULL";
-
   }
 }

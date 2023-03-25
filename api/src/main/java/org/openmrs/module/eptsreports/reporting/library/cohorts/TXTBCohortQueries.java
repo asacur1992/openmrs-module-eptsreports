@@ -732,7 +732,6 @@ public class TXTBCohortQueries {
             this.getPulmonaryTBWithinReportingDate(),
             "startDate=${startDate-6m},endDate=${startDate-1d},location=${location}"));
 
-
     CohortDefinition fichaClinicaMasterCard =
         this.genericCohortQueries.generalSql(
             "fichaClinicaMasterCard",
