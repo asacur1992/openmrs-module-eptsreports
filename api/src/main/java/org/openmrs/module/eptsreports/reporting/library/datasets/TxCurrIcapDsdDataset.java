@@ -25,7 +25,6 @@ import org.openmrs.module.eptsreports.reporting.library.dimensions.IcapDsdDimens
 import org.openmrs.module.eptsreports.reporting.library.dimensions.KeyPopulationDimension;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterface.QUERY.DSDModeTypeLevel1;
-import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterface.QUERY.DSDModelTypeLevel2;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.Gender;
@@ -108,11 +107,12 @@ public class TxCurrIcapDsdDataset extends BaseDataSet {
         "cm",
         EptsReportUtils.map(this.icapDsdDimensions.findMDS("cm", DSDModeTypeLevel1.CM), mappings));
 
-    dataSetDefinition.addDimension(
-        "gaac",
-        EptsReportUtils.map(
-            this.icapDsdDimensions.findMDS("gaac", DSDModelTypeLevel2.GAAC), mappings));
-
+    /* Removido ao Pedido do Nacassaco
+        dataSetDefinition.addDimension(
+            "gaac",
+            EptsReportUtils.map(
+                this.icapDsdDimensions.findMDS("gaac", DSDModelTypeLevel2.GAAC), mappings));
+    */
     this.addDimensions(
         dataSetDefinition,
         "endDate=${endDate}",
@@ -149,7 +149,7 @@ public class TxCurrIcapDsdDataset extends BaseDataSet {
     dataSetDefinition.addColumn(
         "C1All", "TX_CURR: Currently on ART", EptsReportUtils.map(txCurrIndicator, mappings), "");
 
-    final List<String> models = Arrays.asList("dca", "dcp", "bm", "cm", "gaac");
+    final List<String> models = Arrays.asList("dca", "dcp", "bm", "cm");
 
     for (final String mds : models) {
 

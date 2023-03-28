@@ -41,7 +41,6 @@ import org.openmrs.module.eptsreports.reporting.library.dimensions.IcapDsdDimens
 import org.openmrs.module.eptsreports.reporting.library.dimensions.KeyPopulationDimension;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterface.QUERY.DSDModeTypeLevel1;
-import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterface.QUERY.DSDModelTypeLevel2;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.eptsreports.reporting.utils.Gender;
@@ -146,16 +145,23 @@ public class TxNewIcapDsdDataset extends BaseDataSet {
         "sex-worker",
         EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreSexWorker(), mappings));
 
-    dataSetDefinition.addDimension(
-        "dca",
-        EptsReportUtils.map(
-            this.icapDsdDimensions.findMDS("dca", DSDModeTypeLevel1.DCA_APE), mappings));
+    /* Removido *Pedido feito pelo Nacassaco*
+        dataSetDefinition.addDimension(
+            "dca",
+            EptsReportUtils.map(
+                this.icapDsdDimensions.findMDS("dca", DSDModeTypeLevel1.DCA_APE), mappings));
 
-    dataSetDefinition.addDimension(
-        "dcp",
-        EptsReportUtils.map(
-            this.icapDsdDimensions.findMDS("dcp", DSDModeTypeLevel1.DCP), mappings));
+        dataSetDefinition.addDimension(
+            "dcp",
+            EptsReportUtils.map(
+                this.icapDsdDimensions.findMDS("dcp", DSDModeTypeLevel1.DCP), mappings));
 
+
+        dataSetDefinition.addDimension(
+             "gaac",
+             EptsReportUtils.map(
+                    this.icapDsdDimensions.findMDS("gaac", DSDModelTypeLevel2.GAAC), mappings));
+    */
     dataSetDefinition.addDimension(
         "bm",
         EptsReportUtils.map(this.icapDsdDimensions.findMDS("bm", DSDModeTypeLevel1.BM), mappings));
@@ -163,11 +169,6 @@ public class TxNewIcapDsdDataset extends BaseDataSet {
     dataSetDefinition.addDimension(
         "cm",
         EptsReportUtils.map(this.icapDsdDimensions.findMDS("cm", DSDModeTypeLevel1.CM), mappings));
-
-    dataSetDefinition.addDimension(
-        "gaac",
-        EptsReportUtils.map(
-            this.icapDsdDimensions.findMDS("gaac", DSDModelTypeLevel2.GAAC), mappings));
 
     dataSetDefinition.addColumn(
         "1All",
@@ -181,7 +182,9 @@ public class TxNewIcapDsdDataset extends BaseDataSet {
         EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
         "breastfeeding=breastfeeding");
 
-    final List<String> models = Arrays.asList("dca", "dcp", "bm", "cm", "gaac");
+    //  final List<String> models = Arrays.asList("dca", "dcp", "bm", "cm", "gaac");
+
+    final List<String> models = Arrays.asList("bm", "cm");
 
     for (final String mds : models) {
       dataSetDefinition.addColumn(
