@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.CxCaSCRNDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.CxCaTXDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TbPrevDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxTBCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
@@ -32,6 +33,8 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
 
   @Autowired private CxCaTXDataSet CxCaTXDataSet;
 
+  @Autowired private DatimCodeDataSet datimCodeDataSet;
+
   @Override
   public String getExcelDesignUuid() {
     return "218381d8-7c4b-4fe0-9e14-c6d13a336e64";
@@ -49,12 +52,12 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "PEPFAR MER 2.5 Semi-Annual Community";
+    return "PEPFAR MER 2.6.1 Semi-Annual Community";
   }
 
   @Override
   public String getDescription() {
-    return "PEPFAR MER 2.5 Semi-Annual Report Community";
+    return "PEPFAR MER 2.6.1 Semi-Annual Report Community";
   }
 
   @Override
@@ -73,6 +76,10 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
     rd.addDataSetDefinition(
         "CXT", Mapped.mapStraightThrough(this.CxCaTXDataSet.constructDatset(Boolean.TRUE)));
 
+    rd.addDataSetDefinition(
+        "D",
+        Mapped.mapStraightThrough(this.datimCodeDataSet.constructDataset(this.getParameters())));
+
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
@@ -88,8 +95,8 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PEPFAR_MER_2.5_Semiannual.xls",
-              "PEPFAR MER 2.5 Semi-Annual Report Community",
+              "PEPFAR_MER_2.6.1_Semiannual.xls",
+              "PEPFAR MER 2.6.1 Semi-Annual Report Community",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();

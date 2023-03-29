@@ -59,12 +59,12 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "TX_CURR 2.5 Regimes";
+    return "TX_CURR 2.6.1 Regimes";
   }
 
   @Override
   public String getDescription() {
-    return "TX_CURR 2.5 Regimes Report";
+    return "TX_CURR 2.6.1 Regimes Report";
   }
 
   @Override
@@ -108,8 +108,8 @@ public class SetupRegimesTXCURR extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "TX_CURR_2.5_Regimes_Desagregados.xls",
-              "TX_CURR 2.5 Regimes Report",
+              "TX_CURR_2.6.1_Regimes_Desagregados.xls",
+              "TX_CURR 2.6.1 Regimes Report",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
