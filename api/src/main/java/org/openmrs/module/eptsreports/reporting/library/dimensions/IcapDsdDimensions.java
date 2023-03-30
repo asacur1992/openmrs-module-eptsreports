@@ -19,6 +19,7 @@ public class IcapDsdDimensions {
 
   @Autowired private GenericCohortQueries genericCohortQueries;
 
+  // TODO: Voltar ao metodo findPatientsWhoAreIncludedInDSDModel
   public CohortDefinitionDimension findMDS(final String mdsName, final DSDModeTypeLevel1 dsdModel) {
 
     final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
@@ -34,7 +35,8 @@ public class IcapDsdDimensions {
         mdsName,
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                mdsName, DSDQueriesInterface.QUERY.findPatientsWhoAreIncludedInDSDModel(dsdModel)),
+                mdsName,
+                DSDQueriesInterface.QUERY.findPatientsWhoAreIncludedInDSDModelICAP(dsdModel)),
             mappings));
 
     return dimension;
