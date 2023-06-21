@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
 	<!-- See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
@@ -25,21 +22,25 @@
 		/> </changeSet> -->
 
 
-	<changeSet id="20230620-1700-01" author="csaude"
-		runAlways="true">
+	<changeSet id="20230620-1700-01" author="csaude" runAlways="true">
 		<comment>
 			SESP Release version 3.13.0
 		</comment>
-		<sqlFile
-			path="_metadata/SESPMetadataForRelease313_PlatformVersion_2x_20062023.sql" />
+		<sqlFile path="_metadata/SESPMetadataForRelease313_PlatformVersion_2x_20062023.sql" />
 	</changeSet>
 
 	<changeSet id="20230620-1700-02" author="csaude">
 		<comment>
 			SESP Release version 3.13.0 - Fix wrong mappings in Test Result caso Index question 
 		</comment>
-		<sqlFile
-			path="_metadata/SESPMetadataForRelease313_data_reconstruction.sql" />
+		<sqlFile path="_metadata/SESPMetadataForRelease313_data_reconstruction.sql" />
 	</changeSet>
- 
+
+	<changeSet id="20230621-001" author="icap">
+		<comment>
+			SESP Release version 3.13.0 - Truncate reporting report request
+		</comment>
+		<sqlFile path="scripts/reports-truncate.sql" />
+	</changeSet>
+
 </databaseChangeLog>

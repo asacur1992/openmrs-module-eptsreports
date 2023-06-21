@@ -34,8 +34,8 @@ public class TxMlCohortQueries {
   private String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
   public CohortDefinition getPatientstotalIIT() {
-    String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients who are IIT (Totals)");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -53,8 +53,8 @@ public class TxMlCohortQueries {
   }
 
   public CohortDefinition getPatientsWhoAreIITLessThan3Months() {
-    String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients who are LTFU less than 3 months");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -70,8 +70,8 @@ public class TxMlCohortQueries {
   }
 
   public CohortDefinition getPatientsWhoAreIITGreaterOrEqual6Months() {
-    String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients who are LTFU less than 6 months");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -87,8 +87,8 @@ public class TxMlCohortQueries {
   }
 
   public CohortDefinition getPatientsWhoAreIITBetween3And5Months() {
-    String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
-    CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    final String mapping = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Get patients who are LTFU Greater than 3 months And Less Than 6 Months");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -155,8 +155,8 @@ public class TxMlCohortQueries {
 
   @DocumentedDefinition(value = "patientsWhoAreTransferedOut")
   public CohortDefinition getPatientsWhoAreTransferedOut() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("patientsMarkedAsDead");
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
@@ -180,6 +180,7 @@ public class TxMlCohortQueries {
 
   @DocumentedDefinition(value = "patientsWhoRefusedStoppedTreatment")
   public CohortDefinition getPatientsWhoRefusedOrStoppedTreatment() {
+
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
     definition.setName("patientsWhoRefusedStoppedTreatment");
@@ -205,7 +206,7 @@ public class TxMlCohortQueries {
 
   @DocumentedDefinition(value = "PatientsWhoAreIITLessThan3MonthsCalculation")
   private CohortDefinition getPatientsWhoAreIITLessThan3MonthsCalculation() {
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "PatientsWhoAreIITLessThan3MonthsCalculation",
             Context.getRegisteredComponents(TxMLPatientsWhoAreIITLessThan3MonthsCalculation.class)
@@ -220,7 +221,7 @@ public class TxMlCohortQueries {
   @DocumentedDefinition(value = "PatientsWhoAreIITGreatherOrEqual6MonthsCalculation")
   private CohortDefinition getPatientsWhoAreIITGreatherOrEqual6MonthsCalculation() {
 
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "PatientsWhoAreIITGreatherOrEqual6MonthsCalculation",
             Context.getRegisteredComponents(
@@ -237,7 +238,7 @@ public class TxMlCohortQueries {
   @DocumentedDefinition(value = "PatientsWhoAreIITBetween3And5MonthsCalculation")
   private CohortDefinition getPatientsWhoAreIITBetween3And5MonthsCalculationCalculation() {
 
-    BaseFghCalculationCohortDefinition cd =
+    final BaseFghCalculationCohortDefinition cd =
         new BaseFghCalculationCohortDefinition(
             "PatientsWhoAreIITBetween3And5MonthsCalculation",
             Context.getRegisteredComponents(
