@@ -21,22 +21,7 @@
 		baseColumnNames="owner" referencedTableName="users" referencedColumnNames="user_id" 
 		/> </changeSet> -->
 
-
-	<changeSet id="20230620-1700-01" author="csaude" runAlways="true">
-		<comment>
-			SESP Release version 3.13.0
-		</comment>
-		<sqlFile path="_metadata/SESPMetadataForRelease313_PlatformVersion_2x_20062023.sql" />
-	</changeSet>
-
-	<changeSet id="20230620-1700-02" author="csaude">
-		<comment>
-			SESP Release version 3.13.0 - Fix wrong mappings in Test Result caso Index question 
-		</comment>
-		<sqlFile path="_metadata/SESPMetadataForRelease313_data_reconstruction.sql" />
-	</changeSet>
-
-	<changeSet id="20230621-001" author="icap">
+	<changeSet id="20230621-001" author="icap" runAlways="true">
 		<comment>
 			SESP Release version 3.13.0 - Truncate reporting report request
 		</comment>
