@@ -85,6 +85,37 @@ public class TxCurrCohortQueries {
     return definition;
   }
 
+  // Para o IDP
+  @DocumentedDefinition(value = "IDPpatientsWhoAreActiveOnART")
+  public CohortDefinition findIDPWhoAreActiveOnART() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("IDPpatientsWhoAreActiveOnART");
+    //  definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    // mappings = mappings.concat(",startDate=${startDate}");
+
+    mappings = "endDate=${endDate}";
+
+    definition.addSearch(
+        "IDP",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "IDPpatientsWhoAreActiveOnART", TxCurrQueries.QUERY.findIDPPatients),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND IDP");
+
+    return definition;
+  }
+
   @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
   public CohortDefinition findCommunityBMPatientsWhoAreActiveOnART() {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
