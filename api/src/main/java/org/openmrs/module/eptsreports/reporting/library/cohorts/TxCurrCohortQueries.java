@@ -91,7 +91,7 @@ public class TxCurrCohortQueries {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
     definition.setName("IDPpatientsWhoAreActiveOnART");
-    //  definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
@@ -99,8 +99,6 @@ public class TxCurrCohortQueries {
 
     definition.addSearch(
         "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
-
-    // mappings = mappings.concat(",startDate=${startDate}");
 
     mappings = "endDate=${endDate}";
 

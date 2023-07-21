@@ -33,10 +33,8 @@ import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.UNDER_ONE;
 import static org.openmrs.module.eptsreports.reporting.utils.AgeRange.UNKNOWN;
 
 import org.openmrs.module.eptsreports.reporting.library.cohorts.TxCurrCohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.TxNewCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.AgeDimensionCohortInterface;
 import org.openmrs.module.eptsreports.reporting.library.dimensions.EptsCommonDimension;
-import org.openmrs.module.eptsreports.reporting.library.dimensions.KeyPopulationDimension;
 import org.openmrs.module.eptsreports.reporting.library.indicators.EptsGeneralIndicator;
 import org.openmrs.module.eptsreports.reporting.utils.AgeRange;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -52,8 +50,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class IDPIcapDsdDataset extends BaseDataSet {
 
-  @Autowired private TxNewCohortQueries txNewCohortQueries;
-
   @Autowired private EptsCommonDimension eptsCommonDimension;
 
   @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
@@ -63,8 +59,6 @@ public class IDPIcapDsdDataset extends BaseDataSet {
   @Autowired
   @Qualifier("txNewAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
-
-  @Autowired private KeyPopulationDimension keyPopulationDimension;
 
   public DataSetDefinition constructTxNewDataset() {
 
@@ -76,15 +70,6 @@ public class IDPIcapDsdDataset extends BaseDataSet {
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    /*
-        final CohortDefinition patientEnrolledInART =
-            this.txNewCohortQueries.getTxNewCompositionCohort("patientEnrolledInART");
-
-        final CohortIndicator patientEnrolledInHIVStartedARTIndicator =
-            this.eptsGeneralIndicator.getIndicator(
-                "patientNewlyEnrolledInHIVIndicator",
-                EptsReportUtils.map(patientEnrolledInART, mappings));
-    */
     final CohortDefinition patientOnIDP = this.txCurrCohortQueries.findIDPWhoAreActiveOnART();
 
     final CohortIndicator patientOnIDPIndicator =
@@ -131,38 +116,10 @@ public class IDPIcapDsdDataset extends BaseDataSet {
             this.eptsCommonDimension.findPatientsWithUnknownAgeByGender(
                 this.getColumnName(AgeRange.UNKNOWN, Gender.FEMALE), Gender.FEMALE),
             ""));
-    /*
-        dataSetDefinition.addDimension(
-            "homosexual",
-            EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreHomosexual(), mappings));
 
-        dataSetDefinition.addDimension(
-            "drug-user",
-            EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoUseDrugs(), mappings));
-
-        dataSetDefinition.addDimension(
-            "prisioner",
-            EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreInPrison(), mappings));
-
-        dataSetDefinition.addDimension(
-            "sex-worker",
-            EptsReportUtils.map(this.keyPopulationDimension.findPatientsWhoAreSexWorker(), mappings));
-
-        dataSetDefinition.addColumn(
-            "1All",
-            "TX_NEW: New on ART",
-            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
-            "");
-    */
     dataSetDefinition.addColumn(
         "IDP1All", "TX_NEW: New on ART", EptsReportUtils.map(patientOnIDPIndicator, mappings), "");
-    /*
-        dataSetDefinition.addColumn(
-            "ANC",
-            "TX_NEW: Breastfeeding Started ART",
-            EptsReportUtils.map(patientEnrolledInHIVStartedARTIndicator, mappings),
-            "breastfeeding=breastfeeding");
-    */
+
     this.addColums(
         dataSetDefinition,
         mappings,
