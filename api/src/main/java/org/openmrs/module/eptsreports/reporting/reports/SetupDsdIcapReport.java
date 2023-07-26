@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.datasets.IDPIcapDsdDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrIcapDsdDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewIcapDsdDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
@@ -28,6 +29,8 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
 
   @Autowired private TxNewIcapDsdDataset txNewIcapDsdDataset;
 
+  @Autowired private IDPIcapDsdDataset idp;
+
   @Override
   public String getUuid() {
     return "72a77701-e8d2-4226-9ecb-48436f2ccd7e";
@@ -40,7 +43,7 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
 
   @Override
   public String getDescription() {
-    return "DSD report using MER TX CURR and NEW";
+    return "DSD report using MER TX CURR and NE";
   }
 
   @Override
@@ -62,6 +65,9 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
 
     reportDefinition.addDataSetDefinition(
         "N", Mapped.mapStraightThrough(this.txNewIcapDsdDataset.constructTxNewDataset()));
+
+    reportDefinition.addDataSetDefinition(
+        "I", Mapped.mapStraightThrough(this.idp.constructTxNewDataset()));
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(

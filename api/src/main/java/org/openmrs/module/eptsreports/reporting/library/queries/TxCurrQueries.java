@@ -505,5 +505,15 @@ public interface TxCurrQueries {
             + "			inner join obs on obs.person_id=abaixo_mil_copias.patient_id and obs.obs_datetime=abaixo_mil_copias.data_carga \n"
             + "		where obs.voided=0 and ((obs.concept_id=856 and obs.value_numeric<1000) or obs.concept_id=1305)  and obs.location_id=:location\n"
             + "  ";
+
+    public static final String findIDPPatients =
+        "select patient_id from patient  inner join\n"
+            + "\n"
+            + "	(select idp.person_id from\n"
+            + "	(select pa1.person_id FROM person_attribute pa1  where \n"
+            + "	pa1.person_attribute_type_id= 41 and pa1.voided = 0 and pa1.value = 'true') idp\n"
+            + "	inner join (select person_id from person_attribute  where \n"
+            + "	person_attribute_type_id= 45 and voided = 0 and value <= :endDate ) idp_data on  idp_data.person_id = idp.person_id) \n"
+            + "	p on p.person_id = patient.patient_id";
   }
 }
