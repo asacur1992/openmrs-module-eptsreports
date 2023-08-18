@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TxMlWithConsultationOrPickupDataset extends BaseDataSet {
 
-  private static final String TX_ML_WITH_CONULTATION_OR_PICKUP_DRUG =
-      "TX_ML/TX_ML_WITH_CONULTATION_OR_PICKUP_DRUG.sql";
+  private static final String TX_ML_WITH_CONSULTATION_OR_PICKUP_DRUG = "TX_ML/TX_ML_LIST.sql";
 
   public DataSetDefinition loadData(final List<Parameter> parameters) {
 
@@ -24,7 +23,7 @@ public class TxMlWithConsultationOrPickupDataset extends BaseDataSet {
     dataset.addParameters(parameters);
     dataset.setSqlQuery(
         EptsQuerysUtils.loadQuery(
-            TxMlWithConsultationOrPickupDataset.TX_ML_WITH_CONULTATION_OR_PICKUP_DRUG));
+            TxMlWithConsultationOrPickupDataset.TX_ML_WITH_CONSULTATION_OR_PICKUP_DRUG));
 
     return dataset;
   }

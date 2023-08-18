@@ -14,25 +14,25 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** @author Stélio Moiane */
+/** @author Abdul Sacur */
 @Service
-public class SetupTxMlWithConsultationOrPickupReport extends EptsDataExportManager {
+public class SetupTxMlReport extends EptsDataExportManager {
 
   @Autowired private TxMlWithConsultationOrPickupDataset dataset;
 
   @Override
   public String getUuid() {
-    return "a748f6cd-6297-49e8-84da-1ef2de8098b4";
+    return "4eb86ce9-aed8-4c56-aefa-4aad12e7a61d";
   }
 
   @Override
   public String getName() {
-    return "TX_ML COM CONSULTA OU LEVANTAMENTO ARV";
+    return "TXML LISTA";
   }
 
   @Override
   public String getDescription() {
-    return "Prior TX_ML with consultation or drug pick up";
+    return "TXML LISTA";
   }
 
   @Override
@@ -54,7 +54,7 @@ public class SetupTxMlWithConsultationOrPickupReport extends EptsDataExportManag
 
   @Override
   public String getExcelDesignUuid() {
-    return "09bd8baf-dcc7-4008-ae7a-6b71ecd28d46";
+    return "80a0f63d-264a-45e4-a49a-775aeee45a68";
   }
 
   @Override
@@ -65,8 +65,8 @@ public class SetupTxMlWithConsultationOrPickupReport extends EptsDataExportManag
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "LOST_OF_FOLLOW_UP_WITH_CONSULT_OR_DRUG_PICK_UP.xls",
-              "Pacientes TX_ML com consulta ou levantamento ARV",
+              "TX_ML_LIST.xls",
+              "Lista Pacientes TX_ML",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
