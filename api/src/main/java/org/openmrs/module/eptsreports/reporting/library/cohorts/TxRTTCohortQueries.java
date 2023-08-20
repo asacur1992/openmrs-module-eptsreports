@@ -11,11 +11,17 @@ import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPLHIVGreate
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPLHIVLess12MonthCalculation;
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoAreTransferedOutCalculation;
 import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRTTPatientsWhoExperiencedIITCalculation;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRttBetween3To5MonthsListCalculator;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRttGreaterThan6MonthsListCalculator;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRttLessThan3MonthsListCalculator;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxRttListCalculator;
 import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseFghCalculationCohortDefinition;
+import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseIcapCalculationDataSetDefinition;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
+import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -281,5 +287,68 @@ public class TxRTTCohortQueries {
         "RTT-LESS12MONTHS OR RTT-GREATER12MONTHS OR RTT-PLHIVUNKNOWN");
 
     return compositionDefinition;
+  }
+
+  @DocumentedDefinition(value = "TxRttList")
+  public DataSetDefinition getTxRttList() {
+
+    final DataSetDefinition definition =
+        new BaseIcapCalculationDataSetDefinition(
+            "TxRttList", Context.getRegisteredComponents(TxRttListCalculator.class).get(0));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("realEndDate", "Real End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "TxRttLessThan3MonthsList")
+  public DataSetDefinition getTxRttLessThan3MonthsList() {
+
+    final DataSetDefinition definition =
+        new BaseIcapCalculationDataSetDefinition(
+            "TxRttLessThan3MonthsList",
+            Context.getRegisteredComponents(TxRttLessThan3MonthsListCalculator.class).get(0));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("realEndDate", "Real End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "TxRttBetween3To5MonthsList")
+  public DataSetDefinition getTxRttBetween3To5MonthsList() {
+
+    final DataSetDefinition definition =
+        new BaseIcapCalculationDataSetDefinition(
+            "TxRttBetween3To5MonthsList",
+            Context.getRegisteredComponents(TxRttBetween3To5MonthsListCalculator.class).get(0));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("realEndDate", "Real End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "TxRttGreaterTo6MonthsList")
+  public DataSetDefinition getTxRttGreaterThan6MonthsList() {
+
+    final DataSetDefinition definition =
+        new BaseIcapCalculationDataSetDefinition(
+            "TxRttGreaterTo6MonthsList",
+            Context.getRegisteredComponents(TxRttGreaterThan6MonthsListCalculator.class).get(0));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("realEndDate", "Real End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    return definition;
   }
 }
