@@ -3,7 +3,7 @@ SELECT art_start.patient_id, pi.identifier, CONCAT(pn.given_name, ' ', COALESCE(
 		WHEN last_state.state = 9 THEN 'ABANDONO'
 		WHEN last_state.state = 10 THEN 'OBITO' 
 		WHEN last_state.state = 8 THEN 'SUSPENSO' 
-		WHEN last_state.state = 7 THEN 'TRANSFERIDO PARA' END AS state, before_consultation_date, before_pickup_date, after_consultation_date, after_pickup_date, dispensation_type, address3, patient_contact, confidant_name, confidant_contact FROM
+		WHEN last_state.state = 7 THEN 'TRANSFERIDO PARA' END AS state, before_consultation_date, before_pickup_date, before_pickup_date_mc, after_consultation_date, after_pickup_date, after_pickup_date_mc, dispensation_type, address3, patient_contact, confidant_name, confidant_contact FROM
 (
 	select patient_id,min(data_inicio) data_inicio from 
 	(
@@ -98,27 +98,48 @@ LEFT JOIN (
 LEFT JOIN(
 	SELECT e.patient_id, MAX(e.encounter_datetime) before_consultation_date FROM encounter e
 		WHERE e.voided = 0 AND e.encounter_type IN (6,9) 
-			AND e.location_id = :location AND e.encounter_datetime <= :startDate
+			AND e.location_id = :location AND e.encounter_datetime < :startDate
 				GROUP BY e.patient_id
 )consultation_before_rtt ON consultation_before_rtt.patient_id = art_start.patient_id
 LEFT JOIN(
 	SELECT e.patient_id, MAX(e.encounter_datetime) before_pickup_date FROM encounter e
 		WHERE e.voided = 0 AND e.encounter_type = 18 
-			AND e.location_id = :location AND e.encounter_datetime <= :startDate
+			AND e.location_id = :location AND e.encounter_datetime < :startDate
 				GROUP BY e.patient_id
 )pickup_before_rtt ON pickup_before_rtt.patient_id = art_start.patient_id
 LEFT JOIN(
+	SELECT p.patient_id, MAX(value_datetime) before_pickup_date_mc FROM patient p
+		INNER JOIN encounter e ON p.patient_id=e.patient_id 
+		INNER join obs o ON e.encounter_id=o.encounter_id   
+			WHERE p.voided=0 AND e.voided=0 AND o.voided=0 and e.encounter_type=52   
+				AND o.concept_id=23866 AND o.value_datetime IS NOT NULL          
+				AND o.value_datetime < :startDate AND e.location_id= :location            
+					GROUP BY p.patient_id
+)pickup_before_rtt_mc ON pickup_before_rtt_mc.patient_id = art_start.patient_id
+LEFT JOIN(
 	SELECT e.patient_id, MAX(e.encounter_datetime) after_consultation_date FROM encounter e
 		WHERE e.voided = 0 AND e.encounter_type IN (6,9) 
-			AND e.location_id = :location AND e.encounter_datetime <= :endDate
+			AND e.location_id = :location 
+			AND e.encounter_datetime BETWEEN :startDate AND :endDate
 				GROUP BY e.patient_id
 )consultation_after_rtt ON consultation_after_rtt.patient_id = art_start.patient_id
 LEFT JOIN(
 	SELECT e.patient_id, MAX(e.encounter_datetime) after_pickup_date FROM encounter e
 		WHERE e.voided = 0 AND e.encounter_type = 18 
-			AND e.location_id = :location AND e.encounter_datetime <= :endDate
+			AND e.location_id = :location 
+			AND e.encounter_datetime BETWEEN :startDate AND :endDate
 				GROUP BY e.patient_id
 )pickup_after_rtt ON pickup_after_rtt.patient_id = art_start.patient_id
+LEFT JOIN(
+	SELECT p.patient_id, MAX(value_datetime) after_pickup_date_mc FROM patient p
+		INNER JOIN encounter e ON p.patient_id=e.patient_id 
+		INNER join obs o ON e.encounter_id=o.encounter_id   
+			WHERE p.voided=0 AND e.voided=0 AND o.voided=0 and e.encounter_type=52   
+				AND o.concept_id=23866 AND o.value_datetime IS NOT NULL          
+				AND o.value_datetime BETWEEN :startDate AND :endDate
+				AND e.location_id= :location            
+					GROUP BY p.patient_id
+)pickup_after_rtt_mc ON pickup_after_rtt_mc.patient_id = art_start.patient_id
 LEFT JOIN (
 	SELECT last_pickup.patient_id,
     CASE
@@ -150,7 +171,7 @@ LEFT JOIN(
 	SELECT pa.person_id patient_id, pa.value patient_contact FROM person_attribute pa 
 		WHERE pa.person_attribute_type_id = 9 
 			GROUP BY pa.person_id 
-)patint_contact ON patint_contact.patient_id = art_start.patient_id
+)patient_contact ON patient_contact.patient_id = art_start.patient_id
 LEFT JOIN (
 	SELECT o.person_id patient_id, o.value_text confidant_name FROM obs o
 		INNER JOIN encounter e ON e.encounter_id = o.encounter_id
