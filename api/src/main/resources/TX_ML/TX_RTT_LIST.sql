@@ -88,7 +88,7 @@ LEFT JOIN (
                 inner join patient_program pg on p.patient_id = pg.patient_id																
                 inner join patient_state ps on pg.patient_program_id = ps.patient_program_id												
             where pg.voided=0 and ps.voided=0 and p.voided=0 and pg.program_id = 2  																				
-                and ps.start_date<= :startDate and pg.location_id = :location group by pg.patient_id                                              
+                and ps.start_date < :startDate and pg.location_id = :location group by pg.patient_id                                              
         ) 
     max_estado                                                                                                                        
         inner join patient_program pp on pp.patient_id = max_estado.patient_id															
