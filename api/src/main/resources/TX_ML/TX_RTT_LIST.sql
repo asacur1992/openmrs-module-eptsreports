@@ -3,7 +3,8 @@ SELECT art_start.patient_id, pi.identifier, CONCAT(pn.given_name, ' ', COALESCE(
 		WHEN last_state.state = 9 THEN 'ABANDONO'
 		WHEN last_state.state = 10 THEN 'OBITO' 
 		WHEN last_state.state = 8 THEN 'SUSPENSO' 
-		WHEN last_state.state = 7 THEN 'TRANSFERIDO PARA' END AS state, before_consultation_date, before_pickup_date, before_pickup_date_mc, after_consultation_date, after_pickup_date, after_pickup_date_mc, dispensation_type, address3, patient_contact, confidant_name, confidant_contact FROM
+		WHEN last_state.state = 7 THEN 'TRANSFERIDO PARA' END AS state, before_consultation_date, before_pickup_date, before_pickup_date_mc, after_consultation_date, after_pickup_date, after_pickup_date_mc, dispensation_type, 
+		address3, patient_contact, confidant_name, confidant_contact, dispensation_type_mc FROM
 (
 	select patient_id,min(data_inicio) data_inicio from 
 	(
@@ -184,4 +185,45 @@ LEFT JOIN(
 			WHERE o.voided = 0 AND o.concept_id = 6224 AND e.encounter_type = 53
 				GROUP BY o.person_id
 )confidant_contact ON confidant_contact.patient_id = art_start.patient_id
+LEFT JOIN(
+	SELECT last_encounter.patient_id, last_encounter_date ,CASE
+							    WHEN mds_mode_mc.value_coded=165340 THEN 'DB - DISPENSA BIMESTRAL'
+							    WHEN mds_mode_mc.value_coded=23730  THEN 'DT - DISPENSA TRIMESTRAL DE ARV'
+							    WHEN mds_mode_mc.value_coded=23888  THEN 'DS - DISPENSA SEMESTRAL DE ARV'
+							    WHEN mds_mode_mc.value_coded=165314 THEN 'DA - DISPENSA ANUAL DE ARV'
+							    WHEN mds_mode_mc.value_coded=165315 THEN 'DD - DISPENSA DESCENTRALIZADA DE ARV'
+							    WHEN mds_mode_mc.value_coded=165178 THEN 'DCP - DISPENSA COMUNITÁRIA ATRAVÉS DO PROVEDOR'
+							    WHEN mds_mode_mc.value_coded=165179 THEN 'DCA - DISPENSA COMUNITÁRIA ATRAVÉS DO APE'
+							    WHEN mds_mode_mc.value_coded=165264 THEN 'BM - DISPENSA COMUNITÁRIA ATRAVÉS DE BRIGADAS MÓVEIS'
+							    WHEN mds_mode_mc.value_coded=165265 THEN 'CM - DISPENSA COMUNITÁRIA ATRAVÉS DE CM'
+							    WHEN mds_mode_mc.value_coded=23725  THEN 'AF - ABORDAGEM FAMILIAR'
+							    WHEN mds_mode_mc.value_coded=23729  THEN 'FR - FLUXO RÁPIDO'
+							    WHEN mds_mode_mc.value_coded=23724  THEN 'GA - GRUPOS DE APOIO PARA ADESÃO COMUNITÁRIA'
+							    WHEN mds_mode_mc.value_coded=23726  THEN 'CA - CLUBES DE ADESÃO'
+							    WHEN mds_mode_mc.value_coded=165316 THEN 'EH - EXTENSÃO DE HORÁRIO'
+							    WHEN mds_mode_mc.value_coded=165317 THEN 'TB - PARAGEM ÚNICA NO SECTOR DA TB'
+							    WHEN mds_mode_mc.value_coded=165318 THEN 'CT - PARAGEM ÚNICA NOS SERVIÇOS TARV'
+							    WHEN mds_mode_mc.value_coded=165319 THEN 'SAAJ - PARAGEM ÚNICA NO SAAJ'
+							    WHEN mds_mode_mc.value_coded=165320 THEN 'SMI - PARAGEM UNICA NA SMI'
+							    WHEN mds_mode_mc.value_coded=165321 THEN 'DAH - DOENÇA AVANÇADA POR HIV'
+							ELSE NULL END AS dispensation_type_mc FROM (
+								SELECT e.patient_id, MAX(e.encounter_datetime) last_encounter_date FROM encounter e
+									WHERE e.voided = 0 AND e.encounter_type IN (6,9) AND e.location_id = :location
+										GROUP BY e.patient_id
+							)last_encounter
+							INNER JOIN(
+								SELECT mds_mode.person_id patient_id, mds_mode.obs_datetime, mds_mode.value_coded FROM obs mds_mode
+									WHERE mds_mode.voided = 0 AND mds_mode.concept_id = 165174
+										AND mds_mode.value_coded IN (165340, 23730, 23888, 165314, 165315, 165178, 165179, 165264, 165265, 23725, 23729, 23724, 23726, 165316, 165317, 165318, 165319, 165320, 165321)
+										AND mds_mode.obs_datetime <= :endDate
+											GROUP BY mds_mode.person_id
+							)mds_mode_mc ON last_encounter.patient_id = mds_mode_mc.patient_id AND mds_mode_mc.obs_datetime = last_encounter.last_encounter_date
+							INNER JOIN (
+								SELECT mds_state.person_id patient_id, mds_state.obs_datetime FROM obs mds_state
+									WHERE mds_state.concept_id = 165322 AND mds_state.value_coded IN (1256, 1257)
+										AND mds_state.obs_datetime <= :endDate
+											GROUP BY mds_state.person_id
+							)mds_state_mc ON mds_state_mc.patient_id = last_encounter.patient_id AND mds_state_mc.obs_datetime = last_encounter.last_encounter_date
+								GROUP BY last_encounter.patient_id
+)dispensation_type_mc ON dispensation_type_mc.patient_id = art_start.patient_id
 WHERE art_start.patient_id IN ( :patientIds) GROUP BY art_start.patient_id

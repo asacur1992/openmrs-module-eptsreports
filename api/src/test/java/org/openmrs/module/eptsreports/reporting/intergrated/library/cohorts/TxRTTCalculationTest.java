@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.eptsreports.reporting.intergrated.utils.DefinitionsFGHLiveTest;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.TxRTTCohortQueries;
+import org.openmrs.module.eptsreports.reporting.library.dimensions.TxCombinadoDimensions;
 import org.openmrs.module.reporting.common.DateUtil;
 import org.openmrs.module.reporting.dataset.DataSet;
 import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
 
-  @Autowired private TxRTTCohortQueries txRTTCohortQueries;
+  @Autowired private TxCombinadoDimensions txRTTCohortQueries;
 
   @Test
   public void shouldFindPatientsNewlyEnrolledInART() throws EvaluationException {
@@ -36,8 +36,9 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     parameters.put(new Parameter("startDate", "Start Date", Date.class), startDate);
     parameters.put(new Parameter("endDate", "End Date", Date.class), endDate);
     parameters.put(new Parameter("location", "Location", Location.class), location);
+    parameters.put(new Parameter("months", "Months", Integer.class), 12);
 
-    final DataSetDefinition definition = this.txRTTCohortQueries.getTxRttList();
+    final DataSetDefinition definition = this.txRTTCohortQueries.getTxCombinationList();
 
     final DataSet dataSet = this.evaluateDatasetDefinition(definition, parameters);
 
