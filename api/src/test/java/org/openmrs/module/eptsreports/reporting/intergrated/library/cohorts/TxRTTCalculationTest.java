@@ -38,7 +38,7 @@ public class TxRTTCalculationTest extends DefinitionsFGHLiveTest {
     parameters.put(new Parameter("location", "Location", Location.class), location);
     parameters.put(new Parameter("months", "Months", Integer.class), 12);
 
-    final DataSetDefinition definition = this.txRTTCohortQueries.getTxCombinationList();
+    final DataSetDefinition definition = this.txRTTCohortQueries.getTxCombinationListNumerator();
 
     final DataSet dataSet = this.evaluateDatasetDefinition(definition, parameters);
 

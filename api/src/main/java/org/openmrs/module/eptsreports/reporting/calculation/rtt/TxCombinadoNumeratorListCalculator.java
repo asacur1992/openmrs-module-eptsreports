@@ -23,9 +23,9 @@ import org.springframework.stereotype.Component;
 
 /** @author Stélio Moiane */
 @Component
-public class TxCombinadoListCalculator extends BaseFghCalculation {
+public class TxCombinadoNumeratorListCalculator extends BaseFghCalculation {
 
-  private static final String TX_COMBINATION_LIST = "TX_ML/TX_COMBINADO_LISTING.sql";
+  private static final String TX_COMBINATION_LIST = "TX_ML/TX_COMBINADO_LISTING_N.sql";
 
   @Autowired private TxCombinadoNumeratorDataset dataset;
 
@@ -36,7 +36,7 @@ public class TxCombinadoListCalculator extends BaseFghCalculation {
 
     Set<Integer> memberIds = null;
     final SimpleDataSet dataSet =
-        new SimpleDataSet(this.txCombinadoDimensions.getTxCombinationList(), context);
+        new SimpleDataSet(this.txCombinadoDimensions.getTxCombinationListNumerator(), context);
 
     try {
       memberIds =
@@ -49,7 +49,7 @@ public class TxCombinadoListCalculator extends BaseFghCalculation {
 
     final SqlQueryBuilder queryBuilder =
         new SqlQueryBuilder(
-            EptsQuerysUtils.loadQuery(TxCombinadoListCalculator.TX_COMBINATION_LIST),
+            EptsQuerysUtils.loadQuery(TxCombinadoNumeratorListCalculator.TX_COMBINATION_LIST),
             context.getParameterValues());
 
     queryBuilder.addParameter("patientIds", memberIds);

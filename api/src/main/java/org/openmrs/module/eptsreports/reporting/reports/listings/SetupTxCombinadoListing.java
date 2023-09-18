@@ -66,7 +66,11 @@ public class SetupTxCombinadoListing extends EptsDataExportManager {
         this.genericCohortQueries.getBaseCohort(),
         ParameterizableUtil.createParameterMappings("endDate=${endDate},location=${location}"));
 
-    rd.addDataSetDefinition("N", Mapped.mapStraightThrough(this.dataset.getTxCombinationList()));
+    rd.addDataSetDefinition(
+        "N", Mapped.mapStraightThrough(this.dataset.getTxCombinationListNumerator()));
+
+    rd.addDataSetDefinition(
+        "D", Mapped.mapStraightThrough(this.dataset.getTxCombinationListDenominator()));
 
     return rd;
   }
@@ -83,7 +87,7 @@ public class SetupTxCombinadoListing extends EptsDataExportManager {
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:N");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:N|sheet:2,row:8,dataset:D");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (final IOException e) {

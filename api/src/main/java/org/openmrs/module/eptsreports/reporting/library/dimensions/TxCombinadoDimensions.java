@@ -4,7 +4,8 @@ package org.openmrs.module.eptsreports.reporting.library.dimensions;
 import java.util.Date;
 import org.openmrs.Location;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxCombinadoListCalculator;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxCombinadoDenominatorListCalculator;
+import org.openmrs.module.eptsreports.reporting.calculation.rtt.TxCombinadoNumeratorListCalculator;
 import org.openmrs.module.eptsreports.reporting.cohort.definition.BaseIcapCalculationDataSetDefinition;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxCombinadoQueries;
@@ -146,13 +147,29 @@ public class TxCombinadoDimensions {
     dimension.addCohortDefinition("breastfeeding", EptsReportUtils.map(cohortDefinition, mappings));
   }
 
-  @DocumentedDefinition(value = "TxCombinadoList")
-  public DataSetDefinition getTxCombinationList() {
+  @DocumentedDefinition(value = "TxCombinadoListN")
+  public DataSetDefinition getTxCombinationListNumerator() {
 
     final DataSetDefinition definition =
         new BaseIcapCalculationDataSetDefinition(
             "TxCombinadoList",
-            Context.getRegisteredComponents(TxCombinadoListCalculator.class).get(0));
+            Context.getRegisteredComponents(TxCombinadoNumeratorListCalculator.class).get(0));
+
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+    definition.addParameter(new Parameter("months", "Months", Integer.class));
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "TxCombinadoListD")
+  public DataSetDefinition getTxCombinationListDenominator() {
+
+    final DataSetDefinition definition =
+        new BaseIcapCalculationDataSetDefinition(
+            "TxCombinadoList",
+            Context.getRegisteredComponents(TxCombinadoDenominatorListCalculator.class).get(0));
 
     definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
