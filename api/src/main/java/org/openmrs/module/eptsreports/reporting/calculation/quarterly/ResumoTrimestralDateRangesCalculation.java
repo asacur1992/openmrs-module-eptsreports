@@ -12,9 +12,10 @@ public abstract class ResumoTrimestralDateRangesCalculation extends BaseFghCalcu
 
   @Override
   public CalculationResultMap evaluate(
-      Map<String, Object> parameterValues, EvaluationContext context) {
+      final Map<String, Object> parameterValues, final EvaluationContext context) {
 
-    CalculationResultMap resultMap = new CalculationResultMap();
+    final CalculationResultMap resultMap = new CalculationResultMap();
+
 
     //    String year =
     //        (String) context.getParameterValues().get(SetupResumoTrimestralReport.YEAR_PARAMETER);
@@ -28,6 +29,7 @@ public abstract class ResumoTrimestralDateRangesCalculation extends BaseFghCalcu
     //            ResumoTrimestralUtil.getDisaggregatedDates(Integer.valueOf(year),
     // quarterDescription),
     //            this));
+
 
     return resultMap;
   }

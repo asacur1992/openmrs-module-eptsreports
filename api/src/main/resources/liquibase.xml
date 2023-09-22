@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<databaseChangeLog
-	xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
 	<!-- See http://wiki.openmrs.org/display/docs/Module+liquibase+File for 
@@ -25,13 +22,23 @@
 		/> </changeSet> -->
 
 
-	<changeSet id="20230921-17:30" author="csaude"
-		runAlways="true">
+
+	<changeSet id="20230921-17:30" author="csaude">
 		<comment>
 			SESP Release version 3.14.1
 		</comment>
 		<sqlFile
 			path="_metadata/SESPMetadataForRelease314_21092023.sql" />
 	</changeSet>
-	 
+
+	  <changeSet id="20230808-001" author="icap">
+		<comment>
+			SESP Release version 3.13.2 - Update Data Assistant Privileges to be able to upload EPTS Module
+		</comment>
+		<sql>INSERT INTO privilege VALUES ('Purge Global Properties','Delete Global Properties','b4f74851-8150-40cf-b6ec-8b7a2acca770')</sql>
+		<sql>INSERT INTO role_privilege VALUES ('Data Assistant','Purge Global Properties')</sql>
+		<sql>INSERT INTO role_privilege VALUES ('Data Assistant','Manage Global Properties')</sql>
+	</changeSet> 
+
+
 </databaseChangeLog>

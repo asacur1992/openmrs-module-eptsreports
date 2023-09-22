@@ -162,7 +162,7 @@ public class TXTBMontlyCascadeReporCohortQueries {
     composiiton.addSearch(
         "TX-TB-DENOMINATOR",
         EptsReportUtils.map(
-            this.txtbCohortQueries.getDenominator(),
+            this.txtbCohortQueries.getDenominator(false),
             "startDate=${endDate-6m+1d},endDate=${endDate},location=${location}"));
 
     composiiton.setCompositionString("TX-CURR and TX-TB-DENOMINATOR ");
