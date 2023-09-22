@@ -16,7 +16,6 @@ public abstract class ResumoTrimestralDateRangesCalculation extends BaseFghCalcu
 
     final CalculationResultMap resultMap = new CalculationResultMap();
 
-
     //    String year =
     //        (String) context.getParameterValues().get(SetupResumoTrimestralReport.YEAR_PARAMETER);
     //    String quarterDescription =
@@ -29,7 +28,6 @@ public abstract class ResumoTrimestralDateRangesCalculation extends BaseFghCalcu
     //            ResumoTrimestralUtil.getDisaggregatedDates(Integer.valueOf(year),
     // quarterDescription),
     //            this));
-
 
     return resultMap;
   }

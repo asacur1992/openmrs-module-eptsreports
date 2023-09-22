@@ -164,11 +164,8 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
   private void addSection3(
       final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-
     CohortIndicator txTBDenominatorPreviousPeriod =
         this.getIndicator(this.txtbCohortQueries.getDenominator(Boolean.FALSE), mappings);
-
-
 
     dataSetDefinition.addColumn(
         "TC-TB",
@@ -325,8 +322,8 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
     final CohortIndicator positiveResults =
         this.getIndicator(
             this.txtbCohortQueries.getPositiveResultCohortDefinition(
-            		"startDate=${endDate-6m+1d},endDate=${endDate},location=${location}",Boolean.FALSE));
-
+                "startDate=${endDate-6m+1d},endDate=${endDate},location=${location}",
+                Boolean.FALSE));
 
     dataSetDefinition.addColumn(
         "TBD-PR",
@@ -433,12 +430,10 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
   private void addSection8(
       final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-
     CohortIndicator screenedAndStartedTB =
         eptsGeneralIndicator.getIndicator(
             "patientsNewOnARTNumerator",
             EptsReportUtils.map(txtbCohortQueries.txTbNumerator(), mappings));
-
 
     dataSetDefinition.addColumn(
         "TBD-SSTB",

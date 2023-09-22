@@ -44,8 +44,6 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
   private String generalParameterMapping =
       "startDate=${endDate-6m+1d},endDate=${endDate},location=${location}";
 
-
-
   @DocumentedDefinition(value = "TxTBDenominatorPositiveScreening")
   public CohortDefinition getTxTBDenominatorAndPositiveScreening() {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
@@ -53,8 +51,8 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
     definition.setName("TxTB - Denominator Positive Screening");
     definition.addSearch(
         "denominator",
-
-        EptsReportUtils.map(this.txtbCohortQueries.getDenominator(Boolean.FALSE), generalParameterMapping));
+        EptsReportUtils.map(
+            this.txtbCohortQueries.getDenominator(Boolean.FALSE), generalParameterMapping));
 
     definition.addSearch(
         "positive-screening",
@@ -71,7 +69,8 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
 
     definition.addSearch(
         "denominator",
-        EptsReportUtils.map(this.txtbCohortQueries.getDenominator(Boolean.FALSE), generalParameterMapping));
+        EptsReportUtils.map(
+            this.txtbCohortQueries.getDenominator(Boolean.FALSE), generalParameterMapping));
 
     definition.addSearch(
         "positive-screening",
@@ -121,7 +120,8 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
 
     definition.addSearch(
         "DENOMINATOR",
-        EptsReportUtils.map(this.txtbCohortQueries.getDenominator(Boolean.FALSE), this.generalParameterMapping));
+        EptsReportUtils.map(
+            this.txtbCohortQueries.getDenominator(Boolean.FALSE), this.generalParameterMapping));
 
     definition.setCompositionString(
         "(application-for-laboratory-research OR tb-genexpert-culture-lam-bk-test OR lab-results) AND DENOMINATOR");
@@ -680,14 +680,13 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
     definition.setName("TxTB -Denominator Positive Results Who Started TB Treatment");
     this.addGeneralParameters(definition);
-    
-    
+
     definition.addSearch(
-            "posetiveResults",
-            EptsReportUtils.map(
-                this.txtbCohortQueries.getPositiveResultCohortDefinition(
-                    this.generalParameterMapping, Boolean.FALSE),
-                this.generalParameterMapping));
+        "posetiveResults",
+        EptsReportUtils.map(
+            this.txtbCohortQueries.getPositiveResultCohortDefinition(
+                this.generalParameterMapping, Boolean.FALSE),
+            this.generalParameterMapping));
 
     definition.addSearch(
         "txtbNumerator", EptsReportUtils.map(this.txTbNumerator(), this.generalParameterMapping));
@@ -696,8 +695,6 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
     return definition;
   }
 
-
-
   @DocumentedDefinition(value = "ScreenedPatientsWhoStartedTBTreatmentAndTXCurr")
   public CohortDefinition getScreenedPatientsWhoStartedTBTreatmentAndTXCurr() {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
@@ -705,7 +702,6 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
     this.addGeneralParameters(definition);
 
     definition.addSearch(
-
         "txTB", EptsReportUtils.map(txtbCohortQueries.txTbNumerator(), generalParameterMapping));
 
     definition.addSearch(
@@ -764,8 +760,8 @@ public class TXTBDenominatorForTBMontlyCascadeQueries {
         EptsReportUtils.map(tbNegativeResultsInFichaLaboratorio, this.generalParameterMapping));
     cd.addSearch(
         "DENOMINATOR",
-        EptsReportUtils.map(this.txtbCohortQueries.getDenominator(Boolean.FALSE), this.generalParameterMapping));
-    
+        EptsReportUtils.map(
+            this.txtbCohortQueries.getDenominator(Boolean.FALSE), this.generalParameterMapping));
 
     cd.addSearch(
         "positive-results",
