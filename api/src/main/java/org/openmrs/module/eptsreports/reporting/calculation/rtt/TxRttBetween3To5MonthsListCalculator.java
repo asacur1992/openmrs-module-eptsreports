@@ -1,6 +1,7 @@
 /** */
 package org.openmrs.module.eptsreports.reporting.calculation.rtt;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.openmrs.api.APIException;
@@ -50,6 +51,12 @@ public class TxRttBetween3To5MonthsListCalculator extends BaseFghCalculation {
         new SqlQueryBuilder(
             EptsQuerysUtils.loadQuery(TxRttBetween3To5MonthsListCalculator.TX_RTT_LIST),
             context.getParameterValues());
+
+    if (memberIds == null || memberIds.isEmpty()) {
+
+      memberIds = new HashSet<Integer>();
+      memberIds.add(0);
+    }
 
     queryBuilder.addParameter("patientIds", memberIds);
 
