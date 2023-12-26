@@ -259,4 +259,24 @@ public class PrepKeyPopulationDimension {
 
     return dimension;
   }
+
+  public CohortDefinitionDimension findPatientsMarkedAsOtherKeyPop() {
+    final CohortDefinitionDimension dimension = new CohortDefinitionDimension();
+
+    dimension.setName("Other Key Pop");
+    dimension.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    dimension.addParameter(new Parameter("endDate", "End Date", Date.class));
+    dimension.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    dimension.addCohortDefinition(
+        "other",
+        EptsReportUtils.map(
+            this.genericCohortQueries.generalSql(
+                "other", PrepKeyPopQuery.findPatientsWhoAreKeyPop(KeyPopType.OTHER)),
+            mappings));
+
+    return dimension;
+  }
 }

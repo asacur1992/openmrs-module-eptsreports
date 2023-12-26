@@ -21,7 +21,7 @@ public class MICategory13P4Dataset extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.miCategory13P4CohortQueries
-                    .findPatietsOnARTStartedExcludingPregantAndBreastfeedingAndTransferredInTRANSFEREDOUTWITH1000CVCategory11Denominator(),
+                    .findPatietsOnARTStartedExcludingPregantAndBreastfeedingAndTransferredInTRANSFEREDOUTWITH1000CVCategory11DenominatorAdult(),
                 "CAT13P4AdultDENUMINATOR",
                 mappings),
             mappings),
@@ -34,7 +34,7 @@ public class MICategory13P4Dataset extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.miCategory13P4CohortQueries
-                    .findPatientsWhoReceivedResultMoreThan1000CVCategory13P4Numerator(),
+                    .findPatientsWhoReceivedResultMoreThan1000CVCategory13P3Numerator(),
                 "CAT13P4AdultNUMINATOR",
                 mappings),
             mappings),

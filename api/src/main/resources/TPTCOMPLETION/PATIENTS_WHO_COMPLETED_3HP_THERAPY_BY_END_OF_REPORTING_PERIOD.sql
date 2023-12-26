@@ -340,5 +340,5 @@ select inicio_3HP.patient_id
 	inner join obs obsTipo on obsTipo.encounter_id=e.encounter_id                                                                                       
 where e.voided=0 and obs3hp.voided=0 and obsTipo.voided=0                                                                                             
 	and e.encounter_type=60 and obs3hp.concept_id=23985 and obs3hp.value_coded in (23954,23984) and obsTipo.concept_id=23986 and obsTipo.value_coded=1098  
-	and e.encounter_datetime between inicio_3HP.data_inicio_3HP and (inicio_3HP.data_inicio_3HP + INTERVAL 4 month) and e.location_id= :location    	
-	group by inicio_3HP.patient_id having count(distinct e.encounter_id)>=3             																
+	and e.encounter_datetime <= :endDate and e.encounter_datetime between inicio_3HP.data_inicio_3HP and (inicio_3HP.data_inicio_3HP + INTERVAL 4 month) and e.location_id= :location    	
+	group by inicio_3HP.patient_id having count(distinct e.encounter_id)>=3

@@ -2,7 +2,6 @@ package org.openmrs.module.eptsreports.reporting.library.datasets.midatasets;
 
 import org.openmrs.module.eptsreports.reporting.library.cohorts.mi.MICategory11CohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.mi.MICategory11P2CohortQueries;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.mq.MQCategory11CohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.mq.MQGenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.mqdatasets.MQAbstractDataSet;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -16,7 +15,6 @@ public class MICategory11DataSet extends MQAbstractDataSet {
   @Autowired private MICategory11CohortQueries miCategory11CohortQueries;
   @Autowired private MICategory11P2CohortQueries miCategory11P2CohortQueries;
   @Autowired private MQGenericCohortQueries mQGenericCohortQueries;
-  @Autowired private MQCategory11CohortQueries mQCategory11CohortQueries;
 
   public void constructTMiDatset(
       CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {

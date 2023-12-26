@@ -243,7 +243,7 @@ public class ResumoMensalQueries {
             + ") suspenso "
             + " group by patient_id "
             + ") suspenso1 "
-            + "inner join "
+            + "left join "
             + "( "
             + "select patient_id,max(encounter_datetime) encounter_datetime from ( "
             + "select p.patient_id,max(e.encounter_datetime) encounter_datetime from  patient p "
@@ -254,8 +254,7 @@ public class ResumoMensalQueries {
             + ") consultaLev "
             + "group by patient_id "
             + ") consultaOuARV on suspenso1.patient_id=consultaOuARV.patient_id "
-            + "where consultaOuARV.encounter_datetime<=suspenso1.data_suspencao "
-            + "and suspenso1.data_suspencao <=(:endDate -interval 1 month) ";
+            + "where (consultaOuARV.encounter_datetime<=suspenso1.data_suspencao OR consultaOuARV.encounter_datetime is null) ";
 
     return query;
   }

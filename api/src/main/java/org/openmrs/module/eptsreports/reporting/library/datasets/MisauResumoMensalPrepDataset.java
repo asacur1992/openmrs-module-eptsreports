@@ -129,6 +129,11 @@ public class MisauResumoMensalPrepDataset extends BaseDataSet {
         EptsReportUtils.map(
             this.prepKeyPopulationDimension.findAdolescentsAndYouthsPatientsInRisk(), mappings));
 
+    dataSetDefinition.addDimension(
+        "other",
+        EptsReportUtils.map(
+            this.prepKeyPopulationDimension.findPatientsMarkedAsOtherKeyPop(), mappings));
+
     final CohortIndicator indicatorA1 =
         this.eptsGeneralIndicator.getIndicator(
             "Number of Clients Who Initiated Prep For the firts Time",
@@ -152,12 +157,6 @@ public class MisauResumoMensalPrepDataset extends BaseDataSet {
             "N° de Utentes que receberam a PrEP durante o período de reporte",
             EptsReportUtils.map(
                 this.misauResumoMensalPrepCohortQueries.getIndicatorC1(), mappings));
-
-    final CohortIndicator indicatorD1 =
-        this.eptsGeneralIndicator.getIndicator(
-            "N° de Utentes em PrEP  por 3 meses consecutivos após terem iniciado a PrEP",
-            EptsReportUtils.map(
-                this.misauResumoMensalPrepCohortQueries.getIndicatorD1(), mappings));
 
     this.addRow(
         dataSetDefinition,
@@ -188,14 +187,6 @@ public class MisauResumoMensalPrepDataset extends BaseDataSet {
         "C1",
         "N° de Utentes que receberam a PrEP durante o período de reporte",
         EptsReportUtils.map(indicatorC1, mappings),
-        getColumnsForAgeAndGender(),
-        mappings);
-
-    this.addRow(
-        dataSetDefinition,
-        "D1",
-        "N° de Utentes em PrEP  por 3 meses consecutivos após terem iniciado a PrEP",
-        EptsReportUtils.map(indicatorD1, mappings),
         getColumnsForAgeAndGender(),
         mappings);
 
@@ -342,6 +333,8 @@ public class MisauResumoMensalPrepDataset extends BaseDataSet {
         indicatorPrefix + " - Adolescentes e Jovens em Risco",
         mappedIndicator,
         "youths=youths");
+    dataSetDefinition.addColumn(
+        indicatorPrefix + "-other", indicatorPrefix + " - Outro", mappedIndicator, "other=other");
   }
 
   private List<ColumnParameters> getColumnsForAgeAndGender() {

@@ -14,6 +14,7 @@ public class MQCategory11DataSet extends MQAbstractDataSet {
   @Autowired private MQCategory11CohortQueries mQCategory11CohortQueries;
   @Autowired private MQCategory11P2CohortQueries mQCategory11P2CohortQueries;
   @Autowired private MQGenericCohortQueries mQGenericCohortQueries;
+  private final boolean EXCLUDING_BREASTFEEDING = false;
 
   public void constructTMqDatset(
       CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
@@ -25,7 +26,8 @@ public class MQCategory11DataSet extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mQGenericCohortQueries
-                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                        EXCLUDING_BREASTFEEDING),
                 "CAT11AdultoAPSSPPDENOMINATOR",
                 mappings),
             mappings),

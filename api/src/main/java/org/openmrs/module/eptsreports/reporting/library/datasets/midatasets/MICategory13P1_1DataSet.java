@@ -31,7 +31,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.6: Crianças (0-4 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIBChildrens(),
                 "CAT13CV04DENOMINATOR",
                 mappings),
             mappings),
@@ -42,7 +42,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.7: Crianças (5-9 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIBChildrens(),
                 "CAT13CV59DENOMINATOR",
                 mappings),
             mappings),
@@ -53,7 +53,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.8: Crianças (10-14 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIBChildrens(),
                 "CAT13CV1014DENOMINATOR",
                 mappings),
             mappings),
@@ -75,7 +75,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.6: Crianças (0-4 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Numerador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionIC(),
+                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionICChildrens(),
                 "CAT13CV04NUMERATOR",
                 mappings),
             mappings),
@@ -86,7 +86,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.7: Crianças (5-9 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Numerador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionIC(),
+                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionICChildrens(),
                 "CAT13CV59NUMERATOR",
                 mappings),
             mappings),
@@ -97,7 +97,7 @@ public class MICategory13P1_1DataSet extends MQAbstractDataSet {
         "13.8: Crianças (10-14 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Numerador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionIC(),
+                this.mICategory13P1_1CohortQueries.findFinalNumeratorCategory13SectionICChildrens(),
                 "CAT13CV1014NUMERATOR",
                 mappings),
             mappings),

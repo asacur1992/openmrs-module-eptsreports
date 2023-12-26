@@ -315,10 +315,10 @@ public interface GenericMQQueryIntarface {
               + "AND date(o.value_datetime) <= :endRevisionDate    "
               + ") art_start    "
               + "GROUP BY patient_id    "
-              + ") tx_new WHERE art_start_date between DATE_ADD(DATE_SUB(:endRevisionDate, INTERVAL 14 MONTH),INTERVAL 1 DAY) and DATE_SUB(:endRevisionDate, INTERVAL 11 MONTH)  "
+              + ") tx_new WHERE art_start_date between DATE_SUB(:endRevisionDate, INTERVAL 14 MONTH) and DATE_SUB(:endRevisionDate, INTERVAL 11 MONTH)  "
               + ")age  "
               + "inner join person pe on pe.person_id=age.patient_id  "
-              + "where  TIMESTAMPDIFF(year,pe.birthdate,age.art_start_date) <= %s and  birthdate IS NOT NULL ";
+              + "where  TIMESTAMPDIFF(year,pe.birthdate,age.art_start_date) < %s and  birthdate IS NOT NULL ";
 
       return String.format(sql, startAge);
     }

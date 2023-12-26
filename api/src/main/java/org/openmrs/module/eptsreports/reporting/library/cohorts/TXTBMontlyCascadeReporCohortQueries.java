@@ -28,8 +28,7 @@ public class TXTBMontlyCascadeReporCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohorts;
 
-  @Autowired
-  private TXTBDenominatorForTBMontlyCascadeQueries txtbDenominatorForTBMontlyCascadeQueries;
+  @Autowired private TXTBCohortQueries txtbCohortQueries;
 
   @Autowired private TxCurrCohortQueries txCurrCohortQueries;
 
@@ -163,7 +162,8 @@ public class TXTBMontlyCascadeReporCohortQueries {
     composiiton.addSearch(
         "TX-TB-DENOMINATOR",
         EptsReportUtils.map(
-            this.txtbDenominatorForTBMontlyCascadeQueries.getTxTBDenominator(), mappings));
+            this.txtbCohortQueries.getDenominator(false),
+            "startDate=${endDate-6m+1d},endDate=${endDate},location=${location}"));
 
     composiiton.setCompositionString("TX-CURR and TX-TB-DENOMINATOR ");
 

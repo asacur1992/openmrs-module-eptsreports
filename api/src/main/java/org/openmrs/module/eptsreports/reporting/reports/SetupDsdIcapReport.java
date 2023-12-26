@@ -90,7 +90,7 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "MDS_COMMUNITY.xls",
+              "MDS.xls",
               "Relatório de MDS(ICAP)",
               this.getExcelDesignUuid(),
               null);

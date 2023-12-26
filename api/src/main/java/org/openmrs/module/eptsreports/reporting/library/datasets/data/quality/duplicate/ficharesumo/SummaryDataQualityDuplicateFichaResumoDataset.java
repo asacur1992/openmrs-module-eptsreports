@@ -22,6 +22,15 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
   @Autowired
   private EC2PatientListDuplicateFichaResumoDataset eC2PatientListDuplicateFichaResumoDataset;
 
+  @Autowired
+  private EC3PatientListDuplicateFichaResumoDataset eC3PatientListDuplicateFichaResumoDataset;
+
+  @Autowired
+  private EC4PatientListDuplicateFichaResumoDataset eC4PatientListDuplicateFichaResumoDataset;
+
+  @Autowired
+  private EC5PatientListDuplicateFichaResumoDataset eC5PatientListDuplicateFichaResumoDataset;
+
   public DataSetDefinition constructSummaryDataQualityDatset(List<Parameter> parameterList) {
     CohortIndicatorDataSetDefinition dsd = new CohortIndicatorDataSetDefinition();
     dsd.setName("Data Quality Duplicated Ficha Resumo Summary Dataset");
@@ -32,6 +41,15 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
 
     final CohortDefinition summaryCohortQueryEC2 =
         eC2PatientListDuplicateFichaResumoDataset.getEC2Total(parameterList);
+
+    final CohortDefinition summaryCohortQueryEC3 =
+        eC3PatientListDuplicateFichaResumoDataset.getEC3Total(parameterList);
+
+    final CohortDefinition summaryCohortQueryEC4 =
+        eC4PatientListDuplicateFichaResumoDataset.getEC4Total(parameterList);
+
+    final CohortDefinition summaryCohortQueryEC5 =
+        eC5PatientListDuplicateFichaResumoDataset.getEC5Total(parameterList);
 
     dsd.addParameters(parameterList);
     dsd.addColumn(
@@ -51,6 +69,36 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "summaryCohortQueryEC2Indicator",
                 EptsReportUtils.map(summaryCohortQueryEC2, mappings)),
+            mappings),
+        "");
+
+    dsd.addColumn(
+        "EC3D-TOTAL",
+        "EC3D: The patient has more than one Ficha Clínica registered in SESP on the same date and at the same Health Facility. ",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "summaryCohortQueryEC3Indicator",
+                EptsReportUtils.map(summaryCohortQueryEC3, mappings)),
+            mappings),
+        "");
+
+    dsd.addColumn(
+        "EC4D-TOTAL",
+        "EC4D: The patient has more than one Fila registered in SESP on the same date and at the same Health Facility. ",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "summaryCohortQueryEC3Indicator",
+                EptsReportUtils.map(summaryCohortQueryEC4, mappings)),
+            mappings),
+        "");
+
+    dsd.addColumn(
+        "EC5D-TOTAL",
+        "EC5D: The patient has more than one Ficha Recepcao Levantou registered in SESP on the same date and at the same Health Facility. ",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "summaryCohortQueryEC5Indicator",
+                EptsReportUtils.map(summaryCohortQueryEC5, mappings)),
             mappings),
         "");
 

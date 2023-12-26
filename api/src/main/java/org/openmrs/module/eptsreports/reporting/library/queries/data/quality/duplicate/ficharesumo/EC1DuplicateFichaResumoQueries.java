@@ -54,7 +54,7 @@ public interface EC1DuplicateFichaResumoQueries {
             + "order by patient.patient_id, e.encounter_datetime desc ";
 
     public static String getEc1Total =
-        "SELECT distinct "
+        "SELECT "
             + "patient.patient_id "
             + "FROM encounter e "
             + "inner join "

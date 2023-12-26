@@ -46,7 +46,7 @@ public class GenericMICohortQueryCategory12 {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mQCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappingsMI));
+            this.mQCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappingsMI));
 
     definition.addSearch(
         "TRANSFERED-IN",
@@ -98,7 +98,7 @@ public class GenericMICohortQueryCategory12 {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mQCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappings));
+            this.mQCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappings));
 
     definition.addSearch(
         "TRANSFERED-IN",
@@ -150,7 +150,7 @@ public class GenericMICohortQueryCategory12 {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mQCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappings));
+            this.mQCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappings));
 
     definition.addSearch(
         "TRANSFERED-IN",
@@ -202,7 +202,7 @@ public class GenericMICohortQueryCategory12 {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mQCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappings));
+            this.mQCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappings));
 
     definition.addSearch(
         "TRANSFERED-IN",
@@ -254,7 +254,7 @@ public class GenericMICohortQueryCategory12 {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mQCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappings));
+            this.mQCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappings));
 
     definition.addSearch(
         "TRANSFERED-IN",

@@ -132,6 +132,9 @@ public class MICategory11CohortQueries {
     final String mappings =
         "startInclusionDate=${endRevisionDate},endInclusionDate=${endRevisionDate},endRevisionDate=${endRevisionDate},location=${location}";
 
+    final String mappingsMI =
+        "startInclusionDate=${endRevisionDate-5m+1d},endInclusionDate=${endRevisionDate-4m},endRevisionDate=${endRevisionDate},location=${location}";
+
     definition.addSearch(
         "DENOMINATOR",
         EptsReportUtils.map(
@@ -142,7 +145,8 @@ public class MICategory11CohortQueries {
     definition.addSearch(
         "I-APSS-PP",
         EptsReportUtils.map(
-            this.findPatientsWhoHaveAtLeast3APSSConsultationIn99DaysAfterInitiatedART(), mappings));
+            this.findPatientsWhoHaveAtLeast3APSSConsultationIn99DaysAfterInitiatedART(),
+            mappingsMI));
 
     definition.setCompositionString("(DENOMINATOR AND I-APSS-PP)");
     return definition;
@@ -346,6 +350,9 @@ public class MICategory11CohortQueries {
     final String mappings =
         "startInclusionDate=${startInclusionDate},endInclusionDate=${endInclusionDate},endRevisionDate=${endRevisionDate},location=${location}";
 
+    final String mappingsMI =
+        "startInclusionDate=${endRevisionDate-5m+1d},endInclusionDate=${endRevisionDate-4m},endRevisionDate=${endRevisionDate},location=${location}";
+
     definition.addSearch(
         "DENOMINATOR",
         EptsReportUtils.map(
@@ -358,7 +365,7 @@ public class MICategory11CohortQueries {
         EptsReportUtils.map(
             this.mQCohortQueries
                 .findPatientsOnARTWithMinimum3APSSFollowupConsultationsIntheFirst3MonthsAfterStartingARTCategory11Numerator(),
-            mappings));
+            mappingsMI));
 
     definition.setCompositionString("(DENOMINATOR AND G-APSS-PP)");
 

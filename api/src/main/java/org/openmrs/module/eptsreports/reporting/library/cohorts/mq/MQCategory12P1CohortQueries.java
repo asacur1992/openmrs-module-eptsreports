@@ -14,6 +14,7 @@ public class MQCategory12P1CohortQueries {
 
   @Autowired private MQCohortQueries mqCohortQueries;
   @Autowired private MQGenericCohortQueries mQGenericCohortQueries;
+  private final boolean EXCLUDING_BREASTFEEDING = true;
 
   @DocumentedDefinition(
       value =
@@ -46,7 +47,7 @@ public class MQCategory12P1CohortQueries {
     definition.addSearch(
         "BREASTFEEDING",
         EptsReportUtils.map(
-            this.mqCohortQueries.findPatientsWhoAreBreastfeedingInclusionDateRF09(), mappings));
+            this.mqCohortQueries.findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12(), mappings));
 
     definition.addSearch(
         "TRANSFERED-IN",
@@ -87,7 +88,8 @@ public class MQCategory12P1CohortQueries {
         "DENOMINATOR",
         EptsReportUtils.map(
             this.mQGenericCohortQueries
-                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                    EXCLUDING_BREASTFEEDING),
             mappings));
 
     definition.addSearch(
@@ -125,7 +127,8 @@ public class MQCategory12P1CohortQueries {
         "DENOMINATOR",
         EptsReportUtils.map(
             this.mQGenericCohortQueries
-                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                    EXCLUDING_BREASTFEEDING),
             mappings));
 
     definition.addSearch(

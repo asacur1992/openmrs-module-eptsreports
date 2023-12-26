@@ -111,12 +111,16 @@ public class TPTCompletationCohortQueries {
     dsd.addParameter(new Parameter("endDate", "End Date", Date.class));
     dsd.addParameter(new Parameter("location", "location", Location.class));
     final String mappings = "endDate=${endDate},location=${location}";
+    String generalParameterMapping =
+        "startDate=${endDate-1095d},endDate=${endDate},location=${location}";
 
     dsd.addSearch(
         "TPT-NO-COMPLETION",
         EptsReportUtils.map(this.findTxCurrWithoutTPTCompletation(), mappings));
 
-    dsd.addSearch("TB-NUMERATOR", EptsReportUtils.map(this.getTxTBNumerator(), mappings));
+    dsd.addSearch(
+        "TB-NUMERATOR",
+        EptsReportUtils.map(tXTBCohortQueries.txTbNumerator(), generalParameterMapping));
 
     dsd.setCompositionString("TPT-NO-COMPLETION AND TB-NUMERATOR");
 
@@ -279,7 +283,7 @@ public class TPTCompletationCohortQueries {
     String generalParameterMapping =
         "startDate=${endDate-1095d},endDate=${endDate},location=${location}";
     String previousPeriodParameters =
-        "startDate=${endDate-6m-1095d},endDate=${endDate-1095d-1d},location=${location}";
+        "startDate=${endDate-6m+1d-1095d},endDate=${endDate-1095d-1d},location=${location}";
 
     cd.setName("TxTB - Numerator");
     final CohortDefinition A = this.generateTxTBNumerator(generalParameterMapping);
@@ -318,7 +322,8 @@ public class TPTCompletationCohortQueries {
 
     cd.setName("TxTB - Numerator Previous Period");
     final CohortDefinition A = this.generateTxTBNumerator(previousPeriodParameters);
-    cd.addSearch("A-PREVIOUS-PERIOD", EptsReportUtils.map(A, previousPeriodParameters));
+    cd.addSearch(
+        "A-PREVIOUS-PERIOD", EptsReportUtils.map(A, "endDate=${endDate},location=${location}"));
 
     cd.addSearch(
         "started-tb-treatment-previous-period",
@@ -435,8 +440,15 @@ public class TPTCompletationCohortQueries {
             tXTBCohortQueries.getSputumForAcidFastBacilliWithinReportingDate(),
             generalParameterMapping));
 
-    cd.setCompositionString("A OR B OR C OR D OR E OR F OR G OR H OR I");
+    cd.addSearch(
+        "INICIOTB",
+        EptsReportUtils.map(
+            tXTBCohortQueries.findPatientsWhoInitiatedTBTreatment(), generalParameterMapping));
+
+    cd.setCompositionString("A OR B OR C OR D OR E OR F OR G OR H OR I OR INICIOTB");
+
     this.addGeneralParameters(cd);
+
     return cd;
   }
 

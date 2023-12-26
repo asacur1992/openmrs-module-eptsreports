@@ -270,6 +270,15 @@ public class TXTBQueries {
         Arrays.asList(artAdultFollowupEncounterType.getId(), artPedInicioEncounterType.getId()));
   }
 
+  public static String findPatientsWhoInitiatedTBTreatment() {
+    String query =
+        "select p.patient_id from patient p "
+            + "inner join encounter e on p.patient_id=e.patient_id "
+            + "inner join obs o on o.encounter_id=e.encounter_id "
+            + "where e.encounter_type=6 and o.concept_id=1268 and o.value_coded = 1256 and e.location_id=:location and e.voided=0 and p.voided=0 and o.obs_datetime between :startDate and :endDate ";
+    return query;
+  }
+
   public static class AbandonedWithoutNotificationParams {
     protected Integer programId;
     protected Integer returnVisitDateConceptId;

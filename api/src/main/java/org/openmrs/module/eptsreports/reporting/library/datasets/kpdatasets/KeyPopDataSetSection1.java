@@ -34,10 +34,11 @@ public class KeyPopDataSetSection1 extends KeyPopAbstractDataset {
     // create cohort definition
 
     final CohortDefinition patientEnrolledInART =
-        this.keyPopCohortQueries.findPatientsWhoAreNewlyEnrolledOnArtKeyPop();
+        this.resumoMensalCohortQueries
+            .getPatientsWhoInitiatedTarvAtThisFacilityDuringCurrentMonthB1();
 
     final CohortDefinition patientCurrentlyEnrolledOnArt =
-        this.keyPopCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtIncludingTransferedIn();
+        this.resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13();
 
     final CohortDefinition patientCurrentlyEnrolledOnArtHaveVLRequest =
         this.resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHWithVLResultE2();

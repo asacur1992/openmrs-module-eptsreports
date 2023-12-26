@@ -21,6 +21,7 @@ public class KeyPopCohortQueries {
   @Autowired private ResumoMensalCohortQueries resumoMensalCohortQueries;
   @Autowired private GenericCohortQueries genericCohortQueries;
   @Autowired private HivMetadata hivMetadata;
+  @Autowired private TxNewCohortQueries txNewCohortQueries;
 
   public CohortDefinition findPatientsWhoAreNewlyEnrolledOnArtKeyPop() {
 
@@ -65,71 +66,6 @@ public class KeyPopCohortQueries {
     return definition;
   }
 
-  public CohortDefinition findPatientsWhoAreCurrentlyEnrolledOnArtIncludingTransferedIn() {
-
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName("TX CURR KEY POP");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "TX-CURR",
-        EptsReportUtils.map(
-            resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13(), mappings));
-
-    definition.addSearch(
-        "START-ART",
-        EptsReportUtils.map(this.findPatientsWhoAreNewlyEnrolledOnArtKeyPop(), mappings));
-
-    definition.addSearch(
-        "START-ART2",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "START-ART2",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWhoAreNewlyEnrolledOnArtKeyPopCoorte12Months),
-            mappings));
-
-    definition.addSearch(
-        "TRANSFERED-OUT",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "TRANSFERED-OUT",
-                KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedAsTransferedOutAEndDateRF7),
-            mappings));
-
-    definition.addSearch(
-        "SUSPEND",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "SUSPEND", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedSuspendEndDate),
-            mappings));
-
-    definition.addSearch(
-        "ABANDONED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "ABANDONED",
-                KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedAbandonedUntilEndDate),
-            mappings));
-
-    definition.addSearch(
-        "DIED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "DIED", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedDiedEndDate),
-            mappings));
-
-    definition.setCompositionString(
-        "(TX-CURR OR START-ART OR START-ART2) NOT(TRANSFERED-OUT OR SUSPEND OR ABANDONED OR DIED)");
-
-    return definition;
-  }
-
   public CohortDefinition findPatientsWhoAreNewlyEnrolledOnArtKeyPopPreviousPeriodCoorte12Months() {
 
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
@@ -145,12 +81,10 @@ public class KeyPopCohortQueries {
     final String mappingsEndDate = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     definition.addSearch(
-        "START-ART",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWhoAreNewlyEnrolledOnArtKeyPopCoorte12Months),
+        "B1",
+        map(
+            txNewCohortQueries.getTxNewCompositionCohortMISAU(
+                "Number of patientes who initiated TARV"),
             mappings));
 
     definition.addSearch(
@@ -161,7 +95,7 @@ public class KeyPopCohortQueries {
                 KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedAsTransferedOutAEndDateRF7),
             mappingsEndDate));
 
-    definition.setCompositionString("START-ART NOT (TRANSFERED-OUT)");
+    definition.setCompositionString("B1 NOT (TRANSFERED-OUT)");
 
     return definition;
   }
@@ -174,51 +108,23 @@ public class KeyPopCohortQueries {
     definition.addParameter(new Parameter("endDate", "End Date", Date.class));
     definition.addParameter(new Parameter("location", "location", Location.class));
 
-    final String mappingsEndDate = "startDate=${startDate},endDate=${endDate},location=${location}";
+    final String mappingsEndDate =
+        "startDate=${startDate-12m},endDate=${endDate-12m},location=${location}";
+    final String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "B1",
+        map(
+            txNewCohortQueries.getTxNewCompositionCohortMISAU(
+                "Number of patientes who initiated TARV"),
+            mappingsEndDate));
 
     definition.addSearch(
         "TX-CURR",
         EptsReportUtils.map(
-            resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13(),
-            mappingsEndDate));
+            resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13(), mappings));
 
-    definition.addSearch(
-        "TX-NEW-12MONTHS",
-        EptsReportUtils.map(
-            this.findPatientsWhoAreNewlyEnrolledOnArtKeyPopPreviousPeriodCoorte12Months(),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "TRANSFERED-OUT",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "TRANSFERED-OUT",
-                KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedAsTransferedOutAEndDateRF7),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "SUSPEND",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "SUSPEND", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedSuspendEndDate),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "ABANDONED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "ABANDONED", ResumoMensalQueries.getPatientsWhoAbandonedTratmentB7()),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "DIED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "DIED", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedDiedEndDate),
-            mappingsEndDate));
-
-    definition.setCompositionString(
-        "(TX-NEW-12MONTHS AND TX-CURR) NOT (TRANSFERED-OUT OR SUSPEND OR ABANDONED OR DIED)");
+    definition.setCompositionString("(B1 AND TX-CURR)");
 
     return definition;
   }
@@ -234,36 +140,15 @@ public class KeyPopCohortQueries {
 
     final String mappings =
         "startDate=${startDate-7m},endDate=${startDate-4m},location=${location}";
-    final String mappingsEndDate = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     definition.addSearch(
-        "START-ART",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "START-ART",
-                KeyPopQueriesInterface.QUERY.findPatientsWhoAreNewlyEnrolledOnArtKeyPop),
+        "B1",
+        map(
+            txNewCohortQueries.getTxNewCompositionCohortMISAU(
+                "Number of patientes who initiated TARV"),
             mappings));
 
-    definition.addSearch(
-        "TRANSFERED-IN",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWithAProgramStateMarkedAsTransferedInInAPeriod),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCard),
-            mappingsEndDate));
-
-    definition.setCompositionString(
-        "START-ART NOT (TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD)");
+    definition.setCompositionString("B1");
 
     return definition;
   }
@@ -279,90 +164,13 @@ public class KeyPopCohortQueries {
 
     final String mappings =
         "startDate=${startDate-7m},endDate=${startDate-4m},location=${location}";
-    final String mappingsToBeExclude =
-        "startDate=${startDate-7m},endDate=${endDate},location=${location}";
-
-    final String mappingsEndDate = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     definition.addSearch(
         "TX-CURR-6-MONTHS",
         EptsReportUtils.map(
             resumoMensalCohortQueries.findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13(), mappings));
 
-    definition.addSearch(
-        "TX-NEW-6-MONTHS",
-        EptsReportUtils.map(
-            this.findPatientsWhoAreNewlyEnrolledOnArtKeyPop6MonthsCoorte(), mappingsEndDate));
-
-    definition.addSearch(
-        "TRANSFERED-IN",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN",
-                ResumoMensalQueries.findPatientsWithAProgramStateMarkedAsTransferedInInAPeriodB2),
-            mappings));
-
-    definition.addSearch(
-        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN-AND-IN-ART-MASTER-CARD",
-                ResumoMensalQueries
-                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCardB2),
-            mappings));
-
-    // Transfereidos do periodo anterior a 6 meses
-
-    definition.addSearch(
-        "TRANSFERED-IN-PREVIOS-6-MESES",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN-PREVIOS-6-MESES",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWithAProgramStateMarkedAsTransferedInInAPeriodStartDate),
-            mappingsToBeExclude));
-
-    definition.addSearch(
-        "TRANSFERED-IN-AND-IN-ART-MASTER-CARD-PREVIOS-6-MESES",
-        EptsReportUtils.map(
-            this.genericCohorts.generalSql(
-                "TRANSFERED-IN-AND-IN-ART-MASTER-CARD-PREVIOS-6-MESES",
-                KeyPopQueriesInterface.QUERY
-                    .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCardStartDate),
-            mappingsToBeExclude));
-
-    /*    pacientes por remover
-     */ definition.addSearch(
-        "TRANSFERED-OUT",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "findPatientsWhoWhereMarkedAsTransferedInAndOnARnOutAPeriodOnMasterCardStartDateB2",
-                KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedAsTransferedOutAEndDateRF7),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "SUSPEND",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "SUSPEND", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedSuspendEndDate),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "ABANDONED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "ABANDONED", ResumoMensalQueries.getPatientsWhoAbandonedTratmentB7()),
-            mappingsEndDate));
-
-    definition.addSearch(
-        "DIED",
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "DIED", KeyPopQueriesInterface.QUERY.findPatientsWhoWhereMarkedDiedEndDate),
-            mappingsEndDate));
-
-    definition.setCompositionString(
-        "((TX-CURR-6-MONTHS AND TX-NEW-6-MONTHS) OR ((TRANSFERED-IN OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD) NOT(TRANSFERED-IN-PREVIOS-6-MESES OR TRANSFERED-IN-AND-IN-ART-MASTER-CARD-PREVIOS-6-MESES))) NOT (TRANSFERED-OUT OR SUSPEND OR ABANDONED OR DIED)");
+    definition.setCompositionString("TX-CURR-6-MONTHS");
 
     return definition;
   }

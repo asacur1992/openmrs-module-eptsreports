@@ -14,6 +14,7 @@ public class MQCategory11CohortQueries {
 
   @Autowired private MQCohortQueries mQCohortQueries;
   @Autowired private MQGenericCohortQueries mQGenericCohortQueries;
+  private final boolean EXCLUDING_BREASTFEEDING = false;
 
   @DocumentedDefinition(
       value =
@@ -135,7 +136,8 @@ public class MQCategory11CohortQueries {
         "DENOMINATOR",
         EptsReportUtils.map(
             this.mQGenericCohortQueries
-                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                    EXCLUDING_BREASTFEEDING),
             mappings));
 
     definition.addSearch(

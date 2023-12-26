@@ -59,7 +59,7 @@ public class MICommonsDementions {
     dataSetDefinition.addDimension(
         "ageMiEndRevisionDate",
         EptsReportUtils.map(
-            this.mQAgeDimensions.getDimensionAgeEndInclusionDateEndRevisionDate(), mappings));
+            mIAgeDimentions.getDimensionAgeEndInclusionDateEndRevisionDate(), mappings));
 
     dataSetDefinition.addDimension(
         "ageOnTheFirstConsultationDuringInclusionPeriod",

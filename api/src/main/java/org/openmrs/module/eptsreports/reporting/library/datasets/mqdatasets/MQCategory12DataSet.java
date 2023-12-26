@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class MQCategory12DataSet extends MQAbstractDataSet {
 
+  private final boolean EXCLUDING_BREASTFEEDING = true;
+
   @Autowired private MQCategory12P1CohortQueries mQCategory12P1CohortQueries;
   @Autowired private MQGenericCohortQueries mQGenericCohortQueries;
 
@@ -23,7 +25,8 @@ public class MQCategory12DataSet extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mQGenericCohortQueries
-                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                        EXCLUDING_BREASTFEEDING),
                 "CAT12ADULTDENOMINADOR33DAYS",
                 mappings),
             mappings),
@@ -49,7 +52,8 @@ public class MQCategory12DataSet extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mQGenericCohortQueries
-                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                        EXCLUDING_BREASTFEEDING),
                 "CAT12ADULTDENOMINADOR99DAYS",
                 mappings),
             mappings),
@@ -75,7 +79,8 @@ public class MQCategory12DataSet extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mQGenericCohortQueries
-                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                        EXCLUDING_BREASTFEEDING),
                 "CAT12CHILDRENDENOMINADOR33DAYS",
                 mappings),
             mappings),
@@ -101,7 +106,8 @@ public class MQCategory12DataSet extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mQGenericCohortQueries
-                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(),
+                    .findPatientOnARTdExcludingPregantAndTransferredInTransferredOut(
+                        EXCLUDING_BREASTFEEDING),
                 "CAT12CHILDRENDENOMINADOR99DAYS",
                 mappings),
             mappings),

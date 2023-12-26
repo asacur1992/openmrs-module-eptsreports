@@ -356,8 +356,9 @@ public interface MQCategory13P2QueriesInterface {
                 + " )resultado "
                 + " INNER JOIN encounter e ON e.patient_id = resultado.patient_id AND e.voided = 0 AND e.encounter_type = 6 AND e.location_id =:location "
                 + " INNER JOIN obs o ON o.encounter_id = e.encounter_id "
-                + " WHERE  o.concept_id = 23722 AND o.value_coded = 856 AND o.voided = 0 and e.encounter_datetime between date_sub(resultado.dataResultado, INTERVAL 33 DAY) and resultado.dataResultado "
-                + "group by  e.patient_id "
+                + " WHERE  o.concept_id = 23722 AND o.value_coded = 856 AND o.voided = 0 "
+                + " and e.encounter_datetime >= date_sub(resultado.dataResultado, INTERVAL 33 DAY) and e.encounter_datetime<resultado.dataResultado  "
+                + " group by  e.patient_id "
                 + ") final ";
   }
 }

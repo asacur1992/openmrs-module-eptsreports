@@ -85,7 +85,7 @@ public class SetupDataQualityDuplicateReport extends EptsDataExportManager {
     rd.setBaseCohortDefinition(
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "baseCohortQuery", summaryDataQualityDuplicateDataset.getBaseCohortQuery()),
+                "baseCohortQuery", SummaryDataQualityDuplicateDataset.getBaseCohortQuery()),
             null));
     return rd;
   }

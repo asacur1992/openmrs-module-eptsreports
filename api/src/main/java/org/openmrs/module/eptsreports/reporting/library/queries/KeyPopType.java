@@ -12,5 +12,6 @@ public enum KeyPopType {
   MILITARY,
   BREASTFEEDING,
   PREGNANT,
-  YOUTHS
+  YOUTHS,
+  OTHER
 }

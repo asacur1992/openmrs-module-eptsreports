@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MQDataSet extends BaseDataSet {
 
-  @Autowired private MQCategory14DataSet mqCategory14DataSet;
   //  @Autowired private MQCategory3DataSet mqCategory3DataSet;
   //  @Autowired private MQCategory4Dataset mQCategory4Dataset;
   //  @Autowired private MQCategory5DataSet mQCategory5DataSet;
@@ -32,6 +31,7 @@ public class MQDataSet extends BaseDataSet {
   @Autowired private MQCategory13P4DataSet mQCategory13P4DataSet;
   @Autowired private MQCategory9DataSet mQCategory9DataSet;
   @Autowired private MQCategory18DataSet mqCategory18DataSet;
+  @Autowired private MQCategory14DataSet mqCategory14DataSet;
   @Autowired private MQCommonsDementions mQCommonsDementions;
 
   public DataSetDefinition constructTMqDatset() {

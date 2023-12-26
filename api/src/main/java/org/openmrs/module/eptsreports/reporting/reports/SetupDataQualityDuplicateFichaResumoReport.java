@@ -23,6 +23,9 @@ import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSe
 import org.openmrs.module.eptsreports.reporting.library.datasets.SismaCodeDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC1PatientListDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC2PatientListDuplicateFichaResumoDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC3PatientListDuplicateFichaResumoDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC4PatientListDuplicateFichaResumoDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC5PatientListDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.SummaryDataQualityDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
@@ -50,6 +53,15 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
   @Autowired
   private EC2PatientListDuplicateFichaResumoDataset eC2PatientListDuplicateFichaResumoDataset;
 
+  @Autowired
+  private EC3PatientListDuplicateFichaResumoDataset ec3PatientListDuplicateFichaResumoDataset;
+
+  @Autowired
+  private EC4PatientListDuplicateFichaResumoDataset ec4PatientListDuplicateFichaResumoDataset;
+
+  @Autowired
+  private EC5PatientListDuplicateFichaResumoDataset ec5PatientListDuplicateFichaResumoDataset;
+
   @Override
   public String getExcelDesignUuid() {
     return "d34d80ae-fbad-11eb-9a03-0242ac130003";
@@ -62,7 +74,7 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
 
   @Override
   public String getName() {
-    return "RQD2: Relatório De Qualidade De Dados Para Identificar Fichas Resumo Duplicadas";
+    return "RQD2: Relatório de Qualidade de Dados para Identificar Fichas Duplicadas ";
   }
 
   @Override
@@ -85,14 +97,6 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
                 this.getDataParameters())));
 
     rd.addDataSetDefinition(
-        "D",
-        Mapped.mapStraightThrough(this.datimCodeDataset.constructDataset(this.getParameters())));
-
-    rd.addDataSetDefinition(
-        "SC",
-        Mapped.mapStraightThrough(this.sismaCodeDataset.constructDataset(this.getParameters())));
-
-    rd.addDataSetDefinition(
         "ECD1",
         Mapped.mapStraightThrough(
             eC1PatientListDuplicateFichaResumoDataset
@@ -103,6 +107,32 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
         Mapped.mapStraightThrough(
             eC2PatientListDuplicateFichaResumoDataset
                 .ec2PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
+
+    rd.addDataSetDefinition(
+        "ECD3",
+        Mapped.mapStraightThrough(
+            ec3PatientListDuplicateFichaResumoDataset
+                .ec3PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
+
+    rd.addDataSetDefinition(
+        "ECD4",
+        Mapped.mapStraightThrough(
+            ec4PatientListDuplicateFichaResumoDataset
+                .ec4PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
+
+    rd.addDataSetDefinition(
+        "ECD5",
+        Mapped.mapStraightThrough(
+            ec5PatientListDuplicateFichaResumoDataset
+                .ec5PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
+
+    rd.addDataSetDefinition(
+        "D",
+        Mapped.mapStraightThrough(this.datimCodeDataset.constructDataset(this.getParameters())));
+
+    rd.addDataSetDefinition(
+        "SC",
+        Mapped.mapStraightThrough(this.sismaCodeDataset.constructDataset(this.getParameters())));
 
     return rd;
   }
@@ -124,7 +154,9 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:2,row:8,dataset:ECD1 | sheet:3,row:8,dataset:ECD2");
+      props.put(
+          "repeatingSections",
+          "sheet:2,row:7,dataset:ECD1 | sheet:3,row:7,dataset:ECD2 | sheet:4,row:7,dataset:ECD3 | sheet:5,row:7,dataset:ECD4 | sheet:6,row:7,dataset:ECD5");
       props.put("sortWeight", "5000");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);

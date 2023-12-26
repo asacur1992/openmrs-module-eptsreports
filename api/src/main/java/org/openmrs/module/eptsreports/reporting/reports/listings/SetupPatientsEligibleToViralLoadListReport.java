@@ -26,7 +26,7 @@ public class SetupPatientsEligibleToViralLoadListReport extends EptsDataExportMa
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ELEGÍVEIS PARA CARGA VIRAL - v1.13.0 ";
+    return "LISTA DE PACIENTES ELEGÍVEIS PARA CARGA VIRAL - v1.14.0 ";
   }
 
   @Override

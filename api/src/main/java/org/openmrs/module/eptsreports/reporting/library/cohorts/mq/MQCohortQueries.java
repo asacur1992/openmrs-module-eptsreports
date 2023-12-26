@@ -135,6 +135,26 @@ public class MQCohortQueries {
     return definition;
   }
 
+  @DocumentedDefinition(value = "findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12")
+  public CohortDefinition findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12() {
+
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName("findPatientsWhoAreBreastfeedingForMQCat7AndMQCat12");
+    definition.addParameter(new Parameter("startInclusionDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endInclusionDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("endRevisionDate", "End Revision Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    String query =
+        MQQueriesInterface.QUERY.getPatientsWhoArePregnantOrBreastfeedingForMQCat7AndMQCat12(
+            TypePTV.BREASTFEEDING);
+
+    definition.setQuery(query);
+
+    return definition;
+  }
+
   @DocumentedDefinition(
       value =
           "findPatientsWhoAreNewEnrolledOnArtByAgeUsingYearAdulyAndHaveFirstConsultInclusionPeriodCategory3FR12Numerator")
