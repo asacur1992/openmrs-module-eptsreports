@@ -55,17 +55,19 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
   @Qualifier("commonAgeDimensionCohort")
   private AgeDimensionCohortInterface ageDimensionCohort;
 
-  public DataSetDefinition constructDatset(List<Parameter> parameters) {
-    CohortIndicatorDataSetDefinition dataSetDefinition = new CohortIndicatorDataSetDefinition();
-    String mappings = "endDate=${endDate},location=${location}";
+  public DataSetDefinition constructDatset(final List<Parameter> parameters) {
+    final CohortIndicatorDataSetDefinition dataSetDefinition =
+        new CohortIndicatorDataSetDefinition();
+    final String mappings = "endDate=${endDate},location=${location}";
     dataSetDefinition.setName("TX TB Montly Cascade Data Set");
     dataSetDefinition.addParameters(parameters);
 
-    dataSetDefinition.addDimension("gender", EptsReportUtils.map(eptsCommonDimension.gender(), ""));
+    dataSetDefinition.addDimension(
+        "gender", EptsReportUtils.map(this.eptsCommonDimension.gender(), ""));
     dataSetDefinition.addDimension(
         "age",
         EptsReportUtils.map(
-            eptsCommonDimension.age(ageDimensionCohort), "effectiveDate=${endDate}"));
+            this.eptsCommonDimension.age(this.ageDimensionCohort), "effectiveDate=${endDate}"));
 
     dataSetDefinition.addDimension(
         "artStartState",
@@ -103,12 +105,13 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
   }
 
   private void addSection1And2(
-      CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
     final CohortIndicator txCurrIndicator =
         this.eptsGeneralIndicator.getIndicator(
             "findPatientsWhoAreActiveOnART",
-            EptsReportUtils.map(txCurrCohortQueries.findPatientsWhoAreActiveOnART(), mappings));
+            EptsReportUtils.map(
+                this.txCurrCohortQueries.findPatientsWhoAreActiveOnART(), mappings));
 
     dataSetDefinition.addColumn(
         "TC",
@@ -159,10 +162,11 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "artStartState=txcurrPreviouslyOnArt|clinicalConsultation=clinicalConsultationNewly");
   }
 
-  private void addSection3(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+  private void addSection3(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    CohortIndicator txTBDenominatorPreviousPeriod =
-        this.getIndicator(this.txtbCohortQueries.getDenominator(), mappings);
+    final CohortIndicator txTBDenominatorPreviousPeriod =
+        this.getIndicator(this.txtbCohortQueries.getDenominator(Boolean.FALSE), mappings);
 
     dataSetDefinition.addColumn(
         "TC-TB",
@@ -188,7 +192,7 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         mappings,
         "artStartState=txcurrPreviouslyOnArt");
 
-    CohortIndicator tbDenominatorAndTxCurr =
+    final CohortIndicator tbDenominatorAndTxCurr =
         this.getIndicator(this.txtbMontlyCascadeReporCohortQueries.getTxBTDenominatorAndTxCurr());
     dataSetDefinition.addColumn(
         "TBD-TC",
@@ -215,10 +219,11 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "artStartState=txcurrPreviouslyOnArt");
   }
 
-  private void addSEction4(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+  private void addSEction4(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    CohortIndicator denominatorAndPosetiveScreening =
-        getIndicator(
+    final CohortIndicator denominatorAndPosetiveScreening =
+        this.getIndicator(
             this.txTBDenominatorForMontlyCascadeQuery.getTxTBDenominatorAndPositiveScreening());
 
     dataSetDefinition.addColumn(
@@ -245,7 +250,7 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         mappings,
         "artStartState=txcurrPreviouslyOnArt");
 
-    CohortIndicator denominatorAndNegativeScreening =
+    final CohortIndicator denominatorAndNegativeScreening =
         this.getIndicator(
             this.txTBDenominatorForMontlyCascadeQuery.getTxTBDenominatorAndNegativeScreening());
 
@@ -274,9 +279,10 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "artStartState=txcurrPreviouslyOnArt");
   }
 
-  private void addSection5(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+  private void addSection5(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    CohortIndicator specimenSet =
+    final CohortIndicator specimenSet =
         this.getIndicator(
             this.txTBDenominatorForMontlyCascadeQuery.getSpecimenSentCohortDefinition());
 
@@ -311,12 +317,13 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "diagnostictest=additonalDiagnostic");
   }
 
-  private void addSection6(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+  private void addSection6(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    CohortIndicator positiveResults =
+    final CohortIndicator positiveResults =
         this.getIndicator(
             this.txtbCohortQueries.getPositiveResultsForTXTBMontlyCascadeCohortDefinition(
-                txtbCohortQueries.getDenominator(),
+                this.txtbCohortQueries.getDenominator(Boolean.FALSE),
                 "startDate=${endDate-6m+1d},endDate=${endDate},location=${location}"));
 
     dataSetDefinition.addColumn(
@@ -349,7 +356,7 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         EptsReportUtils.map(positiveResults, mappings),
         "diagnostictest=additonalDiagnostic|posetiveTestResult=positiveAdditonalDiagnostic");
 
-    CohortIndicator negativeResults =
+    final CohortIndicator negativeResults =
         this.getIndicator(
             this.txTBDenominatorForMontlyCascadeQuery.getNegativeResultCohortDefinition());
 
@@ -384,10 +391,12 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "diagnostictest=additonalDiagnostic|negativeTestResult=negativeAdditonalDiagnostic");
   }
 
-  private void addSection7(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
-    CohortIndicator startedTBTreatment =
+  private void addSection7(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
+    final CohortIndicator startedTBTreatment =
         this.getIndicator(
-            this.txTBDenominatorForMontlyCascadeQuery.getPositiveResultAndTXTBNumerator());
+            this.txTBDenominatorForMontlyCascadeQuery.getPositiveResultAndTXTBNumerator(
+                Boolean.FALSE));
 
     dataSetDefinition.addColumn(
         "TBD-STB",
@@ -420,12 +429,13 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         "diagnostictest=additonalDiagnostic");
   }
 
-  private void addSection8(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+  private void addSection8(
+      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    CohortIndicator screenedAndStartedTB =
-        eptsGeneralIndicator.getIndicator(
+    final CohortIndicator screenedAndStartedTB =
+        this.eptsGeneralIndicator.getIndicator(
             "patientsNewOnARTNumerator",
-            EptsReportUtils.map(txtbCohortQueries.txTbNumerator(), mappings));
+            EptsReportUtils.map(this.txtbCohortQueries.txTbNumerator(), mappings));
 
     dataSetDefinition.addColumn(
         "TBD-SSTB",
@@ -451,7 +461,7 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         mappings,
         "artStartState=txcurrPreviouslyOnArt");
 
-    CohortIndicator txTBAndTXCurr =
+    final CohortIndicator txTBAndTXCurr =
         this.getIndicator(
             this.txTBDenominatorForMontlyCascadeQuery
                 .getScreenedPatientsWhoStartedTBTreatmentAndTXCurr());
@@ -482,13 +492,13 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
   }
 
   private void addRow(
-      CohortIndicatorDataSetDefinition dataSetDefinition,
-      String indicatorPrefix,
-      String baseLabel,
-      Mapped<CohortIndicator> mappedIndicator,
-      List<ColumnParameters> columns,
-      String mappings,
-      String dimensions) {
+      final CohortIndicatorDataSetDefinition dataSetDefinition,
+      final String indicatorPrefix,
+      final String baseLabel,
+      final Mapped<CohortIndicator> mappedIndicator,
+      final List<ColumnParameters> columns,
+      final String mappings,
+      final String dimensions) {
 
     dataSetDefinition.addColumn(
         indicatorPrefix + "-total",
@@ -507,9 +517,9 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
         mappedIndicator,
         "gender=F|" + dimensions);
 
-    for (ColumnParameters column : columns) {
-      String name = indicatorPrefix + "-" + column.getName();
-      String label = baseLabel + " (" + column.getLabel() + ")";
+    for (final ColumnParameters column : columns) {
+      final String name = indicatorPrefix + "-" + column.getName();
+      final String label = baseLabel + " (" + column.getLabel() + ")";
       dataSetDefinition.addColumn(
           name, label, mappedIndicator, column.getDimensions() + "|" + dimensions);
     }
@@ -517,30 +527,31 @@ public class TXTBMontlyCascadeReportDataSet extends BaseDataSet {
 
   private List<ColumnParameters> getColumnsForAgeDesaggregation() {
 
-    ColumnParameters under15M =
+    final ColumnParameters under15M =
         new ColumnParameters("under15M", "under 15 year male", "gender=M|age=<15", "01");
-    ColumnParameters above15M =
+    final ColumnParameters above15M =
         new ColumnParameters("above15M", "above 15 year male", "gender=M|age=15+", "02");
-    ColumnParameters unknownM =
+    final ColumnParameters unknownM =
         new ColumnParameters("unknownM", "Unknown age male", "gender=M|age=UK", "03");
 
-    ColumnParameters under15F =
+    final ColumnParameters under15F =
         new ColumnParameters("under15F", "under 15 year female", "gender=F|age=<15", "04");
-    ColumnParameters above15F =
+    final ColumnParameters above15F =
         new ColumnParameters("above15F", "above 15 year female", "gender=F|age=15+", "05");
-    ColumnParameters unknownF =
+    final ColumnParameters unknownF =
         new ColumnParameters("unknownF", "Unknown age female", "gender=F|age=UK", "06");
 
     return Arrays.asList(under15M, above15M, unknownM, under15F, above15F, unknownF);
   }
 
-  private CohortIndicator getIndicator(CohortDefinition cohortDefinition) {
-    String mappings = "endDate=${endDate},location=${location}";
+  private CohortIndicator getIndicator(final CohortDefinition cohortDefinition) {
+    final String mappings = "endDate=${endDate},location=${location}";
     return this.eptsGeneralIndicator.getIndicator(
         "" + cohortDefinition, EptsReportUtils.map(cohortDefinition, mappings));
   }
 
-  private CohortIndicator getIndicator(CohortDefinition cohortDefinition, String mappings) {
+  private CohortIndicator getIndicator(
+      final CohortDefinition cohortDefinition, final String mappings) {
     return this.eptsGeneralIndicator.getIndicator(
         "" + cohortDefinition, EptsReportUtils.map(cohortDefinition, mappings));
   }
