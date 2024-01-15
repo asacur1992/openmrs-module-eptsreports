@@ -43,7 +43,7 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
 
   @Override
   public String getDescription() {
-    return "DSD report using MER TX CURR and NE";
+    return "DSD report using MER TX CURR and NEW";
   }
 
   @Override
@@ -80,7 +80,7 @@ public class SetupDsdIcapReport extends EptsDataExportManager {
 
   @Override
   public String getVersion() {
-    return "v1.0.0";
+    return "1.0-SNAPSHOT";
   }
 
   @Override
