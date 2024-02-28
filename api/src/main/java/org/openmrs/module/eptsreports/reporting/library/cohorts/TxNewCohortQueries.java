@@ -341,6 +341,86 @@ public class TxNewCohortQueries {
     return txNewCompositionCohort;
   }
 
+  public CohortDefinition findPatientsWithCD4LessThan200Community() {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName("CD4 GREATER OR EQUAL 200");
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "CD4-LESS-200", EptsReportUtils.map(this.findPatientsWithCD4LessThan200(), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnity),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString("CD4-LESS-200 AND WITH-COMMUNITY-DISPENSATION");
+
+    return txNewCompositionCohort;
+  }
+
+  public CohortDefinition findPatientsWIthCD4GreaterOrEqual200Community() {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName("CD4 GREATER OR EQUAL 200");
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "CD4-GREATER-OR-EQUAL-200",
+        EptsReportUtils.map(this.findPatientsWIthCD4GreaterOrEqual200(), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnity),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString(
+        "CD4-GREATER-OR-EQUAL-200 AND WITH-COMMUNITY-DISPENSATION");
+
+    return txNewCompositionCohort;
+  }
+
+  public CohortDefinition findPatientsWithUnknownCD4Community() {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName("CD4 UNKNOWN");
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "CD4-UNKNOWN", EptsReportUtils.map(this.findPatientsWithUnknownCD4(), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsWhoStartedARTAtComunnity),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString("CD4-UNKNOWN AND WITH-COMMUNITY-DISPENSATION");
+
+    return txNewCompositionCohort;
+  }
+
   public CohortDefinition getTxNewCommunityCMCompositionCohort(final String cohortName) {
     final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
 

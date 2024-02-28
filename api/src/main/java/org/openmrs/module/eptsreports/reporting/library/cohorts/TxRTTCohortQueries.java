@@ -209,41 +209,125 @@ public class TxRTTCohortQueries {
     compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
     compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
 
-    final String mappings =
-        "startDate=${startDate-1d},endDate=${startDate-1d},realEndDate=${endDate},location=${location}";
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch("RTT", EptsReportUtils.map(this.getPatientsOnRTT(), mappings));
 
     compositionDefinition.addSearch(
-        "IIT-PREVIOUS-PERIOD",
-        EptsReportUtils.map(this.getPatientsWhoExperiencedIITCalculation(), mappings));
-
-    compositionDefinition.addSearch(
-        "RTT-TRANFERRED-OUT",
-        EptsReportUtils.map(
-            this.getPatientsWhoWhereTransferredOutCalculation(),
-            "endDate=${startDate},location=${location}"));
-
-    compositionDefinition.addSearch(
-        "TX-CURR",
-        EptsReportUtils.map(
-            this.txCurrCohortQueries.findPatientsWhoAreActiveOnART(),
-            "endDate=${endDate},location=${location}"));
-
-    compositionDefinition.addSearch(
-        "TRF-IN",
-        EptsReportUtils.map(
-            this.tRFINCohortQueries.getPatiensWhoAreTransferredIn(),
-            "startDate=${startDate},endDate=${endDate},location=${location}"));
-
-    compositionDefinition.addSearch(
-        "COMMUNITY-DISPENSATION",
+        "WITH-COMMUNITY-DISPENSATION",
         EptsReportUtils.map(
             this.genericCohorts.generalSql(
-                "findCommunityPatientsDispensation",
+                "findPatientsWhoStartedARTWithComunnityDispensation",
                 TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-            "startDate=${startDate},endDate=${endDate},location=${location}"));
+            mappings));
+
+    compositionDefinition.setCompositionString("RTT AND WITH-COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
+  public CohortDefinition findPatientsWithCD4LessThan200Community() {
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("CD4 GREATER OR EQUAL 200");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "CD4-LESS-200", EptsReportUtils.map(this.findPatientsWithCD4LessThan200(), mappings));
+
+    compositionDefinition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    compositionDefinition.setCompositionString("CD4-LESS-200 AND WITH-COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
+  public CohortDefinition findPatientsNotEligibleToCD4Community() {
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("CD4 GREATER OR EQUAL 200");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "CD4-NOT-ELIGIBLE", EptsReportUtils.map(this.findPatientsNotEligibleToCD4(), mappings));
+
+    compositionDefinition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    compositionDefinition.setCompositionString("CD4-NOT-ELIGIBLE AND WITH-COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
+  public CohortDefinition findPatientsWithUnknownCD4Community() {
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("CD4 UNKNOWN");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "CD4-UNKNOWN", EptsReportUtils.map(this.findPatientsWithUnknownCD4(), mappings));
+
+    compositionDefinition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    compositionDefinition.setCompositionString("CD4-UNKNOWN AND WITH-COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
+  public CohortDefinition findPatientsWIthCD4GreaterOrEqual200Community() {
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("CD4 GREATER OR EQUAL 200");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    compositionDefinition.addSearch(
+        "CD4-GREATER-OR-EQUAL-200",
+        EptsReportUtils.map(this.findPatientsWIthCD4GreaterOrEqual200(), mappings));
+
+    compositionDefinition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     compositionDefinition.setCompositionString(
-        "((IIT-PREVIOUS-PERIOD NOT RTT-TRANFERRED-OUT) AND TX-CURR AND COMMUNITY-DISPENSATION) NOT TRF-IN");
+        "CD4-GREATER-OR-EQUAL-200 AND WITH-COMMUNITY-DISPENSATION");
 
     return compositionDefinition;
   }
@@ -318,6 +402,51 @@ public class TxRTTCohortQueries {
         " where data_iit is null and  data_restart is not null ");
   }
 
+  // CommunityITT
+
+  @DocumentedDefinition(value = "DurationInterruptionOfTreatmentLessThan3Months")
+  public CohortDefinition getDurationInterruptionOfTreatmentLessThan3MonthsCommunity() {
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced treatment interruption of  <3 months before returning to treatment",
+        "  where iit_art_interval < 90 ");
+  }
+
+  @DocumentedDefinition(value = "DurationInterruptionOfTreatmentBetween3And5Months")
+  public CohortDefinition getDurationInterruptionOfTreatmentBetween3And5MonthsCommunity() {
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced treatment interruption of 3-5 months before returning to treatmentt",
+        "  where iit_art_interval >= 90 and iit_art_interval < 180 ");
+  }
+
+  @DocumentedDefinition(value = "DurationInterruptionOfTreatmentGreaterOrEqual6Months")
+  public CohortDefinition getDurationInterruptionOfTreatmentGreaterOrEqual6MonthsCommunity() {
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced treatment interruption of 6 or more months before returning to treatment",
+        "  where iit_art_interval >= 180 ");
+  }
+
+  @DocumentedDefinition(value = "TxRttPLHIVLess12MonthCalculation")
+  public CohortDefinition getPLHIVLess12MonthCalculationCommunity() {
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced treatment interruption of  <12 months before returning to treatment",
+        "  where iit_art_interval < 365 ");
+  }
+
+  @DocumentedDefinition(value = "TxRttPLHIVGreater12MonthCalculation")
+  public CohortDefinition getPLHIVGreather12MonthCalculationCommunity() {
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced treatment interruption of  12 or more months before returning to treatment",
+        "  where iit_art_interval >= 365 ");
+  }
+
+  @DocumentedDefinition(value = "TxRttPLHIVUnknownDesaggregation")
+  public CohortDefinition getPLHIVUnknownDesaggregationCommunity() {
+
+    return this.getDurationofIITIntervalCommunity(
+        "Patients who experienced - Unknown Duration",
+        " where data_iit is null and  data_restart is not null ");
+  }
+
   @DocumentedDefinition(value = "TxRttPLHIVTotal")
   public CohortDefinition getPLHIVTotal() {
 
@@ -346,6 +475,32 @@ public class TxRTTCohortQueries {
     return compositionDefinition;
   }
 
+  @DocumentedDefinition(value = "TxRttPLHIVTotal")
+  public CohortDefinition getPLHIVTotalCommunity() {
+
+    final CompositionCohortDefinition compositionDefinition = new CompositionCohortDefinition();
+
+    compositionDefinition.setName("Tx RTT- Total PLHIV Community");
+    compositionDefinition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    compositionDefinition.addParameter(new Parameter("location", "location", Location.class));
+
+    compositionDefinition.addSearch(
+        "TOTAL", EptsReportUtils.map(this.getPLHIVTotal(), this.mappings));
+
+    compositionDefinition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    compositionDefinition.setCompositionString("TOTAL AND WITH-COMMUNITY-DISPENSATION");
+
+    return compositionDefinition;
+  }
+
   private CohortDefinition getDurationofIITInterval(
       final String intervalLabel, final String interval) {
     final CompositionCohortDefinition composition = new CompositionCohortDefinition();
@@ -370,6 +525,32 @@ public class TxRTTCohortQueries {
             this.mappings));
 
     composition.setCompositionString("RTT AND IIT");
+
+    return composition;
+  }
+
+  private CohortDefinition getDurationofIITIntervalCommunity(
+      final String intervalLabel, final String interval) {
+    final CompositionCohortDefinition composition = new CompositionCohortDefinition();
+
+    composition.setName("IIT -" + intervalLabel);
+    composition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    composition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    composition.addParameter(new Parameter("location", "location", Location.class));
+
+    composition.addSearch(
+        "IIT",
+        EptsReportUtils.map(this.getDurationofIITInterval(intervalLabel, interval), this.mappings));
+
+    composition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    composition.setCompositionString("IIT AND WITH-COMMUNITY-DISPENSATION ");
 
     return composition;
   }
