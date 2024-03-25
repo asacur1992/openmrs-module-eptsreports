@@ -4,7 +4,7 @@
 
 
 DROP PROCEDURE IF EXISTS `CCUDataReconstruct`;
-DELIMITER ;;
+#
 CREATE DEFINER=`root`@`localhost` PROCEDURE CCUDataReconstruct()
     READS SQL DATA
 BEGIN
@@ -118,5 +118,5 @@ BEGIN
 		SET no_info = 0;
 	END;
 	
-END;;
-DELIMITER ;
+END
+#
