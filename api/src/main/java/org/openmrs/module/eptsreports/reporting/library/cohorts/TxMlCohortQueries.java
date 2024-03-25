@@ -2,6 +2,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
 import org.openmrs.Location;
+import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsQuerysUtils;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
@@ -233,5 +234,96 @@ public class TxMlCohortQueries {
     composition.setCompositionString("IIT AND (IIT-INTERVAL or STOPPED-REFUSED-TREATMENT)");
 
     return composition;
+  }
+
+  // COMMUNITY
+  @DocumentedDefinition(value = "patientsWhoMissedNextApointment")
+  public CohortDefinition getPatientsWhoMissedNextApointmentCommunity() {
+
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("PatientsWhoMissedNextApointment");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.addSearch(
+        "MISS", EptsReportUtils.map(this.getPatientsWhoMissedNextApointment(), this.mappings));
+
+    definition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("MISS AND WITH-COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  private CohortDefinition getIITCohortDefinitionCommunity(
+      final String intervalLabel, final String interval) {
+    final CompositionCohortDefinition composition = new CompositionCohortDefinition();
+
+    composition.setName("IIT -" + intervalLabel);
+    composition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    composition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    composition.addParameter(new Parameter("location", "location", Location.class));
+
+    composition.addSearch(
+        "IIT",
+        EptsReportUtils.map(this.getIITCohortDefinition(intervalLabel, interval), this.mappings));
+
+    composition.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    composition.setCompositionString("IIT AND WITH-COMMUNITY-DISPENSATION");
+
+    return composition;
+  }
+
+  public CohortDefinition getPatientsWhoAreIITLessThan3MonthsCommunity() {
+    return this.getIITCohortDefinitionCommunity(
+        " IIT patients < 90 days", " where intervaloIIT < 90 ");
+  }
+
+  public CohortDefinition getPatientsWhoAreIITBetween3And5MonthsCommunity() {
+    return this.getIITCohortDefinitionCommunity(
+        " IIT patients  >= 90 and  < 180  days",
+        " where intervaloIIT >= 90 and intervaloIIT < 180");
+  }
+
+  public CohortDefinition getPatientsWhoAreIITGreaterOrEqual6MonthsCommunity() {
+    return this.getIITCohortDefinitionCommunity(
+        " IIT patients >= 180 days", "where intervaloIIT  >= 180");
+  }
+
+  public CohortDefinition getPatientstotalIITCommunity() {
+    final CompositionCohortDefinition cd = new CompositionCohortDefinition();
+    cd.setName("Get patients who are IIT (Totals)");
+    cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    cd.addParameter(new Parameter("endDate", "End Date", Date.class));
+    cd.addParameter(new Parameter("location", "Location", Location.class));
+
+    cd.addSearch("IIT", EptsReportUtils.map(this.getPatientstotalIIT(), this.mappings));
+
+    cd.addSearch(
+        "WITH-COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsWhoStartedARTWithComunnityDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    cd.setCompositionString("IIT AND WITH-COMMUNITY-DISPENSATION ");
+
+    return cd;
   }
 }
