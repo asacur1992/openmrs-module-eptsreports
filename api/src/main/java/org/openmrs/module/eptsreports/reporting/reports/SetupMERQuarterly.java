@@ -57,6 +57,7 @@ public class SetupMERQuarterly extends EptsDataExportManager {
   @Autowired private PrepCtDataset prepCtDataset;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
+
   @Autowired private DatimCodeDataSet datimCodeDataSet;
 
   @Override
