@@ -52,12 +52,12 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "PEPFAR MER 2.6.1 Semi-Annual Community";
+    return "PEPFAR MER 2.7 Semi-Annual Community";
   }
 
   @Override
   public String getDescription() {
-    return "PEPFAR MER 2.6.1 Semi-Annual Report Community";
+    return "PEPFAR MER 2.7 Semi-Annual Report Community";
   }
 
   @Override
@@ -95,8 +95,8 @@ public class SetupMERSemiAnnualReportCommunity extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PEPFAR_MER_2.6.1_Semiannual.xls",
-              "PEPFAR MER 2.6.1 Semi-Annual Report Community",
+              "PEPFAR_MER_2.7_Semiannual.xls",
+              "PEPFAR MER 2.7 Semi-Annual Report",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
