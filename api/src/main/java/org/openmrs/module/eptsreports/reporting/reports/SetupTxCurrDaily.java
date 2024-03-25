@@ -15,47 +15,28 @@ package org.openmrs.module.eptsreports.reporting.reports;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PrepCtCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxMlCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxNewCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxPvlsCommunityDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttCommunityDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.TxCurrDailyDataset;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
+import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
+public class SetupTxCurrDaily extends EptsDataExportManager {
 
-  @Autowired private TxPvlsCommunityDataset txPvlsCommunityDataset;
-
-  @Autowired private TxNewCommunityDataset txNewCommunityDataset;
-
-  @Autowired private TxCurrCommunityDataset txCurrCommunityDataset;
-
-  @Autowired private TxRttCommunityDataset txRttCommunityDataset;
-
-  @Autowired private TxMlCommunityDataset txMlCommunityDataset;
-
-  @Autowired private TRFINCommunityDataset tRFINCommunityDataset;
-
-  @Autowired private PrepNewCommunityDataset prepNewCommunityDataset;
-
-  @Autowired private PrepCtCommunityDataset prepCtCommunityDataset;
-
+  @Autowired private TxCurrDailyDataset txCurrDataset;
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
   @Autowired private DatimCodeDataSet datimCodeDataSet;
@@ -67,22 +48,22 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
   @Override
   public String getUuid() {
-    return "1dd7abdc-877c-4014-9376-16414a9462ca";
+    return "213ec00e-6c9a-49b4-8d70-6c17ee1d05c7";
   }
 
   @Override
   public String getExcelDesignUuid() {
-    return "eb581a7b-d077-48ea-8ca7-b121e2911900";
+    return "557acbc3-0f9b-4237-a5f9-3128ab2e4062";
   }
 
   @Override
   public String getName() {
-    return "PEPFAR MER 2.7 Quarterly - Comunidade";
+    return "TX CURR DIARIO 2.7";
   }
 
   @Override
   public String getDescription() {
-    return "MER Quarterly Report Comunidade";
+    return "TX CURR DIARIO 2.7";
   }
 
   @Override
@@ -92,31 +73,11 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.txRttCommunityDataset.getParameters());
+    reportDefinition.addParameter(new Parameter("endDate", "Data Final", Date.class));
+    reportDefinition.addParameter(new Parameter("location", "Location", Location.class));
 
     reportDefinition.addDataSetDefinition(
-        "N", Mapped.mapStraightThrough(this.txNewCommunityDataset.constructTxNewDataset()));
-
-    reportDefinition.addDataSetDefinition(
-        "C", Mapped.mapStraightThrough(this.txCurrCommunityDataset.constructTxCurrDataset(true)));
-
-    reportDefinition.addDataSetDefinition(
-        "P", Mapped.mapStraightThrough(this.txPvlsCommunityDataset.constructTxPvlsDatset()));
-
-    reportDefinition.addDataSetDefinition(
-        "ML", Mapped.mapStraightThrough(this.txMlCommunityDataset.constructtxMlDataset()));
-
-    reportDefinition.addDataSetDefinition(
-        "R", Mapped.mapStraightThrough(this.txRttCommunityDataset.constructTxRttDataset()));
-
-    reportDefinition.addDataSetDefinition(
-        "TR", Mapped.mapStraightThrough(this.tRFINCommunityDataset.constructTxTRFIN()));
-
-    reportDefinition.addDataSetDefinition(
-        "PREP", Mapped.mapStraightThrough(this.prepNewCommunityDataset.constructPrepNewDataset()));
-
-    reportDefinition.addDataSetDefinition(
-        "PrEP_CT", Mapped.mapStraightThrough(this.prepCtCommunityDataset.constructPrepCtDataset()));
+        "C", Mapped.mapStraightThrough(this.txCurrDataset.constructTxCurrDataset(true)));
 
     reportDefinition.addDataSetDefinition(
         "D",
@@ -138,8 +99,8 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "PEPFAR_MER_2.7_Quarterly.xls",
-              "PEPFAR MER 2.7 Quarterly",
+              "PEPFAR_MER_2.7_TX_CURR_DAILY.xls",
+              "PEPFAR_MER_2.7_TX_CURR_DAILY",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();

@@ -307,176 +307,6 @@ public class PvlsCommunityCohortQueries {
 
   @DocumentedDefinition(
       value =
-          "PregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget")
-  public CohortDefinition
-      findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName(
-        "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "PREGNANT3MONTHSVL12",
-        EptsReportUtils.map(
-            this
-                .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
-            mappings));
-
-    definition.addSearch(
-        "TARGET",
-        EptsReportUtils.map(
-            this
-                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
-            mappings));
-
-    definition.setCompositionString("PREGNANT3MONTHSVL12 AND TARGET");
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
-      value =
-          "BreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine")
-  public CohortDefinition
-      findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName(
-        "findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "BREASTEFEEDING3MONTHSVL12",
-        EptsReportUtils.map(
-            this
-                .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
-            mappings));
-
-    definition.addSearch(
-        "ROTINE",
-        EptsReportUtils.map(
-            this
-                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsRotine(),
-            mappings));
-
-    definition.setCompositionString("BREASTEFEEDING3MONTHSVL12 AND ROTINE");
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
-      value =
-          "BreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget")
-  public CohortDefinition
-      findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName(
-        "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "BREASTEFEEDING3MONTHSVL12",
-        EptsReportUtils.map(
-            this
-                .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
-            mappings));
-
-    definition.addSearch(
-        "TARGET",
-        EptsReportUtils.map(
-            this
-                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsTarget(),
-            mappings));
-
-    definition.setCompositionString("BREASTEFEEDING3MONTHSVL12 AND TARGET");
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
-      value =
-          "PregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine")
-  public CohortDefinition
-      findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName(
-        "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "IART3MONTHSVL12MONTHSROTINE",
-        EptsReportUtils.map(
-            this
-                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine(),
-            mappings));
-
-    definition.addSearch(
-        "PREGNANT",
-        EptsReportUtils.map(
-            this
-                .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
-            mappings));
-
-    definition.setCompositionString("IART3MONTHSVL12MONTHSROTINE AND PREGNANT");
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
-      value =
-          "PregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target")
-  public CohortDefinition
-      findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Target() {
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-
-    definition.setName(
-        "PatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsRotine");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.addSearch(
-        "IART3MONTHSVL12MONTHSTARGET",
-        EptsReportUtils.map(
-            this
-                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12MonthsTarget(),
-            mappings));
-
-    definition.addSearch(
-        "PREGNANT",
-        EptsReportUtils.map(
-            this
-                .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
-            mappings));
-
-    definition.setCompositionString("IART3MONTHSVL12MONTHSTARGET AND PREGNANT");
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
-      value =
           "findPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine")
   public CohortDefinition
       findPregnantBreatsFeedingWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsWithVlMoreThan1000Rotine() {
@@ -538,7 +368,185 @@ public class PvlsCommunityCohortQueries {
                 .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
             mappings));
 
-    definition.setCompositionString("IART3MONTHSVL12MONTHSTARGET AND BREASTFEEDING");
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString(
+        "IART3MONTHSVL12MONTHSTARGET AND BREASTFEEDING AND COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(
+      value =
+          "findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator")
+  public CohortDefinition
+      findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName(
+        "findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "PREGNANT3MONTHSVL12",
+        EptsReportUtils.map(
+            this
+                .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "DENOMINATOR",
+        EptsReportUtils.map(
+            this.findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString(
+        "PREGNANT3MONTHSVL12 AND DENOMINATOR AND COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(
+      value =
+          "findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator")
+  public CohortDefinition
+      findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName(
+        "findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "PREGNANT3MONTHSVL12",
+        EptsReportUtils.map(
+            this
+                .findPregnantWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "NUMERATOR",
+        EptsReportUtils.map(
+            this
+                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString("PREGNANT3MONTHSVL12 AND NUMERATOR AND COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(
+      value =
+          "findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator")
+  public CohortDefinition
+      findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName(
+        "findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsDenominator");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "BREASTEFEEDING3MONTHSVL12",
+        EptsReportUtils.map(
+            this
+                .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "DENOMINATOR",
+        EptsReportUtils.map(
+            this.findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString(
+        "BREASTEFEEDING3MONTHSVL12 AND DENOMINATOR AND COMMUNITY-DISPENSATION");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(
+      value =
+          "findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator")
+  public CohortDefinition
+      findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName(
+        "findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12MonthsNumerator");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "BREASTEFEEDING3MONTHSVL12",
+        EptsReportUtils.map(
+            this
+                .findBreastfeedingWomanWhoHaveMoreThan3MonthsOnArtWithViralLoadRegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "NUMERATOR",
+        EptsReportUtils.map(
+            this
+                .findPatientsWhoHaveMoreThan3MonthsOnArtWithViralLoadResultLessthan1000RegisteredInTheLast12Months(),
+            mappings));
+
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
+    definition.setCompositionString(
+        "BREASTEFEEDING3MONTHSVL12 AND NUMERATOR AND COMMUNITY-DISPENSATION");
 
     return definition;
   }
