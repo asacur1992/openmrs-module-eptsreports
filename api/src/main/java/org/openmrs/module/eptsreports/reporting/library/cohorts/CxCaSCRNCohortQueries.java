@@ -238,7 +238,17 @@ public class CxCaSCRNCohortQueries {
             this.findPatientsWithScreeningTestForCervicalCancerPreviousReportingPeriod(),
             mappings));
 
-    definition.setCompositionString("(SCREENING NOT PREVIOUS-SCREENING");
+    definition.setCompositionString("SCREENING NOT PREVIOUS-SCREENING");
+
+    if (isCommunity) {
+
+      definition.addSearch(
+          "COMMUNITY-DISPENSATION",
+          EptsReportUtils.map(this.txNewCohortQueries.communityDispensation(), mappings));
+
+      definition.setCompositionString(
+          "(SCREENING AND COMMUNITY-DISPENSATION) NOT PREVIOUS-SCREENING");
+    }
 
     return definition;
   }

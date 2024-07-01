@@ -111,6 +111,15 @@ public class TxTbPrevCohortQueries {
 
     dsd.setCompositionString("ENDED-TPT AND DENOMINATOR");
 
+    if (isCommunity) {
+
+      dsd.addSearch(
+          "COMMUNITY-DISPENSATION",
+          EptsReportUtils.map(this.txNewCohortQueries.communityDispensation(), mappings));
+
+      dsd.setCompositionString("ENDED-TPT AND DENOMINATOR AND COMMUNITY-DISPENSATION");
+    }
+
     return dsd;
   }
 
