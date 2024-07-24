@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TxTbPrevCohortQueries {
 
-  @Autowired private GenericCohortQueries genericCohorts;
-
   private static final String
       FIND_PATIENTS_WHO_STARTED_TB_PREV_PREVENTIVE_TREATMENT_DURING_PREVIOUS_REPORTING_PERIOD =
           "TBPREV/PATIENTS_WHO_STARTED_TB_PREV_PREVENTIVE_TREATMENT_DURING_PREVIOUS_REPORTING_PERIOD.sql";
@@ -26,8 +24,12 @@ public class TxTbPrevCohortQueries {
       FIND_PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD =
           "TBPREV/PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD.sql";
 
+  @Autowired private GenericCohortQueries genericCohorts;
+
+  @Autowired private TxNewCohortQueries txNewCohortQueries;
+
   @DocumentedDefinition(value = "getTbPrevTotalDenominator")
-  public CohortDefinition getTbPrevTotalDenominator() {
+  public CohortDefinition getTbPrevTotalDenominator(final Boolean isCommunity) {
     final CompositionCohortDefinition dsd = new CompositionCohortDefinition();
 
     dsd.setName("Patients Who Started TPT");
@@ -42,7 +44,8 @@ public class TxTbPrevCohortQueries {
             this.genericCohorts.generalSql(
                 "Finding Patients Who have Started TPT During Previous Reporting Period",
                 EptsQuerysUtils.loadQuery(
-                    FIND_PATIENTS_WHO_STARTED_TB_PREV_PREVENTIVE_TREATMENT_DURING_PREVIOUS_REPORTING_PERIOD)),
+                    TxTbPrevCohortQueries
+                        .FIND_PATIENTS_WHO_STARTED_TB_PREV_PREVENTIVE_TREATMENT_DURING_PREVIOUS_REPORTING_PERIOD)),
             mappings));
     dsd.addSearch("TRF-OUT", EptsReportUtils.map(this.findPatientsTransferredOut(), mappings));
     dsd.addSearch(
@@ -51,7 +54,8 @@ public class TxTbPrevCohortQueries {
             this.genericCohorts.generalSql(
                 "Finding Patients Who have Completed TPT",
                 EptsQuerysUtils.loadQuery(
-                    FIND_PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD)),
+                    TxTbPrevCohortQueries
+                        .FIND_PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD)),
             mappings));
     dsd.addSearch(
         "NEWLY-ART",
@@ -62,13 +66,28 @@ public class TxTbPrevCohortQueries {
             this.findPatientsWhoStartedArtAndTpiPreviouslyDessagragation(), mappings));
 
     dsd.setCompositionString(
-        "(STARTED-TPT AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT) ");
+        "(STARTED-TPT AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT)");
+
+    if (isCommunity) {
+      final CohortDefinition communityDispensation =
+          this.txNewCohortQueries.communityDispensation();
+
+      dsd.addSearch(
+          "COMMUNITY-DISPENSATION",
+          EptsReportUtils.map(
+              communityDispensation,
+              EptsReportUtils.removeMissingParameterMappingsFromCohortDefintion(
+                  communityDispensation, mappings)));
+
+      dsd.setCompositionString(
+          "(STARTED-TPT AND COMMUNITY-DISPENSATION AND (NEWLY-ART OR PREVIOUS-ART)) NOT (TRF-OUT NOT ENDED-TPT)");
+    }
 
     return dsd;
   }
 
   @DocumentedDefinition(value = "getTbPrevTotalNumerator")
-  public CohortDefinition getTbPrevTotalNumerator() {
+  public CohortDefinition getTbPrevTotalNumerator(final Boolean isCommunity) {
     final CompositionCohortDefinition dsd = new CompositionCohortDefinition();
 
     dsd.setName("get Patients Who Completed TPT");
@@ -83,11 +102,23 @@ public class TxTbPrevCohortQueries {
             this.genericCohorts.generalSql(
                 "Finding Patients Who have Completed TPT",
                 EptsQuerysUtils.loadQuery(
-                    FIND_PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD)),
+                    TxTbPrevCohortQueries
+                        .FIND_PATIENTS_WHO_COMPLETED_TB_PREV_PREVENTIVE_TREATMENT_DURING_REPORTING_PERIOD)),
             mappings));
-    dsd.addSearch("DENOMINATOR", EptsReportUtils.map(this.getTbPrevTotalDenominator(), mappings));
+
+    dsd.addSearch(
+        "DENOMINATOR", EptsReportUtils.map(this.getTbPrevTotalDenominator(isCommunity), mappings));
 
     dsd.setCompositionString("ENDED-TPT AND DENOMINATOR");
+
+    if (isCommunity) {
+
+      dsd.addSearch(
+          "COMMUNITY-DISPENSATION",
+          EptsReportUtils.map(this.txNewCohortQueries.communityDispensation(), mappings));
+
+      dsd.setCompositionString("ENDED-TPT AND DENOMINATOR AND COMMUNITY-DISPENSATION");
+    }
 
     return dsd;
   }
