@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.datasets.listings.MultiplexDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.listings.PrepAvaliacaoDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -16,23 +17,24 @@ import org.springframework.stereotype.Service;
 
 /** @author Abdul Sacur */
 @Service
-public class SetupMultiplexReport extends EptsDataExportManager {
+public class SetupPrepAvaliacao extends EptsDataExportManager {
 
-  @Autowired private MultiplexDataset dataset;
+  @Autowired private PrepAvaliacaoDataset dataset;
+  @Autowired private DatimCodeDataSet datimCodeDataset;
 
   @Override
   public String getUuid() {
-    return "dab9d120-f8e0-41a9-a453-f2230c6b6798";
+    return "647d2f66-5adf-4e60-b489-e3fcb9676ee3";
   }
 
   @Override
   public String getName() {
-    return "MULTIPLEX LISTA AVALIACAO";
+    return "PREP LISTA AVALIACAO";
   }
 
   @Override
   public String getDescription() {
-    return "MULTIPLEX LISTA AVALIACAO";
+    return "PREP LISTA AVALIACAO";
   }
 
   @Override
@@ -43,7 +45,10 @@ public class SetupMultiplexReport extends EptsDataExportManager {
     reportDefinition.setDescription(this.getDescription());
     reportDefinition.setParameters(this.dataset.getParameters());
     reportDefinition.addDataSetDefinition(
-        "MULT", Mapped.mapStraightThrough(this.dataset.loadData(this.dataset.getParameters())));
+        "D",
+        Mapped.mapStraightThrough(this.datimCodeDataset.constructDataset(this.getParameters())));
+    reportDefinition.addDataSetDefinition(
+        "PREP", Mapped.mapStraightThrough(this.dataset.loadData(this.dataset.getParameters())));
     return reportDefinition;
   }
 
@@ -54,7 +59,7 @@ public class SetupMultiplexReport extends EptsDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "61952210-0184-4dcf-a849-bb4a78d470fb";
+    return "7474bb74-7c7d-4faa-8148-34161a4bb2c7";
   }
 
   @Override
@@ -65,12 +70,12 @@ public class SetupMultiplexReport extends EptsDataExportManager {
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "MULTIPLEX_LIST.xls",
-              "Lista Pacientes na Coorte Multiplex",
+              "PREP_LIST_AVALIACAO.xls",
+              "Lista Pacientes na Coorte PREP",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:6,dataset:MULT");
+      props.put("repeatingSections", "sheet:1,row:7,dataset:PREP");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
 
