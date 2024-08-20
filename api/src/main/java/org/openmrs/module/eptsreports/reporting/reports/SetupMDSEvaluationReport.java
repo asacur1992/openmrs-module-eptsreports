@@ -30,6 +30,7 @@ public class SetupMDSEvaluationReport extends EptsDataExportManager {
 
   public static final String YEAR_PARAMETER = "year";
 
+  @Override
   public String getExcelDesignUuid() {
     return "c4280b6e-3dad-11ee-bb7a-47c3291ec302";
   }
@@ -136,6 +137,7 @@ public class SetupMDSEvaluationReport extends EptsDataExportManager {
     return parameter;
   }
 
+  @Override
   public List<Parameter> getParameters() {
     List<Parameter> parameters = new ArrayList<Parameter>();
     parameters.add(getYearConfigurableParameter());

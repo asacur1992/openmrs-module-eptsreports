@@ -23,7 +23,7 @@ public class OnArtInitiatedArvDrugsMisaDefinitionCalculation extends BaseFghCalc
             .get(0)
             .getResutls(context);
     for (Integer pId : processorResult.keySet()) {
-      Date date = (Date) processorResult.get(pId);
+      Date date = processorResult.get(pId);
       if (date != null) {
         resultMap.put(pId, new SimpleResult(date, this));
       }

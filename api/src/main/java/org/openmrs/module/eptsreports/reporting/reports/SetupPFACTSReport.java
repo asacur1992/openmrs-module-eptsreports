@@ -13,42 +13,31 @@
  */
 package org.openmrs.module.eptsreports.reporting.reports;
 
-import static org.openmrs.module.reporting.evaluation.parameter.Mapped.mapStraightThrough;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
-import org.openmrs.module.eptsreports.reporting.library.datasets.LocationDataSetDefinition;
-import org.openmrs.module.eptsreports.reporting.library.datasets.MisauResumoMensalPrepDataset;
-import org.openmrs.module.eptsreports.reporting.library.datasets.SismaCodeDataSet;
-import org.openmrs.module.eptsreports.reporting.library.datasets.TxRttDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PFACTDataSet;
 import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
-import org.openmrs.module.eptsreports.reporting.reports.manager.EptsPeriodIndicatorDataExportManager;
+import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
-import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
-import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
-import org.openmrs.module.reporting.report.definition.PeriodIndicatorReportDefinition;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupMisauResumoMensalPrepReport extends EptsPeriodIndicatorDataExportManager {
+public class SetupPFACTSReport extends EptsDataExportManager {
 
-  @Autowired private TxRttDataset txRttDataset;
-
-  @Autowired private MisauResumoMensalPrepDataset misauResumoMensalPrepDataset;
+  @Autowired private PFACTDataSet pfactDataset;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
-  @Autowired private DatimCodeDataSet datimCodeDataset;
-  @Autowired private SismaCodeDataSet sismaCodeDataSet;
+
+  @Autowired private DatimCodeDataSet datimCodeDataSet;
 
   @Override
   public String getVersion() {
@@ -57,52 +46,44 @@ public class SetupMisauResumoMensalPrepReport extends EptsPeriodIndicatorDataExp
 
   @Override
   public String getUuid() {
-    return "604b4df7-6a84-493f-9d52-8bc00133af16";
+    return "9dd248c7-1b01-46bb-bd71-eccb97263385";
   }
 
   @Override
   public String getExcelDesignUuid() {
-    return "00fd06c7-cae4-41cd-a761-4687466ffe32";
+    return "ab76c682-e5c2-4a5d-9c49-8490e706b3ca";
   }
 
   @Override
   public String getName() {
-    return "Resumo Mensal da PrEP – MISAU";
+    return "PFACTS Report";
   }
 
   @Override
   public String getDescription() {
-    return "Este relatório apresenta os dados do resumo mensal da PrEP da Unidade Sanitária para o Programa do ITS-HIV/SIDA, provenientes da ferramenta 'Ficha de Seguimento da Profilaxia Pré- Exposição' e outras existentes no sistema";
+    return "PFACTS Report";
   }
 
   @Override
-  public PeriodIndicatorReportDefinition constructReportDefinition() {
-    final PeriodIndicatorReportDefinition reportDefinition =
-        SetupResumoMensalReport.getDefaultPeriodIndicatorReportDefinition();
+  public ReportDefinition constructReportDefinition() {
+    final ReportDefinition reportDefinition = new ReportDefinition();
 
     reportDefinition.setUuid(this.getUuid());
     reportDefinition.setName(this.getName());
     reportDefinition.setDescription(this.getDescription());
-    reportDefinition.setParameters(this.txRttDataset.getParameters());
+    reportDefinition.setParameters(this.pfactDataset.getParameters());
 
     reportDefinition.addDataSetDefinition(
-        "RM", Mapped.mapStraightThrough(this.misauResumoMensalPrepDataset.constructDataset()));
+        "N", Mapped.mapStraightThrough(this.pfactDataset.constructDSDDataset()));
 
     reportDefinition.addDataSetDefinition(
         "D",
-        Mapped.mapStraightThrough(this.datimCodeDataset.constructDataset(this.getParameters())));
-
-    reportDefinition.addDataSetDefinition(
-        "SC",
-        Mapped.mapStraightThrough(this.sismaCodeDataSet.constructDataset(this.getParameters())));
-
-    reportDefinition.addDataSetDefinition(
-        "HF", mapStraightThrough(new LocationDataSetDefinition()));
+        Mapped.mapStraightThrough(this.datimCodeDataSet.constructDataset(this.getParameters())));
 
     reportDefinition.setBaseCohortDefinition(
         EptsReportUtils.map(
             this.genericCohortQueries.generalSql(
-                "baseCohortQuery", BaseQueries.getBaseCohortQueryPrep()),
+                "baseCohortQuery", BaseQueries.getBaseCohortQuery()),
             "endDate=${endDate},location=${location}"));
 
     return reportDefinition;
@@ -115,8 +96,8 @@ public class SetupMisauResumoMensalPrepReport extends EptsPeriodIndicatorDataExp
       reportDesign =
           this.createXlsReportDesign(
               reportDefinition,
-              "Misau_Resumo_Mensal_PrEP.xls",
-              "Resumo Mensal da PrEP – MISAU",
+              "PFACTS_template.xls",
+              "PFACTS_template",
               this.getExcelDesignUuid(),
               null);
       final Properties props = new Properties();
@@ -127,14 +108,5 @@ public class SetupMisauResumoMensalPrepReport extends EptsPeriodIndicatorDataExp
     }
 
     return Arrays.asList(reportDesign);
-  }
-
-  @Override
-  public List<Parameter> getParameters() {
-    List<Parameter> parameters = new ArrayList<Parameter>();
-    parameters.add(ReportingConstants.START_DATE_PARAMETER);
-    parameters.add(ReportingConstants.END_DATE_PARAMETER);
-    parameters.add(ReportingConstants.LOCATION_PARAMETER);
-    return parameters;
   }
 }

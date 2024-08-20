@@ -43,6 +43,9 @@ public class TxRTTCohortQueries {
   private static final String FIND_PATIENTS_NOT_ELIGIBLE_TO_CD4 =
       "TX_RTT/PATIENTS_IIT_PREVIOUS_PERIOD_NOT_ELIGIBLE_TO_CD4.sql";
 
+  private static final String FIND_AGE_PATIENTS_ON_STAGE_3_4 =
+      "TX_NEW/PATIENTS_WHO_ARE_IN_STAGE_3_OR_4.sql";
+
   final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
   @DocumentedDefinition(value = "TxRttPatientsOnRTT")
@@ -394,6 +397,21 @@ public class TxRTTCohortQueries {
         "  where iit_art_interval >= 365 ");
   }
 
+  // PFACT
+  @DocumentedDefinition(value = "TxRttPLHIVGreater12MonthCalculation")
+  public CohortDefinition getPLHIVGreather12MonthCalculationAndCD4Under200() {
+    return this.getDurationofIITIntervalANDCD4Under200(
+        "Patients who experienced treatment interruption of  12 or more months before returning to treatment",
+        "  where iit_art_interval >= 365 ");
+  }
+
+  @DocumentedDefinition(value = "TxRttPLHIVGreater12MonthCalculation")
+  public CohortDefinition getPLHIVGreather12MonthCalculationAndStage3_4() {
+    return this.getDurationofIITIntervalANDStage3Or4(
+        "Patients who experienced treatment interruption of  12 or more months before returning to treatment",
+        "  where iit_art_interval >= 365 ");
+  }
+
   @DocumentedDefinition(value = "TxRttPLHIVUnknownDesaggregation")
   public CohortDefinition getPLHIVUnknownDesaggregation() {
 
@@ -525,6 +543,62 @@ public class TxRTTCohortQueries {
             this.mappings));
 
     composition.setCompositionString("RTT AND IIT");
+
+    return composition;
+  }
+
+  // PFACTS
+  private CohortDefinition getDurationofIITIntervalANDCD4Under200(
+      final String intervalLabel, final String interval) {
+    final CompositionCohortDefinition composition = new CompositionCohortDefinition();
+
+    composition.setName("IIT -" + intervalLabel);
+    composition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    composition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    composition.addParameter(new Parameter("location", "location", Location.class));
+
+    composition.addSearch(
+        "RTT", EptsReportUtils.map(this.findPatientsWithCD4LessThan200(), this.mappings));
+
+    final String query =
+        EptsQuerysUtils.loadQuery(TxRTTCohortQueries.FIND_PATIENTS_WHO_ARE_IIT_PREVIOUS_PERIOD)
+            + interval;
+
+    composition.addSearch(
+        "IIT",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "Patients who experienced treatment interruption of  <3 months before returning to treatment",
+                query),
+            this.mappings));
+
+    composition.setCompositionString("RTT AND IIT");
+
+    return composition;
+  }
+
+  private CohortDefinition getDurationofIITIntervalANDStage3Or4(
+      final String intervalLabel, final String interval) {
+    final CompositionCohortDefinition composition = new CompositionCohortDefinition();
+
+    composition.setName("IIT -" + intervalLabel);
+    composition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    composition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    composition.addParameter(new Parameter("location", "location", Location.class));
+
+    composition.addSearch(
+        "IIT",
+        EptsReportUtils.map(this.getDurationofIITInterval(intervalLabel, interval), this.mappings));
+
+    composition.addSearch(
+        "STAGE",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsStage3OR4",
+                EptsQuerysUtils.loadQuery(TxRTTCohortQueries.FIND_AGE_PATIENTS_ON_STAGE_3_4)),
+            mappings));
+
+    composition.setCompositionString("STAGE AND IIT");
 
     return composition;
   }
