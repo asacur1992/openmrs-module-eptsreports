@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PrepAvaliacaoDataset extends BaseDataSet {
 
-  private static final String PREP = "PREP/prep_avaliacao.sql";
+  private static final String PREP = "PREP/prep_avaliacao_v3.sql";
 
   public DataSetDefinition loadData(final List<Parameter> parameters) {
 

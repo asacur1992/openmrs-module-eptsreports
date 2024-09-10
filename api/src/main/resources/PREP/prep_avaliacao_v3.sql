@@ -1,11 +1,11 @@
-SELECT 
+SELECT pa.patient_id,
+	
     (SELECT 
 		CASE
 			WHEN obs_in.value_coded = 165287 THEN "Adolescentes e Jovens em Risco"
 			ELSE obs_in.value_coded
 		END _grupo	
 		FROM obs obs_in 
-		INNER JOIN concept cpt on cpt.concept_id = obs_in.concept_id
 		WHERE obs_in.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -13,7 +13,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -21,12 +20,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -34,12 +32,12 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos    
         ) 
-        AND cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd'
+        AND obs_in.concept_id=165196
 		AND obs_in.voided=0
         AND obs_in.value_coded = 165287
     ) AS _GRUPO_ALVO_ADOLESCENTE_JOVEM,
@@ -49,7 +47,6 @@ SELECT
 			ELSE obs_in.value_coded
 		END _grupo	
 		FROM obs obs_in 
-		INNER JOIN concept cpt on cpt.concept_id = obs_in.concept_id
 		WHERE obs_in.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -57,7 +54,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -65,12 +61,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -78,12 +73,12 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
-        AND cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd'
+        AND obs_in.concept_id=165196
 		AND obs_in.voided=0
         AND obs_in.value_coded =1982
     ) AS _GRUPO_ALVO_GESTANTE,
@@ -93,7 +88,6 @@ SELECT
 			ELSE obs_in.value_coded
 		END _grupo	
 		FROM obs obs_in 
-		INNER JOIN concept cpt on cpt.concept_id = obs_in.concept_id
 		WHERE obs_in.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -101,7 +95,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -109,12 +102,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -122,12 +114,12 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
-        AND cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd'
+        AND obs_in.concept_id=165196
 		AND obs_in.voided=0
         AND obs_in.value_coded =6332
     ) AS _GRUPO_ALVO_LACTANTE,
@@ -138,7 +130,6 @@ SELECT
 			ELSE obs_in.value_coded
 		END _keypop	
 		FROM obs obs_in 
-		INNER JOIN concept cpt on cpt.concept_id = obs_in.concept_id
 		WHERE obs_in.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -146,7 +137,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -154,12 +144,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -167,11 +156,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
-        ) AND cpt.uuid= 'c7c0b430-bbc1-4042-a365-ad78a13aef56'
+        ) AND obs_in.concept_id = 23703
 		AND obs_in.voided=0
         AND obs_in.value_coded =1377
     ) AS _GRUPO_ALVO_HOMEM_SEXO_HOMEM,
@@ -182,7 +171,6 @@ SELECT
 			ELSE obs_in.value_coded
 		END _keypop	
 		FROM obs obs_in 
-		INNER JOIN concept cpt on cpt.concept_id = obs_in.concept_id
 		WHERE obs_in.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -190,7 +178,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -198,12 +185,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -211,11 +197,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
-        ) AND cpt.uuid= 'c7c0b430-bbc1-4042-a365-ad78a13aef56'
+        ) AND obs_in.concept_id = 23703
 		AND obs_in.voided=0
         AND obs_in.value_coded =1901
     ) AS _GRUPO_ALVO_TRABALHADOR_SEXO,
@@ -234,7 +220,6 @@ SELECT
 		ELSE obs.value_coded
 		END 	
 		FROM obs 
-		INNER JOIN concept cpt ON cpt.concept_id = obs.concept_id
 		WHERE obs.voided=0 AND obs.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -242,7 +227,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -250,12 +234,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -263,12 +246,12 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
-        AND cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07' 
+        AND obs.concept_id=1054
 	) AS _ESTADO_CIVIL,
     (
 		SELECT 
@@ -293,7 +276,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -301,12 +283,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -314,7 +295,7 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
@@ -325,7 +306,6 @@ SELECT
 		SELECT 
 			obs.obs_datetime
 		FROM obs
-        INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 		WHERE obs.voided=0 AND obs.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -333,7 +313,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -341,12 +320,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -354,20 +332,19 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
         AND obs.value_coded=1256
-        AND cpt.uuid = 'b22efbd1-902f-408e-9232-158f678731ec'
+        AND obs.concept_id=165296
 	) AS _DATA_INICIO_PREP,
     (
 		-- Data de Re-inicio de PrEP
 		SELECT 
 			obs.obs_datetime	AS _data_reinicio_prep
 		FROM obs
-        INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 		WHERE obs.voided=0 AND obs.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -375,7 +352,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -383,12 +359,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -396,20 +371,19 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
         AND obs.value_coded=1705
-        AND cpt.uuid = 'b22efbd1-902f-408e-9232-158f678731ec'
+        AND obs.concept_id=165296
 	) AS _DATA_REINICIO_PREP,
     (
 		-- Data do Teste de HIV Negativo
 		SELECT 
 			obs.value_datetime	AS _data_teste_hiv
 		FROM obs
-        INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 		WHERE obs.voided=0 AND obs.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -417,7 +391,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -425,12 +398,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -438,19 +410,18 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
-        ) 
-        AND cpt.uuid = 'eef8b142-283a-4f63-9da6-0bb7df2744f9'
+        )
+        AND obs.concept_id=165194
 	) AS _DATA_TESTE_HIV_NEGATIVO,
     (
 		-- Data de levantamento e a mesma que a da consulta de inicio de PrEP se tiver levantado no minimo 1 medicamento nos 3 regimes
 		SELECT 
 			obs.obs_datetime
 		FROM obs
-        INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 		WHERE obs.voided=0 AND obs.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -458,7 +429,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -466,12 +436,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -479,13 +448,13 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
         AND obs.value_coded=1256
-        AND cpt.uuid = 'b22efbd1-902f-408e-9232-158f678731ec'
+        AND obs.concept_id=165296
 	) AS _DATA_LEVANTAMENTO_ARV,
     (
 		-- Numero de frascos levantados TDF_3TC
@@ -495,7 +464,6 @@ SELECT
 			ELSE 0
 			END
         FROM obs obs_out
-        INNER JOIN concept cpt on cpt.concept_id = obs_out.concept_id
 		WHERE obs_out.voided=0 AND obs_out.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -503,7 +471,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -511,12 +478,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -524,13 +490,13 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
 		) 
-		AND cpt.uuid = '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
         AND obs_out.value_coded = 165214
+        AND obs_out.concept_id=165213
            
     ) AS _NUMERO_FRASCOS_LEVANTADOS_TDF_3TC,
     (
@@ -541,7 +507,6 @@ SELECT
 			ELSE 0
 			END
         FROM obs obs_out
-        INNER JOIN concept cpt on cpt.concept_id = obs_out.concept_id
 		WHERE obs_out.voided=0 AND obs_out.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -549,7 +514,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -557,12 +521,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				)  AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -570,13 +533,13 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
 		) 
-		AND cpt.uuid = '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
         AND obs_out.value_coded = 165215
+        AND obs_out.concept_id = 165213
            
     ) AS _NUMERO_FRASCOS_LEVANTADOS_TDF_FTC,
     (
@@ -586,7 +549,6 @@ SELECT
 				(SELECT 
 						obs_reg_3.value_numeric AS _numero_frascos_regime_outro
 					FROM obs obs_reg_3
-					INNER JOIN concept cpt_reg_3 on cpt_reg_3.concept_id = obs_reg_3.concept_id
 					WHERE obs_reg_3.voided=0 AND obs_reg_3.encounter_id = (
 						SELECT ec.encounter_id FROM encounter ec
 							WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -594,7 +556,6 @@ SELECT
 							-- consulta com resposta do grupo de analise
 							SELECT enc.encounter_id FROM encounter enc 
 							INNER JOIN obs on obs.encounter_id = enc.encounter_id
-							INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 							WHERE enc.patient_id = pa.patient_id
 							AND enc.encounter_type=80 
 							AND enc.encounter_datetime between :startDate AND :endDate  
@@ -602,12 +563,11 @@ SELECT
 							AND enc.voided=0
 							AND obs.voided=0
 							AND obs.value_coded IN (165287,1982,6332,1377,1901)
-							AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+							AND obs.concept_id IN (165196,23703)
 					)  AND ec.encounter_id IN (
 							-- Consulta que levantou pelo menos 1 regime de medicamento
 							SELECT enc.encounter_id FROM encounter enc 
 							INNER JOIN obs on obs.encounter_id = enc.encounter_id
-							INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 							WHERE enc.patient_id = pa.patient_id
 							AND enc.encounter_type=80 
 							AND enc.encounter_datetime between :startDate AND :endDate  
@@ -615,16 +575,15 @@ SELECT
 							AND enc.voided=0
 							AND obs.voided=0
 							AND obs.value_coded IN (165214,165215,165216)
-							AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+							AND obs.concept_id = 165213
 				)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
 				-- END da Primeira consulta que satisfaz os criterios exigidos
 			) 
-			AND cpt_reg_3.uuid = '18d4175b-df7c-4659-a266-38e9ff60278e')
+			AND obs_reg_3.concept_id = 165217)
 			ELSE 0
 			END
         FROM obs obs_out
-        INNER JOIN concept cpt on cpt.concept_id = obs_out.concept_id
 		WHERE obs_out.voided=0 AND obs_out.encounter_id = (
 				SELECT ec.encounter_id FROM encounter ec
 				WHERE ec.encounter_type=80 AND ec.patient_id=pa.patient_id
@@ -632,7 +591,6 @@ SELECT
 						-- consulta com resposta do grupo de analise
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -640,12 +598,11 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165287,1982,6332,1377,1901)
-						AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
+						AND obs.concept_id IN (165196,23703)
 				) AND ec.encounter_id IN (
 						-- Consulta que levantou pelo menos 1 regime de medicamento
 						SELECT enc.encounter_id FROM encounter enc 
 						INNER JOIN obs on obs.encounter_id = enc.encounter_id
-						INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
 						WHERE enc.patient_id = pa.patient_id
 						AND enc.encounter_type=80 
 						AND enc.encounter_datetime between :startDate AND :endDate  
@@ -653,13 +610,13 @@ SELECT
 						AND enc.voided=0
 						AND obs.voided=0
 						AND obs.value_coded IN (165214,165215,165216)
-						AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+						AND obs.concept_id = 165213
 			)
 				ORDER BY ec.encounter_datetime ASC limit 0,1
            -- END da Primeira consulta que satisfaz os criterios exigidos
         ) 
-		AND cpt.uuid = '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
         AND obs_out.value_coded = 165216
+        AND obs_out.concept_id = 165213
            
     ) AS _NUMERO_FRASCOS_LEVANTADOS_OUTRO,
     -- Colunas da consulta de seguimento Numero 1
@@ -831,432 +788,387 @@ SELECT
 		) AND obs_s.concept_id = 165228  AND obs_s.voided=0
     ) AS _VISITA_3_DATA_PROXIMA_CONSULTA_MARCADA,
     (
-		SELECT MIN(tabela_interrupccao._data_interr) FROM (
-				(-- Pega a data de interrupcao na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, MIN(obs_inter.value_datetime) AS _data_interr
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
-
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-
-				UNION
-
-			(-- Pega a data de interrupcao na 1a consulta de seguimento
-				SELECT 
-					seg.patient_id AS pat_id, MIN(seg.encounter_datetime)  AS _data_interr
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-
-				UNION
-
-			(-- Pega a data de interrupcao na 2a consulta de seguimento
-				SELECT 
-					seg.patient_id AS pat_id, MIN(seg.encounter_datetime)  AS _data_interr
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-
-				UNION
-
-				(-- Pega a data de interrupcao na 3a consulta de seguimento
-					SELECT 
-						seg.patient_id AS pat_id, MIN(seg.encounter_datetime)  AS _data_interr
-					FROM encounter seg 
-					INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-					WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-					AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-					AND seg.encounter_datetime between :startDate AND :endDate 
-
-					GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-			) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id group by tabela_interrupccao.pat_id
+		SELECT MIN(tabela_interrupccao.data_int) FROM (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+			) AS tabela_interrupccao WHERE tabela_interrupccao.patient_id=pa.patient_id group by tabela_interrupccao.patient_id
     ) AS _DATA_PREP_INTERROMPIDA,
-    (
-		SELECT tabela_interrupccao._motivo FROM (
-				(-- Pega na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, obs_inter.value_datetime AS _data_interr,
-                        (SELECT CASE WHEN obs_mtv.value_coded=1169 THEN "INFECTADO COM HIV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = ec.encounter_id) AS _motivo
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
+    (select "INFECTADO COM HIV"  from (
+           
+           select seguimento.patient_id, seguimento.data_int from 
+           
+			( select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id ) interno inner join (  
+									select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+									from 	patient p				
+									inner join encounter e on p.patient_id=e.patient_id
+									inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+									obsScreen.value_coded =1169 and  obsScreen.voided=0
+									where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+										e.encounter_datetime between :startDate and :endDate
+										group by p.patient_id) seguimento on seguimento.patient_id = interno.patient_id
+												where seguimento.data_int = interno.data_int
+    
+				union
+					select xx.patient_id,  xx.data_int from (
+							select 	p.patient_id, min(obs_data.obs_datetime) data_int
+							from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) interrup inner join (
+                    
+                    select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded =1169 and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+                    ) xx on interrup.patient_id = xx.patient_id where interrup.data_int = xx.data_int 
 
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-                
-                UNION
-              
-			(-- Pega na 1a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=1169 THEN "INFECTADO COM HIV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-                
-                UNION
-              
-			(-- Pega na 2a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=1169 THEN "INFECTADO COM HIV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-                
-                UNION
-              
-			(-- Pega na 3a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=1169 THEN "INFECTADO COM HIV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-        ) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id order by tabela_interrupccao._data_interr ASC limit 0,1
+           ) interrupa inner join ( 		
+				select 		dentro.patient_id, min(dentro.data_int) data_int from (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) dentro group by dentro.patient_id
+			) tabela_interrupccao on tabela_interrupccao.patient_id = interrupa.patient_id
+					where  interrupa.patient_id = pa.patient_id and  tabela_interrupccao.data_int = interrupa.data_int  
+                    group by pa.patient_id
     ) AS _MOTIVO_INFECTADO_HIV,
-    (
-		SELECT tabela_interrupccao._motivo FROM (
-				(-- Pega na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, obs_inter.value_datetime AS _data_interr,
-                        (SELECT CASE WHEN obs_mtv.value_coded=2015 THEN "EFEITOS SECUNDARIOS ARV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = ec.encounter_id) AS _motivo
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
+    (select "EFEITOS SECUNDARIOS ARV"  from (
+           
+           select seguimento.patient_id, seguimento.data_int from 
+           
+			( select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id ) interno inner join (  
+									select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+									from 	patient p				
+									inner join encounter e on p.patient_id=e.patient_id
+									inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+									obsScreen.value_coded =2015 and  obsScreen.voided=0
+									where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+										e.encounter_datetime between :startDate and :endDate
+										group by p.patient_id) seguimento on seguimento.patient_id = interno.patient_id
+												where seguimento.data_int = interno.data_int
+    
+				union
+					select xx.patient_id,  xx.data_int from (
+							select 	p.patient_id, min(obs_data.obs_datetime) data_int
+							from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) interrup inner join (
+                    
+                    select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded =2015 and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+                    ) xx on interrup.patient_id = xx.patient_id where interrup.data_int = xx.data_int 
 
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-                
-                UNION
-              
-			(-- Pega na 1a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=2015 THEN "EFEITOS SECUNDARIOS ARV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-                
-                UNION
-              
-			(-- Pega na 2a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=2015 THEN "EFEITOS SECUNDARIOS ARV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-                
-                UNION
-              
-			(-- Pega na 3a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=2015 THEN "EFEITOS SECUNDARIOS ARV" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-        ) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id order by tabela_interrupccao._data_interr ASC limit 0,1
+           ) interrupa inner join ( 		
+				select 		dentro.patient_id, min(dentro.data_int) data_int from (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) dentro group by dentro.patient_id
+			) tabela_interrupccao on tabela_interrupccao.patient_id = interrupa.patient_id
+					where  interrupa.patient_id = pa.patient_id and  tabela_interrupccao.data_int = interrupa.data_int  
+                    group by pa.patient_id
     ) AS _MOTIVO_EFEITO_SECUNDARIO,
-    (
-		SELECT tabela_interrupccao._motivo FROM (
-				(-- Pega na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, obs_inter.value_datetime AS _data_interr,
-                        (SELECT CASE WHEN obs_mtv.value_coded=165226 THEN "SEM MAIS RISCOS SUBSTANCIAIS" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = ec.encounter_id) AS _motivo
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
+    (select "SEM MAIS RISCOS SUBSTANCIAIS"  from (
+           
+           select seguimento.patient_id, seguimento.data_int from 
+           
+			( select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id ) interno inner join (  
+									select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+									from 	patient p				
+									inner join encounter e on p.patient_id=e.patient_id
+									inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+									obsScreen.value_coded =165226 and  obsScreen.voided=0
+									where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+										e.encounter_datetime between :startDate and :endDate
+										group by p.patient_id) seguimento on seguimento.patient_id = interno.patient_id
+												where seguimento.data_int = interno.data_int
+    
+				union
+					select xx.patient_id,  xx.data_int from (
+							select 	p.patient_id, min(obs_data.obs_datetime) data_int
+							from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) interrup inner join (
+                    
+                    select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded =165226 and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+                    ) xx on interrup.patient_id = xx.patient_id where interrup.data_int = xx.data_int 
 
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-                
-                UNION
-              
-			(-- Pega na 1a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165226 THEN "SEM MAIS RISCOS SUBSTANCIAIS" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-                
-                UNION
-              
-			(-- Pega na 2a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165226 THEN "SEM MAIS RISCOS SUBSTANCIAIS" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-                
-                UNION
-              
-			(-- Pega na 3a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165226 THEN "SEM MAIS RISCOS SUBSTANCIAIS" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-        ) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id order by tabela_interrupccao._data_interr ASC limit 0,1
+           ) interrupa inner join ( 		
+				select 		dentro.patient_id, min(dentro.data_int) data_int from (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) dentro group by dentro.patient_id
+			) tabela_interrupccao on tabela_interrupccao.patient_id = interrupa.patient_id
+					where  interrupa.patient_id = pa.patient_id and  tabela_interrupccao.data_int = interrupa.data_int  
+                    group by pa.patient_id
     ) AS _MOTIVO_SEM_MAIS_RISCO,
-    (
-		SELECT tabela_interrupccao._motivo FROM (
-				(-- Pega na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, obs_inter.value_datetime AS _data_interr,
-                        (SELECT CASE WHEN obs_mtv.value_coded=165227 THEN "PREFERENCIA DO UTENTE" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = ec.encounter_id) AS _motivo
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
+    (select "PREFERENCIA DO UTENTE"  from (
+           
+           select seguimento.patient_id, seguimento.data_int from 
+           
+			( select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id ) interno inner join (  
+									select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+									from 	patient p				
+									inner join encounter e on p.patient_id=e.patient_id
+									inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+									obsScreen.value_coded =165227 and  obsScreen.voided=0
+									where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+										e.encounter_datetime between :startDate and :endDate
+										group by p.patient_id) seguimento on seguimento.patient_id = interno.patient_id
+												where seguimento.data_int = interno.data_int
+    
+				union
+					select xx.patient_id,  xx.data_int from (
+							select 	p.patient_id, min(obs_data.obs_datetime) data_int
+							from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) interrup inner join (
+                    
+                    select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded =165227 and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+                    ) xx on interrup.patient_id = xx.patient_id where interrup.data_int = xx.data_int 
 
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-                
-                UNION
-              
-			(-- Pega na 1a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165227 THEN "PREFERENCIA DO UTENTE" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-                
-                UNION
-              
-			(-- Pega na 2a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165227 THEN "PREFERENCIA DO UTENTE" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-                
-                UNION
-              
-			(-- Pega na 3a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=165227 THEN "PREFERENCIA DO UTENTE" ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-        ) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id order by tabela_interrupccao._data_interr ASC limit 0,1
+           ) interrupa inner join ( 		
+				select 		dentro.patient_id, min(dentro.data_int) data_int from (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) dentro group by dentro.patient_id
+			) tabela_interrupccao on tabela_interrupccao.patient_id = interrupa.patient_id
+					where  interrupa.patient_id = pa.patient_id and  tabela_interrupccao.data_int = interrupa.data_int  
+                    group by pa.patient_id
     ) AS _MOTIVO_PREFERENCIA_UTENTE,
-    (
-		SELECT tabela_interrupccao._motivo FROM (
-				(-- Pega na Ficha inicial na parte do resumo
-					SELECT 
-						ec.patient_id AS pat_id, obs_inter.value_datetime AS _data_interr,
-                        (SELECT CASE WHEN obs_mtv.value_coded=5622 THEN obs_mtv.comments ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = ec.encounter_id) AS _motivo
-					FROM obs obs_inter
-					INNER JOIN encounter ec ON ec.encounter_id = obs_inter.encounter_id
+    (select "OUTRO"  from (
+           
+           select seguimento.patient_id, seguimento.data_int from 
+           
+			( select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id ) interno inner join (  
+									select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+									from 	patient p				
+									inner join encounter e on p.patient_id=e.patient_id
+									inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+									obsScreen.value_coded =5622 and  obsScreen.voided=0
+									where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+										e.encounter_datetime between :startDate and :endDate
+										group by p.patient_id) seguimento on seguimento.patient_id = interno.patient_id
+												where seguimento.data_int = interno.data_int
+    
+				union
+					select xx.patient_id,  xx.data_int from (
+							select 	p.patient_id, min(obs_data.obs_datetime) data_int
+							from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) interrup inner join (
+                    
+                    select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded =5622 and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id 
+                    ) xx on interrup.patient_id = xx.patient_id where interrup.data_int = xx.data_int 
 
-					WHERE obs_inter.voided = 0 AND obs_inter.concept_id = 1256 
-					AND ec.encounter_id IN (
-							-- Pacientes que Pertencem ao grupo de analise
-							SELECT ec_g.encounter_id FROM encounter ec_g
-							INNER JOIN obs obs_grupo on obs_grupo.encounter_id = ec_g.encounter_id
-							WHERE obs_grupo.value_coded IN (165287,1982,6332,1377,1901) AND ec_g.encounter_datetime between :startDate AND :endDate 
-							AND ec_g.location_id =:location
-					) AND ec.encounter_id IN (
-							-- Pacientes que Levantaram pelo menos 1 regime de medicamento
-							SELECT ec_med.encounter_id FROM encounter ec_med
-							INNER JOIN obs obs_lvt_med on obs_lvt_med.encounter_id = ec_med.encounter_id
-							WHERE obs_lvt_med.value_coded IN (165214,165215,165216) AND ec_med.encounter_datetime between :startDate AND :endDate 
-							AND ec_med.location_id =:location
-					)
-				AND ec.encounter_type=80 
-				AND ec.encounter_datetime between :startDate AND :endDate 
-				AND ec.location_id =:location
-        
-				GROUP BY ec.patient_id ORDER BY obs_inter.value_datetime)
-                
-                UNION
-              
-			(-- Pega na 1a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=5622 THEN obs_mtv.comments ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 0,1)
-                
-                UNION
-              
-			(-- Pega na 2a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=5622 THEN obs_mtv.comments ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 1,1)
-                
-                UNION
-              
-			(-- Pega na 3a consulta de seguimento
-                SELECT 
-					seg.patient_id AS pat_id ,seg.encounter_datetime  AS _data_interr,
-                    (SELECT CASE WHEN obs_mtv.value_coded=5622 THEN obs_mtv.comments ELSE "" END FROM obs obs_mtv WHERE obs_mtv.concept_id=165225 AND obs_mtv.voided=0 AND obs_mtv.encounter_id = seg.encounter_id) AS _motivo
-				FROM encounter seg 
-				INNER JOIN obs obs_mtv ON obs_mtv.encounter_id = seg.encounter_id
-				WHERE seg.voided=0 AND seg.encounter_type=81 AND seg.location_id =:location
-				AND obs_mtv.concept_id = 165225 AND obs_mtv.value_coded IN (1169,2015,165226,165227,5622) AND obs_mtv.voided=0 
-				AND seg.encounter_datetime between :startDate AND :endDate 
-
-				GROUP BY seg.patient_id ORDER BY seg.encounter_datetime  ASC limit 2,1)
-        ) AS tabela_interrupccao WHERE tabela_interrupccao.pat_id=pa.patient_id order by tabela_interrupccao._data_interr ASC limit 0,1
+           ) interrupa inner join ( 		
+				select 		dentro.patient_id, min(dentro.data_int) data_int from (
+			select 	p.patient_id, min(obsScreen.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id and obsScreen.concept_id=165225 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622) and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =81 and e.location_id=:location and
+         					e.encounter_datetime between :startDate and :endDate
+         			group by p.patient_id
+                    union
+                     select 	p.patient_id, min(obs_data.obs_datetime) data_int
+         			from 	patient p				
+         					inner join encounter e on p.patient_id=e.patient_id
+         					inner join obs obsScreen on obsScreen.encounter_id=e.encounter_id
+                            inner join obs obs_data on obs_data.encounter_id = e.encounter_id
+                            and obsScreen.concept_id=165225 and obs_data.concept_id = 165292 and obs_data.value_coded = 1260 and
+                             obsScreen.value_coded in (1169,2015,165226,165227,5622)  and  obsScreen.voided=0
+         			where 	e.voided=0 and p.voided=0 and e.encounter_type =80 and e.location_id=:location and
+         					obs_data.obs_datetime between :startDate and :endDate
+         			group by p.patient_id ) dentro group by dentro.patient_id
+			) tabela_interrupccao on tabela_interrupccao.patient_id = interrupa.patient_id
+					where  interrupa.patient_id = pa.patient_id and  tabela_interrupccao.data_int = interrupa.data_int  
+                    group by pa.patient_id
     ) AS _MOTIVO_OUTRO
     
 FROM patient pa
@@ -1266,20 +1178,18 @@ where pa.patient_id IN (
 	-- Pacientes que Pertencem ao grupo de analise
 	SELECT enc.patient_id FROM encounter enc 
     INNER JOIN obs on obs.encounter_id = enc.encounter_id
-    INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
     WHERE 
 		enc.encounter_type=80 
 		AND enc.encounter_datetime between :startDate AND :endDate  
         AND enc.location_id =:location 
         AND enc.voided=0
         AND obs.voided=0
+		AND obs.concept_id IN (165196,23703)
         AND obs.value_coded IN (165287,1982,6332,1377,1901)
-        AND (cpt.uuid= '279a7f80-b3cd-45c2-b16b-4706212416fd' || cpt.uuid= 'e1d80fbe-1d5f-11e0-b929-000c29ad1d07')
 )  AND pa.patient_id IN (
 	-- Pacientes que Levantaram pelo menos 1 regime de medicamento
 	SELECT enc.patient_id FROM encounter enc 
     INNER JOIN obs on obs.encounter_id = enc.encounter_id
-    INNER JOIN concept cpt on cpt.concept_id = obs.concept_id
     WHERE 
 		enc.encounter_type=80 
 		AND enc.encounter_datetime between :startDate AND :endDate 
@@ -1287,5 +1197,5 @@ where pa.patient_id IN (
         AND enc.voided=0
         AND obs.voided=0
         AND obs.value_coded IN (165214,165215,165216)
-        AND cpt.uuid= '0bfae0d8-e2aa-48e4-b4a4-c157021b4f15'
+        AND obs.concept_id = 165213
 ) 
