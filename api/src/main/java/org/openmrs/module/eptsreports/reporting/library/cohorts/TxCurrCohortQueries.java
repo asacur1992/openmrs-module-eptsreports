@@ -34,6 +34,26 @@ public class TxCurrCohortQueries {
   private static final String FIND_PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART =
       "TX_CURR/PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART.sql";
 
+  private static final String FIND_PATIENTS_WITH_CD4_LESS_THAN_200 = "PFACT/CD4_UNDER_200.sql";
+
+  private static final String FIND_PATIENTS_TB_LAM = "PFACT/TB_LAM.sql";
+
+  private static final String FIND_PATIENTS_TB_GENEXPERT = "PFACT/GENEXPERT.sql";
+
+  private static final String FIND_PATIENTS_TB_CRAG = "PFACT/CRAG.sql";
+
+  private static final String FIND_PATIENTS_DAH = "PFACT/DAH.sql";
+
+  private static final String FIND_PATIENTS_TB_DIAGNOSTIC = "PFACT/DIAGNOSTICO_TB.sql";
+
+  private static final String FIND_PATIENTS_TB_TREATMENT = "PFACT/TB_TREATMENT.sql";
+
+  private static final String FIND_PATIENTS_CRAG_POSITIVE = "PFACT/CRAG_POSITIVE.sql";
+
+  private static final String FIND_PATIENTS_MCC_DIAGNOSTIC = "PFACT/DIAGNOSTICO_MENINGITE.sql";
+
+  private static final String FIND_PATIENTS_MCC_TREATMENT = "PFACT/TRATAMENTO_MENINGITE.sql";
+
   @Autowired private GenericCohortQueries genericCohorts;
 
   @DocumentedDefinition(value = "patientsWhoAreActiveOnART")
@@ -83,6 +103,267 @@ public class TxCurrCohortQueries {
             mappings));
 
     definition.setCompositionString("CURRENTLY-ON-ART AND COMMUNITY-DISPENSATION-CM");
+
+    return definition;
+  }
+
+  // PFACT
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnARTWithLessThan200")
+  public CohortDefinition findPatientsWithLessThan200CD4WhoAreActiveOnARTTBLAM() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("patientsWhoAreActiveOnARTWithLessThan200");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "CD4-LESS-200",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCd4LessThan200",
+                EptsQuerysUtils.loadQuery(FIND_PATIENTS_WITH_CD4_LESS_THAN_200)),
+            mappings));
+
+    definition.addSearch(
+        "TB-LAM",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_TB_LAM)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND CD4-LESS-200 AND TB-LAM");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnARTWithLessThan200")
+  public CohortDefinition findPatientsWithLessThan200CD4OnARTANDGenExpert() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("patientsWhoAreActiveOnARTWithLessThan200");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "CD4-LESS-200",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCd4LessThan200",
+                EptsQuerysUtils.loadQuery(FIND_PATIENTS_WITH_CD4_LESS_THAN_200)),
+            mappings));
+
+    definition.addSearch(
+        "TB-GEN",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_TB_GENEXPERT)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND CD4-LESS-200 AND TB-GEN");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnARTWithLessThan200AndCrag")
+  public CohortDefinition findPatientsWithLessThan200CD4OnARTANDCrag() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("patientsWhoAreActiveOnARTWithLessThan200Crag");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "CD4-LESS-200",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCd4LessThan200",
+                EptsQuerysUtils.loadQuery(FIND_PATIENTS_WITH_CD4_LESS_THAN_200)),
+            mappings));
+
+    definition.addSearch(
+        "TB-CRAG",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_TB_CRAG)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND CD4-LESS-200 AND TB-CRAG");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAH")
+  public CohortDefinition findPatientsinDAH() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndDiagnosticTB");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART", EptsReportUtils.map(this.findPatientsWhoAreActiveOnART(), mappings));
+
+    definition.addSearch(
+        "DAH",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientDAH", EptsQuerysUtils.loadQuery(FIND_PATIENTS_DAH)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART AND DAH");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAHAndDiagnosticTB")
+  public CohortDefinition findPatientsinDAHAndDiagnosticTB() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndDiagnosticTB");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART-DAH", EptsReportUtils.map(this.findPatientsinDAH(), mappings));
+
+    definition.addSearch(
+        "TB",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_TB_DIAGNOSTIC)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART-DAH AND TB");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAHAndDiagnosticTB")
+  public CohortDefinition findPatientsinDAHAndDiagnosticTBTreatment() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndDiagnosticTB");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART-TB",
+        EptsReportUtils.map(this.findPatientsinDAHAndDiagnosticTB(), mappings));
+
+    definition.addSearch(
+        "TB-TREAT",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_TB_TREATMENT)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART-TB AND TB-TREAT");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAHAndCragPositive")
+  public CohortDefinition findPatientsinDAHAndCragPositive() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndCragPositive");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART-DAH", EptsReportUtils.map(this.findPatientsinDAH(), mappings));
+
+    definition.addSearch(
+        "CRAG-POSITIVE",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_CRAG_POSITIVE)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART-DAH AND CRAG-POSITIVE");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAHAndMCCDiagnostic")
+  public CohortDefinition findPatientsinDAHAndMCCDiagnostic() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndCragPositive");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART-DAH", EptsReportUtils.map(this.findPatientsinDAH(), mappings));
+
+    definition.addSearch(
+        "MCC",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_MCC_DIAGNOSTIC)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART-DAH AND MCC");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findPatientsinDAHAndMCCTreatment")
+  public CohortDefinition findPatientsinDAHAndMCCTreatment() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findPatientsinDAHAndCragPositive");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "CURRENTLY-ON-ART-DAH",
+        EptsReportUtils.map(this.findPatientsinDAHAndMCCDiagnostic(), mappings));
+
+    definition.addSearch(
+        "TREATMENT",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientTBLAM", EptsQuerysUtils.loadQuery(FIND_PATIENTS_MCC_TREATMENT)),
+            mappings));
+
+    definition.setCompositionString("CURRENTLY-ON-ART-DAH AND TREATMENT");
 
     return definition;
   }

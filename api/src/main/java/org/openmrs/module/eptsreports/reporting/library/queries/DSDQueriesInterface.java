@@ -719,6 +719,14 @@ public interface DSDQueriesInterface {
           + "	and (TIMESTAMPDIFF(year,birthdate,:endDate)) 			    ";
     }
 
+    public static final String findPatientsByAgeRangePFACT() {
+
+      return "select patient.patient_id from patient                         		"
+          + "	inner join person on person.person_id = patient.patient_id		"
+          + "where patient.voided = 0 and person.voided = 0 AND birthdate IS NOT NULL "
+          + "	and (TIMESTAMPDIFF(year,birthdate,:endDate)) 		    ";
+    }
+
     public static String findPatientsWhoArePregnantsAndBreastFeeding(final TypePTV typePTV) {
 
       String query =

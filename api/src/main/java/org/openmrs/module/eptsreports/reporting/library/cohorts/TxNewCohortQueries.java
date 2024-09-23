@@ -62,6 +62,9 @@ public class TxNewCohortQueries {
   private static final String FIND_AGE_PATIENTS_ON_TX_NEW =
       "TX_NEW/PATIENTS_AGE_AT_THE_DATE_OF_INITIATION_ON_ART.sql";
 
+  private static final String FIND_AGE_PATIENTS_ON_STAGE_3_4 =
+      "TX_NEW/PATIENTS_WHO_ARE_IN_STAGE_3_OR_4.sql";
+
   /**
    * PATIENTS WITH UPDATED DATE OF DEPARTURE IN THE ART SERVICE Are patients with date of delivery
    * updated in the tarv service. Note that the 'Start Date' and 'End Date' parameters refer to the
@@ -354,6 +357,32 @@ public class TxNewCohortQueries {
             mappings));
 
     txNewCompositionCohort.setCompositionString("START-ART AND WITH-COMMUNITY-DISPENSATION");
+
+    return txNewCompositionCohort;
+  }
+
+  public CohortDefinition getTxNewStage3OR4CompositionCohort() {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+
+    txNewCompositionCohort.setName("Patient TX NEW IN STAGE 3 OR 4");
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    txNewCompositionCohort.addSearch(
+        "START-ART", EptsReportUtils.map(this.getTxNewCompositionCohort("TX NEW"), mappings));
+
+    txNewCompositionCohort.addSearch(
+        "STAGE",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPatientsStage3OR4",
+                EptsQuerysUtils.loadQuery(TxNewCohortQueries.FIND_AGE_PATIENTS_ON_STAGE_3_4)),
+            mappings));
+
+    txNewCompositionCohort.setCompositionString("START-ART AND STAGE");
 
     return txNewCompositionCohort;
   }

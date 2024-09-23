@@ -65,6 +65,7 @@ public class EptsReportsActivator extends BaseModuleActivator {
   }
 
   /** @see #started() */
+  @Override
   public void started() {
 
     try {
@@ -92,6 +93,7 @@ public class EptsReportsActivator extends BaseModuleActivator {
   }
 
   /** @see #stopped() */
+  @Override
   public void stopped() {
     log.info("Stopped EPTS Reports Module");
   }
