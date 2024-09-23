@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTEIDCommunityDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTEIDDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTHEICommunityDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTHEIDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PrepCtCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
@@ -55,6 +59,10 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
   @Autowired private PrepNewCommunityDataset prepNewCommunityDataset;
 
   @Autowired private PrepCtCommunityDataset prepCtCommunityDataset;
+ 
+  @Autowired private PMTCTEIDCommunityDataSet pmtcteidDataSet;
+
+  @Autowired private PMTCTHEICommunityDataSet pmtctheiDataSet;
 
   @Autowired protected GenericCohortQueries genericCohortQueries;
 
@@ -117,6 +125,12 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
     reportDefinition.addDataSetDefinition(
         "PrEP_CT", Mapped.mapStraightThrough(this.prepCtCommunityDataset.constructPrepCtDataset()));
+
+    reportDefinition.addDataSetDefinition(
+        "PMTCT_EID", Mapped.mapStraightThrough(this.pmtcteidDataSet.constructPMTCTEIDDataset()));
+
+    reportDefinition.addDataSetDefinition(
+        "PMTCT_HEI", Mapped.mapStraightThrough(this.pmtctheiDataSet.constructPMTCTHEIDataset()));
 
     reportDefinition.addDataSetDefinition(
         "D",

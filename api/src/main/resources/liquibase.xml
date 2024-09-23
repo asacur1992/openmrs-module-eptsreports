@@ -23,14 +23,16 @@
 
 
 
-	<changeSet id="20240920-16:00" author="csaude" runAlways="true">
+	<changeSet id="20240920-16:00" author="csaude">
 
 		<comment>
 			SESP Release version 3.18.0
 		</comment>
 
-		<sqlFile
-			path="_metadata/SESPMetadataForRelease318_20092024.sql" />
+		<sqlFile path="_metadata/SESPMetadataForRelease318_20092024.sql" />
+		<sqlFile path="_metadata/procedure1.sql" encoding="UTF-8" splitStatements="true" endDelimiter="#" />
+		<sql>CALL ConvsetDataReconstruction()</sql>
+		<sql>DROP PROCEDURE IF EXISTS ConvsetDataReconstruction</sql>
 	</changeSet>
 
 	<!--changeSet id="20230808-001" author="icap">

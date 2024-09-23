@@ -389,10 +389,8 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         "artStartState=txcurrPreviouslyOnArt|diagnostictest=additonalDiagnostic");
   }
 
-
   private void addSection6A(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
     CohortIndicator positiveResults =
-
         this.getIndicator(
             this.tb4MontlyCascadeCohortQuery.getDenominatorAndPositiveOrNegativeCohort(
                 this.tb4MontlyCascadeCohortQuery.getAllPositiveTestResults(),
@@ -494,7 +492,6 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         mappings,
         "artStartState=txcurrNewlyOnArt|diagnostictest=additonalDiagnostic");
 
-
     this.addRow(
         dataSetDefinition,
         "TBD-PRO-P",
@@ -507,7 +504,6 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
 
   private void addSection6B(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
     CohortIndicator negativeResults =
-
         this.getIndicator(
             this.tb4MontlyCascadeCohortQuery.getDenominatorAndPositiveOrNegativeCohort(
                 this.tb4MontlyCascadeCohortQuery.getAllNegativeTestResults(),
