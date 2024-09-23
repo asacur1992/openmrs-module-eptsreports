@@ -20,9 +20,7 @@ import java.util.Properties;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.DatimCodeDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTEIDCommunityDataSet;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTEIDDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTHEICommunityDataSet;
-import org.openmrs.module.eptsreports.reporting.library.datasets.PMTCTHEIDataSet;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PrepCtCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.PrepNewCommunityDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.TRFINCommunityDataset;
@@ -59,7 +57,7 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
   @Autowired private PrepNewCommunityDataset prepNewCommunityDataset;
 
   @Autowired private PrepCtCommunityDataset prepCtCommunityDataset;
- 
+
   @Autowired private PMTCTEIDCommunityDataSet pmtcteidDataSet;
 
   @Autowired private PMTCTHEICommunityDataSet pmtctheiDataSet;

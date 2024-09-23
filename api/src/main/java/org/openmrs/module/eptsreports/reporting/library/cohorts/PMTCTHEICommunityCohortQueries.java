@@ -14,7 +14,6 @@
 package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
-
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -27,9 +26,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PMTCTHEICommunityCohortQueries {
 
-
   @Autowired private GenericCohortQueries genericCohorts;
-  
+
   @Autowired private PMTCTHEICohortQueries pmtctHeiCohort;
 
   public CohortDefinition getNumberOfInfantsWhoHadVirologicHIVTestResults() {
@@ -43,16 +41,17 @@ public class PMTCTHEICommunityCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     composition.addSearch(
-            "NUMERATOR",
-            EptsReportUtils.map(this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestResults(), mappings));
-    
+        "NUMERATOR",
+        EptsReportUtils.map(
+            this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestResults(), mappings));
+
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     composition.setCompositionString("NUMERATOR AND COMMUNITY-DISPENSATION");
 
@@ -70,16 +69,18 @@ public class PMTCTHEICommunityCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     composition.addSearch(
-            "NUMERATOR",
-            EptsReportUtils.map(this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestWithPositiveTestResults(), mappings));
-    
+        "NUMERATOR",
+        EptsReportUtils.map(
+            this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestWithPositiveTestResults(),
+            mappings));
+
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     composition.setCompositionString("NUMERATOR AND COMMUNITY-DISPENSATION");
 
@@ -97,18 +98,19 @@ public class PMTCTHEICommunityCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     composition.addSearch(
-            "NUMERATOR",
-            EptsReportUtils.map(this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestWithNegativeTestResults(), mappings));
+        "NUMERATOR",
+        EptsReportUtils.map(
+            this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestWithNegativeTestResults(),
+            mappings));
 
-  
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
-    
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
+
     composition.setCompositionString("NUMERATOR AND COMMUNITY-DISPENSATION");
 
     return composition;
@@ -126,16 +128,19 @@ public class PMTCTHEICommunityCohortQueries {
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
     composition.addSearch(
-            "POSITIVE-RESULTS",
-            EptsReportUtils.map(this.pmtctHeiCohort.getNumberOfInfantsWhoHadVirologicHIVTestWithPositiveTestResultsWhoInitatedARTTreatment(), mappings));
-    
+        "POSITIVE-RESULTS",
+        EptsReportUtils.map(
+            this.pmtctHeiCohort
+                .getNumberOfInfantsWhoHadVirologicHIVTestWithPositiveTestResultsWhoInitatedARTTreatment(),
+            mappings));
+
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     composition.setCompositionString("POSITIVE-RESULTS AND COMMUNITY-DISPENSATION");
 

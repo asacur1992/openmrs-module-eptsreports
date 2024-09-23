@@ -14,7 +14,6 @@
 package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
-
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.TxNewQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
@@ -28,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class PMTCTEIDCommunityCohortQueries {
 
   @Autowired private GenericCohortQueries genericCohorts;
-  
+
   @Autowired private PMTCTEIDCohortQueries pmtctCohortQueries;
 
   public CohortDefinition getNumberOfInfantsWhoHadVirologicHIVTest() {
@@ -44,15 +43,15 @@ public class PMTCTEIDCommunityCohortQueries {
     composition.addSearch(
         "NUMERATOR",
         EptsReportUtils.map(
-            this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTest(),mappings));
-    
+            this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTest(), mappings));
+
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     composition.setCompositionString("NUMERATOR AND COMMUNITY-DISPENSATION");
 
@@ -71,15 +70,17 @@ public class PMTCTEIDCommunityCohortQueries {
 
     composition.addSearch(
         "FIRST-TEST",
-        EptsReportUtils.map(this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTestWithFistTest(), mappings));
+        EptsReportUtils.map(
+            this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTestWithFistTest(),
+            mappings));
 
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
     composition.setCompositionString("FIRST-TEST AND COMMUNITY-DISPENSATION");
 
@@ -98,15 +99,17 @@ public class PMTCTEIDCommunityCohortQueries {
 
     composition.addSearch(
         "SECOND-TEST",
-        EptsReportUtils.map(this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTestWithSecondTest(), mappings));
-    
+        EptsReportUtils.map(
+            this.pmtctCohortQueries.getNumberOfInfantsWhoHadVirologicHIVTestWithSecondTest(),
+            mappings));
+
     composition.addSearch(
-            "COMMUNITY-DISPENSATION",
-            EptsReportUtils.map(
-                this.genericCohorts.generalSql(
-                    "findCommunityPatientsDispensation",
-                    TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-                mappings));
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
     composition.setCompositionString("SECOND-TEST AND COMMUNITY-DISPENSATION");
 
     return composition;

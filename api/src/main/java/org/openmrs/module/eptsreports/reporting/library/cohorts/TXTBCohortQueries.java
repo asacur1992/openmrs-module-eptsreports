@@ -743,7 +743,8 @@ public class TXTBCohortQueries {
 
     final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-    definition.addSearch("DENOMINATOR", EptsReportUtils.map(this.getDenominator(), mappings));
+    definition.addSearch(
+        "DENOMINATOR", EptsReportUtils.map(this.getDenominatorForCommunity(), mappings));
 
     definition.addSearch("DTS", EptsReportUtils.map(this.findPatientWhoAreCXR(), mappings));
 
