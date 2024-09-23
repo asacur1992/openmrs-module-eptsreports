@@ -204,19 +204,19 @@ public class PrepCtDataset extends BaseDataSet {
 
     dataSetDefinition.addColumn(
         "PREP-C-POSITIVE",
-        "PREP_CT: POSITIVE RESULT",
+        "PREP_CT: POSITIVE TEST RESULTS",
         EptsReportUtils.map(clientsWithPositiveTestResultIndicator, mappings),
         "");
 
     dataSetDefinition.addColumn(
         "PREP-C-NEGATIVE",
-        "PREP_CT: NEGATIVE RESULT",
+        "PREP_CT: NEGATIVE TEST RESULTS",
         EptsReportUtils.map(clientsWithNegativeTestResultIndicator, mappings),
         "");
 
     dataSetDefinition.addColumn(
-        "PREP-C-INDETERMINATE",
-        "PREP_CT: INDETERMINATE RESULT",
+        "PREP-C-OTHER-TEST-RESULTS",
+        "PREP_CT: OTHER TEST RESULTS",
         EptsReportUtils.map(clientsWithIndeterminateTestResultIndicator, mappings),
         "");
 

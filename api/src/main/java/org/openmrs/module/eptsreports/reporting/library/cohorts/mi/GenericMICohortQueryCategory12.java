@@ -3,6 +3,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts.mi;
 import java.util.Date;
 import org.openmrs.module.eptsreports.reporting.library.cohorts.mq.MQCohortQueries;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.ReportType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
@@ -52,7 +53,9 @@ public class GenericMICohortQueryCategory12 {
 
     definition.addSearch(
         "TRANSFERED-OUT",
-        EptsReportUtils.map(this.mQCohortQueries.findPatientsWhoTransferedOutRF07(), mappingsMI));
+        EptsReportUtils.map(
+            this.mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MI),
+            mappingsMI));
 
     definition.setCompositionString(
         "START-ART-A NOT (PREGNANT OR TRANSFERED-IN OR TRANSFERED-OUT)");
@@ -99,7 +102,9 @@ public class GenericMICohortQueryCategory12 {
 
     definition.addSearch(
         "TRANSFERED-OUT",
-        EptsReportUtils.map(this.mQCohortQueries.findPatientsWhoTransferedOutRF07(), mappings));
+        EptsReportUtils.map(
+            this.mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MI),
+            mappings));
 
     definition.setCompositionString(
         "START-ART-A NOT (PREGNANT OR TRANSFERED-IN OR TRANSFERED-OUT)");
@@ -151,7 +156,9 @@ public class GenericMICohortQueryCategory12 {
 
     definition.addSearch(
         "TRANSFERED-OUT",
-        EptsReportUtils.map(this.mQCohortQueries.findPatientsWhoTransferedOutRF07(), mappings));
+        EptsReportUtils.map(
+            this.mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MI),
+            mappings));
 
     definition.setCompositionString(
         "START-ART-A NOT (PREGNANT OR BREASTFEEDING OR TRANSFERED-IN OR TRANSFERED-OUT)");
@@ -198,7 +205,9 @@ public class GenericMICohortQueryCategory12 {
 
     definition.addSearch(
         "TRANSFERED-OUT",
-        EptsReportUtils.map(this.mQCohortQueries.findPatientsWhoTransferedOutRF07(), mappings));
+        EptsReportUtils.map(
+            this.mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MI),
+            mappings));
 
     definition.setCompositionString(
         "(START-ART-A AND PREGNANT) NOT (TRANSFERED-IN OR TRANSFERED-OUT)");
@@ -245,7 +254,9 @@ public class GenericMICohortQueryCategory12 {
 
     definition.addSearch(
         "TRANSFERED-OUT",
-        EptsReportUtils.map(this.mQCohortQueries.findPatientsWhoTransferedOutRF07(), mappings));
+        EptsReportUtils.map(
+            this.mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MI),
+            mappings));
 
     definition.setCompositionString(
         "(START-ART-A AND PREGNANT) NOT (TRANSFERED-IN OR TRANSFERED-OUT)");

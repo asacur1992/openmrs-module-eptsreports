@@ -2,6 +2,7 @@ package org.openmrs.module.eptsreports.reporting.library.cohorts.mq;
 
 import java.util.Date;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.ReportType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.definition.library.DocumentedDefinition;
@@ -56,7 +57,8 @@ public class MQCategory12P1CohortQueries {
     definition.addSearch(
         "TRANSFERED-OUT",
         EptsReportUtils.map(
-            this.mqCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappingsTrfOutCat12));
+            this.mqCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ),
+            mappingsTrfOutCat12));
 
     definition.setCompositionString("(RF5 AND PREGNANT) NOT (TRANSFERED-IN OR TRANSFERED-OUT)");
 

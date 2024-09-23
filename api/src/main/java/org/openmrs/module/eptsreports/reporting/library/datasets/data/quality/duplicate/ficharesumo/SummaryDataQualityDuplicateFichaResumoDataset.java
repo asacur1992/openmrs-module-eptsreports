@@ -31,6 +31,9 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
   @Autowired
   private EC5PatientListDuplicateFichaResumoDataset eC5PatientListDuplicateFichaResumoDataset;
 
+  @Autowired
+  private EC6PatientListDuplicateFichaResumoDataset eC6PatientListDuplicateFichaResumoDataset;
+
   public DataSetDefinition constructSummaryDataQualityDatset(List<Parameter> parameterList) {
     CohortIndicatorDataSetDefinition dsd = new CohortIndicatorDataSetDefinition();
     dsd.setName("Data Quality Duplicated Ficha Resumo Summary Dataset");
@@ -50,6 +53,9 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
 
     final CohortDefinition summaryCohortQueryEC5 =
         eC5PatientListDuplicateFichaResumoDataset.getEC5Total(parameterList);
+
+    final CohortDefinition summaryCohortQueryEC6 =
+        eC6PatientListDuplicateFichaResumoDataset.getEC6Total(parameterList);
 
     dsd.addParameters(parameterList);
     dsd.addColumn(
@@ -99,6 +105,16 @@ public class SummaryDataQualityDuplicateFichaResumoDataset extends BaseDataSet {
             this.eptsGeneralIndicator.getIndicator(
                 "summaryCohortQueryEC5Indicator",
                 EptsReportUtils.map(summaryCohortQueryEC5, mappings)),
+            mappings),
+        "");
+
+    dsd.addColumn(
+        "EC6D-TOTAL",
+        "EC6D: The patient has more than one Ficha Recepcao Levantou registered in SESP on the same date and at the same Health Facility. ",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "summaryCohortQueryEC6Indicator",
+                EptsReportUtils.map(summaryCohortQueryEC6, mappings)),
             mappings),
         "");
 

@@ -20,15 +20,7 @@ public class Ec4Queries {
    *
    * @return String
    */
-  public static String getEc4CombinedQuery(
-      int programId,
-      int stateId,
-      int adultFollowUp,
-      int childFollowUp,
-      int fichaResumo,
-      int stateOfStayPriorArtPatient,
-      int stateOfStayOfArtPatient,
-      int patientHasDiedConcept) {
+  public static String getEc4CombinedQuery() {
     String query =
         "SELECT 	pe.person_id As patient_id, "
             + "		pid.identifier AS NID, "
@@ -50,6 +42,7 @@ public class Ec4Queries {
             + "		DATE_FORMAT(pe.death_date,'%d-%m-%Y') As death_date_demographic, "
             + "		DATE_FORMAT(deadFichaResumo.death_date,'%d-%m-%Y') As death_date_resumo, "
             + "		DATE_FORMAT(deadFichaClinica.death_date,'%d-%m-%Y') As death_date_clinica, "
+            + "		DATE_FORMAT(deadHomeVisitCard.death_date,'%d-%m-%Y') As death_date_home_vc, "
             + "		MIN(DATE_FORMAT(seguimento.encounter_datetime, '%d-%m-%Y')) AS encounter_date, "
             + "		DATE_FORMAT(seguimento.date_created, '%d-%m-%Y') AS encounter_date_created, "
             + "	     seguimento.location_name "
@@ -63,12 +56,10 @@ public class Ec4Queries {
             + "	 INNER JOIN patient_program pg ON p.patient_id = pg.patient_id "
             + "	 INNER JOIN patient_state ps ON pg.patient_program_id = ps.patient_program_id "
             + "	 WHERE p.voided = 0 "
-            + "	 AND pg.program_id = "
-            + programId
+            + "	 AND pg.program_id = 2 "
             + "	 AND pg.voided = 0 "
             + "	 AND ps.voided = 0 "
-            + "	 AND ps.state = "
-            + stateId
+            + "	 AND ps.state = 10 "
             + "	 AND pg.location_id IN (:location) "
             + "	 AND ps.start_date IS NOT NULL AND ps.end_date IS NULL "
             + ") deadPrograma on pe.person_id = deadPrograma.patient_id "
@@ -78,14 +69,11 @@ public class Ec4Queries {
             + "	FROM patient p "
             + "	INNER JOIN encounter e ON p.patient_id = e.patient_id "
             + "	INNER JOIN obs o ON e.encounter_id = o.encounter_id "
-            + "	WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = "
-            + stateOfStayPriorArtPatient
-            + "	AND o.value_coded = "
-            + patientHasDiedConcept
-            + "	AND e.encounter_type = "
-            + fichaResumo
+            + "	WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 6272 "
+            + "	AND o.value_coded = 1366 "
+            + "	AND e.encounter_type = 53 "
             + "	AND e.location_id IN (:location) "
-            + " AND e.encounter_datetime BETWEEN :startDate AND :endDate"
+            + " AND e.encounter_datetime <= :endDate "
             + ") deadFichaResumo on pe.person_id = deadFichaResumo.patient_id "
             + "left join "
             + "( "
@@ -93,15 +81,23 @@ public class Ec4Queries {
             + "	FROM patient p "
             + "	INNER JOIN encounter e ON p.patient_id = e.patient_id "
             + "	INNER JOIN obs o ON e.encounter_id = o.encounter_id "
-            + "	WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = "
-            + stateOfStayOfArtPatient
-            + "	AND value_coded = "
-            + patientHasDiedConcept
-            + "	AND e.encounter_type = "
-            + adultFollowUp
+            + "	WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 6273 "
+            + "	AND value_coded = 1366 "
+            + "	AND e.encounter_type = 6 "
             + "	AND e.location_id IN (:location) "
-            + " AND e.encounter_datetime BETWEEN :startDate AND :endDate "
+            + " AND e.encounter_datetime <=  :endDate "
             + ") deadFichaClinica on pe.person_id = deadFichaClinica.patient_id "
+            + "left join "
+            + "( "
+            + "select p.patient_id, "
+            + "	      		max(e.encounter_datetime) death_date, e.date_created "
+            + "	      	from patient p "
+            + "	      		inner join encounter e on p.patient_id = e.patient_id "
+            + "	      		inner join obs o on o.encounter_id = e.encounter_id "
+            + "	      	where e.voided = 0 and p.voided = 0 and e.encounter_datetime <=:endDate and e.encounter_type = 21 "
+            + "	      		and o.voided = 0 and o.concept_id in (2031,23944,23945) and o.value_coded = 1366 and e.location_id =:location "
+            + "	      		group by p.patient_id "
+            + ") deadHomeVisitCard on pe.person_id = deadHomeVisitCard.patient_id "
             + "left join "
             + "(	select pn1.* "
             + "	from person_name pn1 "
@@ -132,15 +128,10 @@ public class Ec4Queries {
             + "	from patient p "
             + "			inner join encounter e on p.patient_id = e.patient_id "
             + "			inner join location l on l.location_id = e.location_id "
-            + "	where 	p.voided = 0 and e.voided = 0 and e.encounter_type in ("
-            + childFollowUp
-            + ","
-            + adultFollowUp
-            + ")and e.location_id IN (:location) "
+            + "	where 	p.voided = 0 and e.voided = 0 and e.encounter_type in (6,9) and e.location_id IN (:location) "
             + " AND e.encounter_datetime BETWEEN :startDate AND :endDate "
             + ") seguimento on seguimento.patient_id = pe.person_id "
-            + "left join  patient_program pg ON pe.person_id = pg.patient_id and pg.program_id = "
-            + programId
+            + "left join  patient_program pg ON pe.person_id = pg.patient_id and pg.program_id = 2 "
             + " and pg.location_id IN (:location) "
             + "left join  patient_state ps ON pg.patient_program_id = ps.patient_program_id and ps.start_date IS NOT NULL AND ps.end_date IS NULL "
             + "where 	pe.voided = 0 and "
@@ -148,14 +139,15 @@ public class Ec4Queries {
             + "			peObito.person_id is not null or "
             + "			deadPrograma.patient_id is not null or "
             + "			deadFichaResumo.patient_id is not null or "
-            + "			deadFichaClinica.patient_id is not null "
+            + "			deadFichaClinica.patient_id is not null or "
+            + "			deadHomeVisitCard.patient_id is not null "
             + "		) and "
-            + " "
             + "			( "
             + "				seguimento.encounter_datetime>peObito.death_date or "
             + "				seguimento.encounter_datetime>deadPrograma.death_date or "
             + "				seguimento.encounter_datetime>deadFichaResumo.death_date or "
-            + "				seguimento.encounter_datetime>deadFichaClinica.death_date "
+            + "				seguimento.encounter_datetime>deadFichaClinica.death_date or "
+            + "				seguimento.encounter_datetime>deadHomeVisitCard.death_date "
             + "			) "
             + "GROUP BY pe.person_id; ";
     return query;

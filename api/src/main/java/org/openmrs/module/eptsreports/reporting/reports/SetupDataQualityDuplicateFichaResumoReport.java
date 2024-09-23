@@ -26,6 +26,7 @@ import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.du
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC3PatientListDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC4PatientListDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC5PatientListDuplicateFichaResumoDataset;
+import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.EC6PatientListDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.library.datasets.data.quality.duplicate.ficharesumo.SummaryDataQualityDuplicateFichaResumoDataset;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
 import org.openmrs.module.reporting.ReportingException;
@@ -61,6 +62,9 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
 
   @Autowired
   private EC5PatientListDuplicateFichaResumoDataset ec5PatientListDuplicateFichaResumoDataset;
+
+  @Autowired
+  private EC6PatientListDuplicateFichaResumoDataset ec6PatientListDuplicateFichaResumoDataset;
 
   @Override
   public String getExcelDesignUuid() {
@@ -127,6 +131,12 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
                 .ec5PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
 
     rd.addDataSetDefinition(
+        "ECD6",
+        Mapped.mapStraightThrough(
+            ec6PatientListDuplicateFichaResumoDataset
+                .ec6PatientWithDuplicatedFichaResumoListDataset(this.getDataParameters())));
+
+    rd.addDataSetDefinition(
         "D",
         Mapped.mapStraightThrough(this.datimCodeDataset.constructDataset(this.getParameters())));
 
@@ -156,7 +166,7 @@ public class SetupDataQualityDuplicateFichaResumoReport extends EptsDataExportMa
       Properties props = new Properties();
       props.put(
           "repeatingSections",
-          "sheet:2,row:7,dataset:ECD1 | sheet:3,row:7,dataset:ECD2 | sheet:4,row:7,dataset:ECD3 | sheet:5,row:7,dataset:ECD4 | sheet:6,row:7,dataset:ECD5");
+          "sheet:2,row:8,dataset:ECD1 | sheet:3,row:8,dataset:ECD2 | sheet:4,row:8,dataset:ECD3 | sheet:5,row:8,dataset:ECD4 | sheet:6,row:8,dataset:ECD5 | sheet:7,row:8,dataset:ECD6");
       props.put("sortWeight", "5000");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);

@@ -75,7 +75,7 @@ public interface MQCategory13P2QueriesInterface {
                 + " WHERE 	cc.voided = 0 AND cc.encounter_type = 6  AND cc.location_id = :location "
                 + " AND o.concept_id = 23722 AND o.value_coded = 856 AND o.voided = 0 "
                 + " ) fisrtConsultation ON fisrtConsultation.patient_id = tx_new.patient_id "
-                + " WHERE fisrtConsultation.encounter_datetime BETWEEN date_add(tx_new.art_start_date, INTERVAL 80 DAY) AND date_add(tx_new.art_start_date, INTERVAL 130 DAY) "
+                + " WHERE fisrtConsultation.encounter_datetime BETWEEN date_add(tx_new.art_start_date, INTERVAL 80 DAY) AND date_add(tx_new.art_start_date, INTERVAL 132 DAY) "
                 + " GROUP BY tx_new.patient_id "
                 + ") result ";
 
@@ -263,7 +263,7 @@ public interface MQCategory13P2QueriesInterface {
                 + "and p.voided=0  "
                 + "and  e.encounter_type = 6  "
                 + "and e.location_id=:location "
-                + "and e.encounter_datetime BETWEEN :startInclusionDate AND :endRevisionDate  "
+                + "and e.encounter_datetime BETWEEN :startInclusionDate AND :endInclusionDate  "
                 + "GROUP by p.patient_id "
                 + ")ultimaConsulta "
                 + "inner join "
@@ -290,11 +290,10 @@ public interface MQCategory13P2QueriesInterface {
             + ")maxEnc "
             + "  inner join "
             + "( "
-            + "select p.patient_id, max(o.obs_datetime) data_estado from patient p "
+            + "select p.patient_id, o.obs_datetime data_estado from patient p "
             + "inner join encounter e on p.patient_id=e.patient_id "
             + "inner join obs  o on e.encounter_id=o.encounter_id "
             + "where e.voided=0 and o.voided=0 and p.voided=0 and  e.encounter_type in (53,6) and o.concept_id in (6272,6273) and o.value_coded in (1707,1705) and e.location_id=:location "
-            + "group by p.patient_id "
             + " ) abandono on abandono.patient_id = maxEnc.patient_id "
             + "where abandono.data_estado BETWEEN date_sub(maxEnc.encounter_datetime, INTERVAL 3 month) AND maxEnc.encounter_datetime ";
 

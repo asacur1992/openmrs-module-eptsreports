@@ -42,6 +42,38 @@ public class ResumoMensalDAHQueries {
     return query;
   }
 
+  public static String getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfMonthIndicator5() {
+
+    String query =
+        "     select patient_id from ( "
+            + "	 	select activeInDAH.patient_id,saidaDAH.obs_datetime  from( "
+            + " 	 	select p.patient_id,max(e.encounter_datetime) maxDataInicioDAH "
+            + " 	from "
+            + "  	patient p inner join encounter e on p.patient_id=e.patient_id "
+            + " 	where p.voided=0 and e.voided=0 and e.encounter_type=90 and e.encounter_datetime <= :endDate "
+            + "	and e.location_id=:location "
+            + "	group by p.patient_id "
+            + " 	) activeInDAH "
+            + "	left join "
+            + "             ( "
+            + "		select p.patient_id, o.obs_datetime from patient p "
+            + "           join encounter e on p.patient_id=e.patient_id "
+            + "           join obs o on o.encounter_id=e.encounter_id "
+            + "       where e.voided=0 and o.voided=0 and p.voided=0 and e.encounter_type = 90 "
+            + "           and o.concept_id=1708 and o.obs_datetime <= :endDate and o.value_coded in (1366,1707,1706) and e.location_id=:location "
+            + "           union "
+            + "            select p.patient_id, o.value_datetime from patient p "
+            + "           join encounter e on p.patient_id=e.patient_id "
+            + "           join obs o on o.encounter_id=e.encounter_id "
+            + "       where e.voided=0 and o.voided=0 and p.voided=0 and e.encounter_type = 90 "
+            + "           and o.concept_id=165386  and o.value_datetime <= :endDate and e.location_id=:location "
+            + "	)saidaDAH on saidaDAH.patient_id = activeInDAH.patient_id "
+            + "	where ((saidaDAH.obs_datetime >= activeInDAH.maxDataInicioDAH and  saidaDAH.obs_datetime <= :endDate) or saidaDAH.patient_id is null) "
+            + "	) final where final.obs_datetime is null ";
+
+    return query;
+  }
+
   /**
    * 6 - Com registo de “Data de Início no Modelo de DAH”, na Ficha de DAH, ocorrida na coorte de 6
    * meses
@@ -207,8 +239,8 @@ public class ResumoMensalDAHQueries {
             + " 	 	select p.patient_id,e.encounter_datetime "
             + " 	from "
             + "  	patient p inner join encounter e on p.patient_id=e.patient_id "
-            + " 	where p.voided=0 and e.voided=0 and e.encounter_type=90 and e.encounter_datetime >= :startDate - INTERVAL 6 MONTH "
-            + " 	AND e.encounter_datetime <= :endDate - INTERVAL 6 MONTH - INTERVAL 1 DAY "
+            + " 	where p.voided=0 and e.voided=0 and e.encounter_type=90 and e.encounter_datetime >= :startDate - interval 7 month "
+            + " 	AND e.encounter_datetime <= :startDate -  interval 6 month - interval 1 day"
             + "	and e.location_id=:location "
             + "	) dah "
             + "	inner join ( "
@@ -253,15 +285,15 @@ public class ResumoMensalDAHQueries {
             + "	From patient p "
             + "	inner join encounter e on p.patient_id=e.patient_id "
             + "	inner join obs o on e.encounter_id=o.encounter_id "
-            + "	where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 1695 and  e.encounter_type = 90 and o.value_numeric is not null "
-            + "	and e.location_id=:location and o.obs_datetime >= :startDate and o.obs_datetime <= :endDate "
+            + "	where p.voided=0 and e.voided=0 and o.voided=0 and o.concept_id = 1695 and  e.encounter_type in (90,6) and o.value_numeric is not null "
+            + "	and e.location_id=:location and o.obs_datetime between :startDate and :endDate "
             + "	union "
             + "	Select p.patient_id "
             + "	From patient p "
             + "	inner join encounter e on p.patient_id=e.patient_id "
             + "	inner join obs o on e.encounter_id=o.encounter_id "
-            + "	where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 1695 and  e.encounter_type = 6 and o.value_numeric is not null "
-            + "	and e.location_id=:location and e.encounter_datetime >= :startDate and e.encounter_datetime <= :endDate ";
+            + "	where p.voided=0 and e.voided=0 and o.voided=0 and o.concept_id = 165515 and  e.encounter_type in (90,6) and o.value_coded is not null "
+            + "	and e.location_id=:location and o.obs_datetime between :startDate and  :endDate ";
 
     return query;
   }
@@ -277,15 +309,15 @@ public class ResumoMensalDAHQueries {
         "	select f.patient_id "
             + "from "
             + "( "
-            + "select p.patient_id, o.obs_datetime,o.value_numeric, e.encounter_type,e.encounter_id "
+            + "select p.patient_id, o.obs_datetime,o.value_numeric, e.encounter_type,e.encounter_id,o.concept_id,o.value_coded "
             + "   from patient p "
             + "inner join encounter e on e.patient_id=p.patient_id "
             + "inner join obs o on o.encounter_id=e.encounter_id "
-            + "  where (p.voided=0 and  e.voided=0 and e.encounter_type in (6,90) and o.concept_id=1695  and o.voided=0 and o.value_numeric is not null) "
+            + "  where p.voided=0 and  e.voided=0 and e.encounter_type in (6,90) and o.concept_id in(1695,165515)  and o.voided=0 and (o.value_numeric is not null or o.value_coded is not null) "
             + "        and  e.location_id=:location and o.obs_datetime between :startDate and :endDate "
             + ")f "
             + "inner join person pe on pe.person_id=f.patient_id "
-            + "WHERE       (TIMESTAMPDIFF(year,pe.birthdate,:endDate)>=5 and f.value_numeric<200 ) "
+            + "WHERE       (TIMESTAMPDIFF(year,pe.birthdate,:endDate)>=5 and ((f.concept_id=1695 and f.value_numeric<200) OR (f.concept_id=165515 and f.value_coded=165513))) "
             + "        OR  ((TIMESTAMPDIFF(year,pe.birthdate,:endDate) between 1 and 4) and f.value_numeric<500 ) "
             + "        OR  (TIMESTAMPDIFF(year,pe.birthdate,:endDate)<1 and f.value_numeric<750 ) "
             + "GROUP BY f.patient_id ";

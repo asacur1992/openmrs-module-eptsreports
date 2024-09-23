@@ -52,6 +52,31 @@ public class ResumoMensalDAHCohortQueries {
     return definition;
   }
 
+  public CohortDefinition getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfMonthIndicatorI5() {
+
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setName("NumberOfPatientsActiveInDAHWhoAreInTARVByEndOfPreviousMonthIndicator0");
+    final String mappings = "startDate=${startDate-1d},endDate=${endDate},location=${location}";
+
+    definition.setName("getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfPreviousMonthIndicator0");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    definition.addSearch(
+        "ACTIVEDAH",
+        EptsReportUtils.map(
+            this.genericCohortQueries.generalSql(
+                "getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfMonthIndicator5",
+                ResumoMensalDAHQueries
+                    .getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfMonthIndicator5()),
+            mappings));
+
+    definition.setCompositionString("ACTIVEDAH");
+
+    return definition;
+  }
+
   /** RF31 - Utentes Novos Inscritos (Pré-TARV) ou Novos Inícios (TARV) */
   public CohortDefinition findPatientsNewEnrolledOnPreTarvOrNewEnrolledOnTarvRF31() {
 
@@ -529,53 +554,6 @@ public class ResumoMensalDAHCohortQueries {
     return definition;
   }
 
-  /**
-   * Número total de utentes em seguimento para Doença Avançada por HIV no fim do mês
-   * (5=(0+1+2+3)-4)
-   */
-  public CohortDefinition getTotalNumberOfPatientsInDAHAtTheEndOfReportingPeriodI5() {
-
-    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-    definition.setName("NumberOfPatientsWhoLeftDAHDuringReportPeriodI4");
-    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-
-    definition.setName("getNumberOfPatientsWhoLeftDAHDuringReportPeriodI4");
-    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("location", "location", Location.class));
-
-    definition.addSearch(
-        "I0",
-        EptsReportUtils.map(
-            this.getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfPreviousMonthIndicatorI0(),
-            mappings));
-
-    definition.addSearch(
-        "I1",
-        EptsReportUtils.map(
-            this.getNumberOfPatientsNewEnrolledInARTWhoInitiatedDAHDuringReportPeriodI1(),
-            mappings));
-
-    definition.addSearch(
-        "I2",
-        EptsReportUtils.map(
-            this.getNumberOfPatientsWhoReinitiatedARTWhoInitiatedDAHDuringReportPeriodI2(),
-            mappings));
-
-    definition.addSearch(
-        "I3",
-        EptsReportUtils.map(
-            this.getNumberOfPatientsCurrentInARTWhoInitiatedDAHDuringReportPeriodI3(), mappings));
-
-    definition.addSearch(
-        "I4",
-        EptsReportUtils.map(this.getNumberOfPatientsWhoLeftDAHDuringReportPeriodI4(), mappings));
-
-    definition.setCompositionString("(I0 OR I1 OR I2 OR I3) NOT I4");
-
-    return definition;
-  }
-
   /** 6 - Número total de óbitos nos utentes com diagnóstico de Doença Avançada na coorte */
   public CohortDefinition getTotalNumberOfPatientsWhoAreDeadWithDAHDiagnosticI6() {
 
@@ -604,7 +582,7 @@ public class ResumoMensalDAHCohortQueries {
             this.genericCohortQueries.generalSql(
                 "getNumberOfPatientsDiedWithDAHSixMonthsAfterDAH6",
                 ResumoMensalDAHQueries.getNumberOfPatientsDiedWithDAHSixMonthsAfterDAH6()),
-            mappings6Months));
+            mappings));
 
     definition.addSearch(
         "B8",

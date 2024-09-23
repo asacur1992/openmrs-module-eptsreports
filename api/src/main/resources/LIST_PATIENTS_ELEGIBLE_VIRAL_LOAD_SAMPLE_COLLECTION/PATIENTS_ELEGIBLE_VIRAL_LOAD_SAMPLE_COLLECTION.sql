@@ -554,7 +554,7 @@
             		)maxCarga 
             		inner join encounter e on maxCarga.patient_id=e.patient_id 
             		inner join obs o on o.encounter_id=e.encounter_id 
-            		where 	o.obs_datetime=maxCarga.data_carga and 
+            		where 	date(o.obs_datetime)=maxCarga.data_carga and 
             				o.concept_id in (1305,856) and e.encounter_type in (13,6,9,53,51) and e.location_id=:location and 
             				e.voided=0 and o.voided=0 
             	) carga_viral on maxNextConsultaOrLevantamento.patient_id=carga_viral.patient_id
@@ -666,7 +666,7 @@
             					inner join patient_program pg on p.patient_id=pg.patient_id 
             					inner join patient_state ps on pg.patient_program_id=ps.patient_program_id 
             			where 	pg.voided=0 and ps.voided=0 and p.voided=0 and 
-            					pg.program_id=8 and ps.state=27 and ps.end_date is null and 
+            					pg.program_id=8 and ps.state=27 and 
             					ps.start_date between date_add(:endDate, interval -18 month) AND :endDate and location_id=:location 
             		     union 
                            select p.patient_id,data_colheita.value_datetime data_parto from patient p 

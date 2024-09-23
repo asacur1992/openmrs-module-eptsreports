@@ -32,8 +32,9 @@ public class EptsReportsDao {
         sessionFactory
             .getCurrentSession()
             .createSQLQuery(
-                "select concat(report_definition_uuid, '') as uuid from reporting_report_design where reporting_report_design.uuid = ?")
-            .setString(0, uuid)
+                String.format(
+                    "select concat(report_definition_uuid, '') as uuid from reporting_report_design where reporting_report_design.uuid = '%s' ",
+                    uuid))
             .list();
     if (!list.isEmpty()) {
       return list.get(0);
@@ -46,19 +47,23 @@ public class EptsReportsDao {
     Transaction transaction = session.beginTransaction();
     session
         .createSQLQuery(
-            "delete from reporting_report_design_resource "
-                + "where reporting_report_design_resource.report_design_id = ("
-                + "select id from reporting_report_design where reporting_report_design.uuid = ?)")
-        .setString(0, designUuid)
+            String.format(
+                "delete from reporting_report_design_resource "
+                    + "where reporting_report_design_resource.report_design_id = ("
+                    + "select id from reporting_report_design where reporting_report_design.uuid = '%s')",
+                designUuid))
         .executeUpdate();
+
     session
         .createSQLQuery(
-            "delete from reporting_report_design where reporting_report_design.uuid = ?")
-        .setString(0, designUuid)
+            String.format(
+                "delete from reporting_report_design where reporting_report_design.uuid = '%s'",
+                designUuid))
         .executeUpdate();
+
     session
-        .createSQLQuery("delete from serialized_object where uuid = ?")
-        .setString(0, serializedObjectUuid)
+        .createSQLQuery(
+            String.format("delete from serialized_object where uuid = '%s' ", serializedObjectUuid))
         .executeUpdate();
     transaction.commit();
   }

@@ -658,7 +658,7 @@ public class ResumoMensalDAHDataSetDefinition extends BaseDataSet {
             "I5",
             mapStraightThrough(
                 resumoMensalDAHCohortQueries
-                    .getTotalNumberOfPatientsInDAHAtTheEndOfReportingPeriodI5())));
+                    .getNumberOfPatientsActiveInDAHWhoAreInTARVByEndOfMonthIndicatorI5())));
   }
 
   private Mapped<CohortIndicator> getTotalNumberOfPatientsWhoAreDeadWithDAHDiagnosticI6() {

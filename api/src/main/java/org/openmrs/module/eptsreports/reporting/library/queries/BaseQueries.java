@@ -57,7 +57,16 @@ public class BaseQueries {
             + "	select p.patient_id from patient p                                 							"
             + "    	inner join patient_program pp on pp.patient_id = p.patient_id  							"
             + "	where p.voided = 0 and pp.voided = 0 and pp.program_id = 25        							"
-            + "  	and pp.date_enrolled <= :endDate                                						";
+            + "  	and pp.date_enrolled <= :endDate                                						"
+            + " union 																						"
+            + "select p.patient_id                                                                                                             "
+            + "from patient p                                                                                                                  "
+            + "	join patient_identifier pi on pi.patient_id = p.patient_id                                                                    "
+            + "	join patient_program pg on pg.patient_id = p.patient_id 																	  "
+            + "	join encounter e on e.patient_id = p.patient_id                                                                               "
+            + "where p.voided = 0 and pi.voided = 0  and  pg.voided = 0 and e.voided = 0                                                       "
+            + "	and pg.program_id = 6 and pi.identifier_type = 9  																		      "
+            + "	and pi.location_id = :location and pg.location_id = :location and e.location_id = :location and pg.date_enrolled <= :endDate  ";
 
     return query;
   }

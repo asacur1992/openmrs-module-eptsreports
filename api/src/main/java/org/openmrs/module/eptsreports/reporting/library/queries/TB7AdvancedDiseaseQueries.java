@@ -21,7 +21,8 @@ public interface TB7AdvancedDiseaseQueries {
 
     public static final String FIND_PATIENTS_WHO_ARE_DEAD = "TB7/DEAD_CURR_DATE.sql";
 
-    public static final String FIND_PREGNANT_OR_BREASTEFEEDING = "TB7/PATIENTS_PREGNANT.sql";
+    public static final String FIND_PATIENTS_WITH_CD4_AFTER_FIRST_PREGNANT_REGISTRATION =
+        "TB7/PATIENTS_WITH_CD4_AFTER_FIRST_PREGNANT_REGISTRATION.sql";
 
     public static final String FIND_PREGNANTS_WITH_COUNT_CD4 =
         "TB7/PATIENTS_PREGNANT_WITH_COUNT_CD4.sql";
@@ -29,11 +30,8 @@ public interface TB7AdvancedDiseaseQueries {
     public static final String FIND_PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_TX_NEW =
         "TB7/PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_TX_NEW.sql";
 
-    public static final String FIND_PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_TX_NEW_CASCATE2 =
-        "TB7/PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_TX_NEW_CASCATE2.sql";
-
-    public static final String FIND_PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_HIGH_VL_CASCATE2 =
-        "TB7/PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_HIGH_VL_CASCATE2.sql";
+    public static final String FIND_PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_CASCATE2 =
+        "TB7/PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_CASCATE2.sql";
 
     public static final String FIND_PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_HIGH_VL =
         "TB7/PATIENTS_WITH_SEVERE_IMMUNOSUPPRESSION_HIGH_VL.sql";
@@ -76,37 +74,28 @@ public interface TB7AdvancedDiseaseQueries {
     }
 
     public static String findPatientsWithHighViralLoad =
-        "select distinct ultima_cv.patient_id 													"
-            + "from( 																															"
-            + "																																	"
-            + "	select p.patient_id ,o.obs_datetime data_cv, o.value_numeric 																	"
-            + "	from patient p 																													"
-            + "		inner join encounter e on p.patient_id=e.patient_id 																		"
-            + "		inner join obs o on e.encounter_id=o.encounter_id 																			"
+        "select penultimaCV.patient_id from ( "
+            + " select ultima_cv.patient_id, max(date(o.obs_datetime)) dataPenultimaCV "
+            + "from( "
+            + "	select p.patient_id ,min(o.obs_datetime) data_cv "
+            + "	from patient p "
+            + "		inner join encounter e on p.patient_id=e.patient_id "
+            + "		inner join obs o on e.encounter_id=o.encounter_id "
             + "	where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 856 and  e.encounter_type in (13,51) and o.value_numeric > 1000 "
-            + "	and o.obs_datetime between :startDate and :endDate and e.location_id=:location 													"
-            + ") ultima_cv 																														"
-            + "inner join( 																														"
-            + "																																	"
-            + "	select p.patient_id ,o.obs_datetime data_cv, o.value_numeric  																	"
-            + "	from patient p 																													"
-            + "		inner join encounter e on p.patient_id=e.patient_id 																		"
-            + "		inner join obs o on e.encounter_id=o.encounter_id 																			"
-            + "	where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 856 and  e.encounter_type in (13,51) and o.value_numeric>1000   "
-            + "		and o.obs_datetime < :endDate and e.location_id=:location 																	"
-            + "																																	"
-            + ") penultima_cv on penultima_cv.patient_id = ultima_cv.patient_id 																"
-            + "left join(																														"
-            + "																																	"
-            + "	select p.patient_id ,o.obs_datetime data_cv, o.value_numeric  																	"
-            + "	from patient p 																													"
-            + "		inner join encounter e on p.patient_id=e.patient_id 																		"
-            + "		inner join obs o on e.encounter_id=o.encounter_id 																			"
-            + "	where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 856 and  e.encounter_type in (13,51) and o.value_numeric <=1000 "
-            + "	and o.obs_datetime < :endDate and e.location_id=:location 																		"
-            + ") outras_cv on ultima_cv.patient_id = outras_cv.patient_id 																		"
-            + "where penultima_cv.data_cv < ultima_cv.data_cv 																					"
-            + "	and (outras_cv.patient_id is null or outras_cv.data_cv < penultima_cv.data_cv or outras_cv.data_cv > ultima_cv.data_cv )		";
+            + "	and o.obs_datetime between :startDate and :endDate and e.location_id=:location "
+            + "	group by p.patient_id "
+            + ") ultima_cv "
+            + "inner join encounter e on ultima_cv.patient_id=e.patient_id "
+            + "		inner join obs o on e.encounter_id=o.encounter_id "
+            + "		where e.voided=0 and o.voided=0 and concept_id in (856,1305) and  e.encounter_type in (13,51) "
+            + "	and o.obs_datetime < ultima_cv.data_cv and e.location_id=:location "
+            + "	group by ultima_cv.patient_id "
+            + "	) penultimaCV "
+            + "	inner join encounter e on penultimaCV.patient_id=e.patient_id "
+            + "		inner join obs o on e.encounter_id=o.encounter_id "
+            + "		where e.voided=0 and o.voided=0 and concept_id = 856 and  e.encounter_type in (13,51) and o.value_numeric > 1000 "
+            + "	and date(o.obs_datetime) = penultimaCV.dataPenultimaCV and e.location_id=:location "
+            + "	group by penultimaCV.patient_id ";
 
     public static String findPatientWhoReinitiatedART =
         "select patient_id 																		"
@@ -218,7 +207,7 @@ public interface TB7AdvancedDiseaseQueries {
             + "		inner join encounter e on e.patient_id=p.patient_id  "
             + "		inner join obs o on o.encounter_id=e.encounter_id  "
             + "where p.voided = 0 and e.voided=0 and o.voided=0 and e.encounter_type in (6,13,53,51,90) and o.concept_id in (1695, 165515) "
-            + "		and e.location_id= :location and o.obs_datetime >= :startDate and o.obs_datetime < :endDate ";
+            + "		and e.location_id= :location and o.obs_datetime >= :startDate and o.obs_datetime <= :endDate ";
 
     public static final String findPatientsWIthHighVLWithCD4Count =
         "select cd4_eligible.patient_id  												"

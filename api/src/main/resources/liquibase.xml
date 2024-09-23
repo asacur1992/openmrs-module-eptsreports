@@ -21,12 +21,16 @@
 		baseColumnNames="owner" referencedTableName="users" referencedColumnNames="user_id" 
 		/> </changeSet> -->
 
-	<changeSet id="20240620-17:00" author="csaude" runAlways="true">
+
+
+	<changeSet id="20240920-16:00" author="csaude" runAlways="true">
+
 		<comment>
-			SESP Release version 3.17.0
+			SESP Release version 3.18.0
 		</comment>
 
-		<sqlFile path="_metadata/SESPMetadataForRelease317_20062024.sql" />
+		<sqlFile
+			path="_metadata/SESPMetadataForRelease318_20092024.sql" />
 	</changeSet>
 
 	<!--changeSet id="20230808-001" author="icap">

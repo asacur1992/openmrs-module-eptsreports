@@ -64,7 +64,7 @@ public interface MQCategory13P4QueriesInterface {
             + " ) B2 "
             + " inner join encounter e ON e.patient_id = B2.patient_id and e.voided = 0 and e.location_id = :location and e.encounter_type = 6 "
             + " inner join obs o ON o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id = 23722 and o.value_coded = 856 "
-            + " and e.encounter_datetime BETWEEN date_add(B2.data_carga, INTERVAL 80 DAY) AND date_add(B2.data_carga, INTERVAL 130 DAY) ";
+            + " and e.encounter_datetime BETWEEN date_add(B2.data_carga, INTERVAL 80 DAY) AND date_add(B2.data_carga, INTERVAL 132 DAY) ";
 
     public static final String findPatientsWhoHaveRequestedCV120DaysAfterCV50CopiesResultByQueryH =
         " Select B2.patient_id "
@@ -77,6 +77,6 @@ public interface MQCategory13P4QueriesInterface {
             + " group by p.patient_id ) B2 "
             + " inner join encounter e ON e.patient_id = B2.patient_id and e.voided = 0 and e.location_id = :location and e.encounter_type = 6 "
             + " inner join obs o ON o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id = 23722 and o.value_coded = 856 "
-            + " and e.encounter_datetime BETWEEN date_add(B2.data_carga, INTERVAL 80 DAY) AND date_add(B2.data_carga, INTERVAL 130 DAY) ";
+            + " and e.encounter_datetime BETWEEN date_add(B2.data_carga, INTERVAL 80 DAY) AND date_add(B2.data_carga, INTERVAL 132 DAY) ";
   }
 }

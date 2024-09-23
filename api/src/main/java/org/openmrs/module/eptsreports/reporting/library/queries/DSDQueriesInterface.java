@@ -156,12 +156,12 @@ public interface DSDQueriesInterface {
             + "select  max_estado.patient_id                                                                                                    "
             + "from(                                                                                                                             "
             + "  select pg.patient_id,                                                                                                           "
-            + "      max(ps.start_date) data_estado                                                                                              "
+            + "     ps.start_date data_estado                                                                                              "
             + "    from  patient p                                                                                                               "
             + "      inner join patient_program pg on p.patient_id = pg.patient_id                                                               "
             + "      inner join patient_state ps on pg.patient_program_id = ps.patient_program_id                                                "
             + "    where pg.voided=0 and ps.voided=0 and p.voided=0  and pg.program_id = 2                                                       "
-            + "      and ps.start_date>=:startDate and  ps.start_date<=:endDate and pg.location_id =:location group by pg.patient_id             "
+            + "      and ps.start_date>=:startDate and  ps.start_date<=:endDate and pg.location_id =:location             "
             + "    )                                                                                                                             "
             + "max_estado                                                                                                                        "
             + "  inner join patient_program pp on pp.patient_id = max_estado.patient_id                                                          "
@@ -170,7 +170,7 @@ public interface DSDQueriesInterface {
             + "union                                                                                                                             "
             + "select transferido_de.patient_id                                                                                                  "
             + "from(                                                                                                                             "
-            + "  select p.patient_id, max(obsOpenDate.value_datetime) data_estado from patient p                                                 "
+            + "  select p.patient_id, obsOpenDate.value_datetime data_estado from patient p                                                 "
             + "    inner join encounter e on p.patient_id=e.patient_id                                                                           "
             + "    inner join obs obsTransIn on e.encounter_id= obsTransIn.encounter_id                                                          "
             + "    inner join obs obsOpenDate on e.encounter_id= obsOpenDate.encounter_id                                                        "
@@ -179,7 +179,7 @@ public interface DSDQueriesInterface {
             + "    and e.encounter_type=53 and obsTransIn.concept_id=1369 and obsTransIn.value_coded=1065                                        "
             + "    and obsOpenDate.concept_id=23891 and obsOpenDate.value_datetime is not null                                                   "
             + "    and obsInTarv.concept_id=6300 and obsInTarv.value_coded=6276                                                                  "
-            + "    and obsOpenDate.value_datetime >=:startDate and obsOpenDate.value_datetime < :endDate and e.location_id=:location group by p.patient_id  "
+            + "    and obsOpenDate.value_datetime >=:startDate and obsOpenDate.value_datetime < :endDate and e.location_id=:location  "
             + ") transferido_de                                                                                                                                ";
 
     public static String findPatientsWhoAreIncludedInDSDModel(
@@ -715,7 +715,7 @@ public interface DSDQueriesInterface {
 
       return "select patient.patient_id from patient                         		"
           + "	inner join person on person.person_id = patient.patient_id		"
-          + "where patient.voided = 0 and person.voided = 0 					"
+          + "where patient.voided = 0 "
           + "	and (TIMESTAMPDIFF(year,birthdate,:endDate)) 			    ";
     }
 

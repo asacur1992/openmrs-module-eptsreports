@@ -21,6 +21,8 @@ public class MICategory13P1_2CohortQueries {
 
   @Autowired private MQCohortQueries mQCohortQueries;
 
+  @Autowired private MICategory13P1_1CohortQueries mICategory13P1_1CohortQueries;
+
   @DocumentedDefinition(
       value = "findPatientsWithLastClinicalConsultationwhoAreInSecondLineDenominatorB2")
   public CohortDefinition
@@ -66,7 +68,7 @@ public class MICategory13P1_2CohortQueries {
   }
 
   @DocumentedDefinition(value = "findDenominatorCategory13SectionIIB")
-  public CohortDefinition findDenominatorCategory13SectionIIB() {
+  public CohortDefinition findDenominatorCategory13SectionIIB(boolean excludeTbActiveDiagnostic) {
 
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
@@ -120,7 +122,26 @@ public class MICategory13P1_2CohortQueries {
                 .findAllPatientsWhoDroppedOutARTDuringTheLastSixMonthsBeforeLastClinicalConsultation(),
             mappings));
 
-    definition.setCompositionString("(B1 AND (B2NEWII NOT B2ENEW)) NOT (B5E OR C OR DROPPEDOUT)");
+    definition.addSearch(
+        "TRANSFERED-IN",
+        EptsReportUtils.map(
+            mQCohortQueries
+                .findPatientsWhoWhereMarkedAsTransferedInAndOnARTOnInAPeriodOnMasterCardRF06(),
+            mappings));
+
+    definition.addSearch(
+        "TB-ACTIVA",
+        EptsReportUtils.map(
+            mQCategory13Section1CohortQueries
+                .findPatientsWithDiagnosticoTBAtivaDuringRevisionPeriod(),
+            mappings));
+
+    if (excludeTbActiveDiagnostic)
+      definition.setCompositionString(
+          "(B1 AND (B2NEWII NOT B2ENEW)) NOT (B5E OR C OR DROPPEDOUT OR TRANSFERED-IN OR TB-ACTIVA)");
+    else
+      definition.setCompositionString(
+          "(B1 AND (B2NEWII NOT B2ENEW)) NOT (B5E OR C OR DROPPEDOUT OR TRANSFERED-IN)");
 
     return definition;
   }
@@ -141,7 +162,7 @@ public class MICategory13P1_2CohortQueries {
         "startInclusionDate=${endRevisionDate-2m+1d},endInclusionDate=${endRevisionDate-1m},endRevisionDate=${endRevisionDate},location=${location}";
 
     definition.addSearch(
-        "B", EptsReportUtils.map(this.findDenominatorCategory13SectionIIB(), mappings));
+        "B", EptsReportUtils.map(this.findDenominatorCategory13SectionIIB(true), mappings));
 
     definition.addSearch(
         "C",
@@ -149,6 +170,80 @@ public class MICategory13P1_2CohortQueries {
             mQCategory13Section1CohortQueries.findNumeratorCategory13Section1C(), mappings));
 
     definition.setCompositionString("B AND C");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findCoinfectedWithTBAndHIVAdultsPatientsDenominator13_4")
+  public CohortDefinition findCoinfectedWithTBAndHIVAdultsPatientsDenominator13_4() {
+
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findCoinfectedWithTBAndHIVAdultsPatientsDenominator13_4");
+    definition.addParameter(
+        new Parameter("startInclusionDate", "Data Inicio Inclusão", Date.class));
+    definition.addParameter(new Parameter("endInclusionDate", "Data Fim Inclusão", Date.class));
+    definition.addParameter(new Parameter("endRevisionDate", "Data Fim Revisão", Date.class));
+    definition.addParameter(new Parameter("location", "location", Date.class));
+
+    final String mappings =
+        "startInclusionDate=${startInclusionDate},endInclusionDate=${endInclusionDate},endRevisionDate=${endRevisionDate},location=${location}";
+
+    final String mappingsPeriodoAvaliacao =
+        "startInclusionDate=${endRevisionDate-2m+1d},endInclusionDate=${endRevisionDate-1m},endRevisionDate=${endRevisionDate},location=${location}";
+
+    definition.addSearch(
+        "RF15-SEGUNDA-LINHA",
+        EptsReportUtils.map(this.findDenominatorCategory13SectionIIB(false), mappings));
+
+    definition.addSearch(
+        "RF14-PRIMEIRA-LINHA",
+        EptsReportUtils.map(
+            this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(false),
+            mappings));
+
+    definition.addSearch(
+        "TB-ACTIVA",
+        EptsReportUtils.map(
+            mQCategory13Section1CohortQueries
+                .findPatientsWithDiagnosticoTBAtivaDuringRevisionPeriod(),
+            mappingsPeriodoAvaliacao));
+
+    definition.setCompositionString("(RF15-SEGUNDA-LINHA OR RF14-PRIMEIRA-LINHA) AND TB-ACTIVA");
+
+    return definition;
+  }
+
+  @DocumentedDefinition(value = "findCoinfectedWithTBAndHIVAdultsPatientsNumerator13_4")
+  public CohortDefinition findCoinfectedWithTBAndHIVAdultsPatientsNumerator13_4() {
+
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("findCoinfectedWithTBAndHIVAdultsPatientsNumerator13_4");
+    definition.addParameter(
+        new Parameter("startInclusionDate", "Data Inicio Inclusão", Date.class));
+    definition.addParameter(new Parameter("endInclusionDate", "Data Fim Inclusão", Date.class));
+    definition.addParameter(new Parameter("endRevisionDate", "Data Fim Revisão", Date.class));
+    definition.addParameter(new Parameter("location", "location", Date.class));
+
+    final String mappings =
+        "startInclusionDate=${startInclusionDate},endInclusionDate=${endInclusionDate},endRevisionDate=${endRevisionDate},location=${location}";
+
+    final String mappingsPeriodoAvaliacao =
+        "startInclusionDate=${endRevisionDate-2m+1d},endInclusionDate=${endRevisionDate-1m},endRevisionDate=${endRevisionDate-1m},location=${location}";
+
+    definition.addSearch(
+        "TBHIV-DENOMINATOR-13-4",
+        EptsReportUtils.map(
+            this.findCoinfectedWithTBAndHIVAdultsPatientsDenominator13_4(), mappings));
+
+    definition.addSearch(
+        "REQUEST-CV",
+        EptsReportUtils.map(
+            mQCategory13Section1CohortQueries.findNumeratorCategory13Section1C(),
+            mappingsPeriodoAvaliacao));
+
+    definition.setCompositionString("TBHIV-DENOMINATOR-13-4 AND REQUEST-CV");
 
     return definition;
   }

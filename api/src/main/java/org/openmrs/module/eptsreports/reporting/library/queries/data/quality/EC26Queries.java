@@ -107,6 +107,8 @@ public class EC26Queries {
             + "AND ps.start_date IS NOT NULL  "
             + "AND ps.end_date IS NULL  "
             + "AND pg.program_id = 2  "
+            + "and ps.voided = 0 "
+            + "and pg.voided = 0 "
             + "AND pg.location_id  in (:location) "
             + "GROUP BY pg.patient_id  "
             + ") AS programState ON pe.person_id = programState.patient_id ";
@@ -195,6 +197,8 @@ public class EC26Queries {
             + "INNER JOIN patient_state ps ON pg.patient_program_id = ps.patient_program_id  "
             + "AND ps.start_date IS NOT NULL  "
             + "AND ps.end_date IS NULL  "
+            + "and ps.voided = 0 "
+            + "and pg.voided = 0 "
             + "AND pg.program_id = 2  "
             + "AND pg.location_id  in (:location) "
             + "GROUP BY pg.patient_id  "

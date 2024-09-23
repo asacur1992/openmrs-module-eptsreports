@@ -27,6 +27,24 @@ from (
 	    		and per.voided=0 and timestampdiff(year,per.birthdate,:endDate)>=5 and o.concept_id = 1695 and o.value_numeric<200 and o.location_id=:location 
 	    
 	    union 
+
+	    	    
+	    select distinct max_cd4.patient_id  
+	    from( 
+	    		Select p.patient_id,max(o.obs_datetime) max_data_cd4  
+	    		From patient p 
+	    			inner join encounter e on p.patient_id=e.patient_id 
+	    			inner join obs o on e.encounter_id=o.encounter_id 
+	    		where p.voided=0 and e.voided=0 and o.voided=0 and concept_id = 165515 and  e.encounter_type in (6,51,13,53,90) 
+	    			and o.obs_datetime between :startDate and :endDate and e.location_id=:location 
+	    				group by p.patient_id 
+	    	)
+	    max_cd4 
+	    		inner join person per on per.person_id=max_cd4.patient_id 
+	    		inner join obs o on o.person_id=max_cd4.patient_id and max_cd4.max_data_cd4=o.obs_datetime and o.voided=0  
+	    		and per.voided=0 and timestampdiff(year,per.birthdate,:endDate)>=5 and o.concept_id = 165515 and o.value_coded=165513 and o.location_id=:location 
+
+	    		union
 	    
 	    select distinct max_cd4.patient_id  
 	    from( 
@@ -83,9 +101,9 @@ from (
 	    		 and e.encounter_datetime >= date_add(:startDate, interval - 12 month) and e.encounter_datetime < :startDate and e.location_id=:location 
 	    	
 	    	union
-			select transferido_para.patient_id 
-	    	from (
-		    	 select transferido_para.patient_id, data_transferencia  
+	 	select transferido_para.patient_id  
+	    	from ( 
+		    	 select transferido_para.patient_id,data_transferencia  
 		    	 from ( 
 		    			select patient_id,max(data_transferencia) data_transferencia 
 		    			from ( 
@@ -148,7 +166,7 @@ from (
 								inner join encounter e on e.patient_id= p.patient_id 
 								inner join obs o on o.encounter_id = e.encounter_id                                                                                        
 							where p.voided= 0 and e.voided=0 and o.voided = 0 and e.encounter_type=18 and o.concept_id = 5096                                                                  
-								and e.location_id= :location and e.encounter_datetime <= :endDate                                                                               
+								and e.location_id=:location and e.encounter_datetime <= :endDate                                                                               
 								group by p.patient_id 
 		         
 		         				union
@@ -159,7 +177,7 @@ from (
 		                    		inner join encounter e on p.patient_id=e.patient_id                                                                                         
 		                    		inner join obs o on e.encounter_id=o.encounter_id                                                                                           
 		              			where p.voided=0 and pe.voided = 0 and e.voided=0 and o.voided=0 and e.encounter_type=52                                                       
-		                    		and o.concept_id=23866 and o.value_datetime is not null and e.location_id= :location and o.value_datetime <= :endDate                                                                                        
+		                    		and o.concept_id=23866 and o.value_datetime is not null and e.location_id=:location and o.value_datetime <= :endDate                                                                                        
 		              				group by p.patient_id
 		               ) ultimo_levantamento group by patient_id
 		      	) ultimo_levantamento
@@ -168,9 +186,9 @@ from (
 			
 			) ultimo_fila on transferido_para.patient_id  = ultimo_fila.patient_id 
 					where transferido_para.data_transferencia >= ultimo_fila.max_date
-		)
-		transferido_para
-		inner join
+	   )
+	   transferido_para
+	   inner join
 		(
 			select patient_id , data_ultimo_levantamento    
 			from(  	
@@ -182,7 +200,7 @@ from (
 						inner join encounter e on e.patient_id= p.patient_id 
 						inner join obs o on o.encounter_id = e.encounter_id                                                                                        
 					where p.voided= 0 and e.voided=0 and o.voided = 0 and e.encounter_type=18 and o.concept_id = 5096                                                                  
-						and e.location_id= :location and e.encounter_datetime <= :endDate                                                                                
+						and e.location_id=:location and e.encounter_datetime <= :endDate                                                                                
 						group by p.patient_id 
 		
 					union
@@ -193,14 +211,13 @@ from (
 			     		inner join encounter e on p.patient_id=e.patient_id                                                                                         
 			     		inner join obs o on e.encounter_id=o.encounter_id                                                                                           
 		       		where p.voided=0 and pe.voided = 0 and e.voided=0 and o.voided=0 and e.encounter_type=52                                                       
-		               	and o.concept_id=23866 and o.value_datetime is not null and e.location_id= :location and o.value_datetime <= :endDate                                                                                         
+		               	and o.concept_id=23866 and o.value_datetime is not null and e.location_id=:location and o.value_datetime <= :endDate                                                                                         
 						group by p.patient_id
 		          ) ultimo_levantamento group by patient_id
 		 	) ultimo_levantamento
 			where ultimo_levantamento.data_ultimo_levantamento <= :endDate  
 		)ultimo_levantamento on ultimo_levantamento.patient_id = transferido_para.patient_id
 		where ultimo_levantamento.patient_id is null or ( ultimo_levantamento.patient_id is not null and ultimo_levantamento.data_ultimo_levantamento  <= :endDate )
-		
 	   ) saidas on inicioDAH.patient_id = saidas.patient_id 
 	   where saidas.patient_id is null
  )inicioDAH

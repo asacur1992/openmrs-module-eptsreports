@@ -78,7 +78,6 @@ public interface EC3DuplicateFichaResumoQueries {
             + "SELECT pg.patient_id, pg.date_enrolled, ps.state, max(ps.start_date) AS start_date  FROM patient_program pg   "
             + "INNER JOIN patient_state ps ON pg.patient_program_id = ps.patient_program_id   "
             + "AND ps.start_date IS NOT NULL   "
-            + "AND ps.end_date IS NULL   "
             + "AND pg.program_id = 2   "
             + "AND pg.location_id  in (:location) "
             + "GROUP BY pg.patient_id   "

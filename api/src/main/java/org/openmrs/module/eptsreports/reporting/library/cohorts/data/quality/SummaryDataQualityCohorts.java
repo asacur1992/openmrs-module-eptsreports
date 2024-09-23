@@ -123,26 +123,13 @@ public class SummaryDataQualityCohorts {
    *
    * @return CohortDefinition
    */
-  public CohortDefinition getPatientsWithStatesAndEncountersEC11(
-      int programId,
-      int stateId,
-      int labEncounterType,
-      int fsrLabEncounterType,
-      int sampleCollectionDateConceptId,
-      int requestLaboratoryDateConceptId) {
+  public CohortDefinition getPatientsWithStatesAndEncountersEC11() {
     SqlCohortDefinition cd = new SqlCohortDefinition();
     cd.setName("Patients who have state that is before an encounter - EC11");
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
     cd.addParameter(new Parameter("location", "Location", Location.class));
-    cd.setQuery(
-        SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC11(
-            programId,
-            stateId,
-            labEncounterType,
-            fsrLabEncounterType,
-            sampleCollectionDateConceptId,
-            requestLaboratoryDateConceptId));
+    cd.setQuery(SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC11());
     return cd;
   }
 
@@ -166,16 +153,7 @@ public class SummaryDataQualityCohorts {
     cd.addParameter(new Parameter("location", "Location", Location.class));
     cd.addParameter(new Parameter("startDate", "Start Date", Date.class));
     cd.addParameter(new Parameter("endDate", "End Date", Date.class));
-    cd.setQuery(
-        SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC4(
-            programId,
-            stateId,
-            adultFollowUp,
-            childFollowUp,
-            fichaResumo,
-            stateOfStayPriorArtPatient,
-            stateOfStayOfArtPatient,
-            patientHasDiedConcept));
+    cd.setQuery(SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC4());
     return cd;
   }
 
@@ -312,16 +290,7 @@ public class SummaryDataQualityCohorts {
     sql.addParameter(new Parameter("location", "Location", Location.class));
     sql.addParameter(new Parameter("startDate", "Start Date", Date.class));
     sql.addParameter(new Parameter("endDate", "End Date", Date.class));
-    sql.setQuery(
-        SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC4(
-            programId,
-            stateId,
-            adultFollowUp,
-            childFollowUp,
-            fichaResumo,
-            stateOfStayPriorArtPatient,
-            stateOfStayOfArtPatient,
-            patientHasDiedConcept));
+    sql.setQuery(SummaryQueries.getPatientsWithStateThatIsBeforeAnEncounterEC4());
 
     CompositionCohortDefinition cd = new CompositionCohortDefinition();
     cd.setName("Dead or deceased patients");

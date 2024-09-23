@@ -80,7 +80,7 @@
                               			select pg.patient_id,ps.start_date data_parto from patient p                                                                                                                                                                                        
                               				inner join patient_program pg on p.patient_id=pg.patient_id                                                                                                                                                                                     
                               				inner join patient_state ps on pg.patient_program_id=ps.patient_program_id                                                                                                                                                                      
-                              			where pg.voided=0 and ps.voided=0 and p.voided=0 and  pg.program_id=8 and ps.state=27 and ps.end_date is null and  ps.start_date between date_add(:endDate, interval -36 MONTH) and :endDate and location_id=:location                              
+                              			where pg.voided=0 and ps.voided=0 and p.voided=0 and  pg.program_id=8 and ps.state=27 and  ps.start_date between date_add(:endDate, interval -36 MONTH) and :endDate and location_id=:location                              
                               		   union																																																												
                                       select p.patient_id,data_colheita.value_datetime data_parto from patient p    																																										
                               				inner join encounter e on p.patient_id=e.patient_id    																																															

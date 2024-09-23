@@ -24,6 +24,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
 
   @Autowired private MICategory13P2CohortQueries mICategory13P2CohortQueries;
 
+  private final boolean EXCLUDE_TB_ACTIVE_DIAGNOSTIC = true;
+
   public void constructTMiDatset(
       CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
 
@@ -32,7 +34,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.1: Adultos (15/+anos) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador ",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV15PLUSDENOMINATOR",
                 mappings),
             mappings),
@@ -43,7 +46,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.6: Crianças (0-4 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV04DENOMINATOR",
                 mappings),
             mappings),
@@ -54,7 +58,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.7: Crianças (5-9 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                this.mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV59DENOMINATOR",
                 mappings),
             mappings),
@@ -65,7 +70,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.8: Crianças (10-14 anos de idade) na 1a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(),
+                mICategory13P1_1CohortQueries.findDenominatorCategory13SectionIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV1014DENOMINATOR",
                 mappings),
             mappings),
@@ -121,7 +127,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
                 this.mICategory13P3CohortQueries
-                    .findPatientsInFirstLineTherapheuticWhoReceivedViralChargeBetweenSixthAndNinthMonthAfterARTStartCategory13Denominador(),
+                    .findPatientsInFirstLineTherapheuticWhoReceivedViralChargeBetweenSixthAndNinthMonthAfterARTStartCategory13Denominador(
+                        EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13_PART_3_13_2_DENOMINATOR",
                 mappings),
             mappings),
@@ -274,7 +281,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.4: Adultos (15/+anos) na 2a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_2CohortQueries.findDenominatorCategory13SectionIIB(),
+                this.mICategory13P1_2CohortQueries.findDenominatorCategory13SectionIIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV15PLUSDENOMINATOR_SECTION1_2",
                 mappings),
             mappings),
@@ -285,7 +293,8 @@ public class VLMICategory13Dataset extends MQAbstractDataSet {
         "13.13: Crianças na 2a linha de TARV que tiveram consulta clínica no período de revisão e que eram elegíveis ao pedido de CV Denominador",
         EptsReportUtils.map(
             this.setIndicatorWithAllParameters(
-                this.mICategory13P1_2CohortQueries.findDenominatorCategory13SectionIIB(),
+                this.mICategory13P1_2CohortQueries.findDenominatorCategory13SectionIIB(
+                    EXCLUDE_TB_ACTIVE_DIAGNOSTIC),
                 "CAT13CV24DENOMINATOR_SECTION1_2",
                 mappings),
             mappings),

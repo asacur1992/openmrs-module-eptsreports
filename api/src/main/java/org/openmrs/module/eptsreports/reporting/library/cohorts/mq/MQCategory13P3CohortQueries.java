@@ -108,6 +108,54 @@ public class MQCategory13P3CohortQueries {
     return definition;
   }
 
+  @DocumentedDefinition(
+      value =
+          "findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterInitiatedART")
+  public CohortDefinition
+      findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterInitiatedART() {
+
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName(
+        "findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterInitiatedART");
+    definition.addParameter(new Parameter("startInclusionDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endInclusionDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("endRevisionDate", "End Revision Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    String query =
+        MQCategory13P3QueriesInterface.QUERY
+            .findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterInitiatedART;
+
+    definition.setQuery(query);
+
+    return definition;
+  }
+
+  @DocumentedDefinition(
+      value =
+          "findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterSecondLineARTRegimen")
+  public CohortDefinition
+      findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterSecondLineARTRegimen() {
+
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+
+    definition.setName(
+        "findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterSecondLineARTRegimen");
+    definition.addParameter(new Parameter("startInclusionDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endInclusionDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("endRevisionDate", "End Revision Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    String query =
+        MQCategory13P3QueriesInterface.QUERY
+            .findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterSecondLineARTRegimen;
+
+    definition.setQuery(query);
+
+    return definition;
+  }
+
   @DocumentedDefinition(value = "findAllPatientWhoAreDeadByEndOfRevisonPeriod")
   public CohortDefinition findAllPatientWhoAreDeadByEndOfRevisonPeriod() {
 

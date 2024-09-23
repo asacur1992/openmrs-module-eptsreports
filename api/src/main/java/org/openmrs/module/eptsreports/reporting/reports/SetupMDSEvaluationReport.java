@@ -1,17 +1,17 @@
 package org.openmrs.module.eptsreports.reporting.reports;
 
+import static org.openmrs.module.reporting.evaluation.parameter.Mapped.mapStraightThrough;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
-import org.openmrs.module.eptsreports.reporting.library.cohorts.GenericCohortQueries;
 import org.openmrs.module.eptsreports.reporting.library.datasets.ListMDSEvaluationReportDataSet;
+import org.openmrs.module.eptsreports.reporting.library.datasets.LocationDataSetDefinition;
 import org.openmrs.module.eptsreports.reporting.library.datasets.SismaCodeDataSet;
-import org.openmrs.module.eptsreports.reporting.library.queries.BaseQueries;
 import org.openmrs.module.eptsreports.reporting.reports.manager.EptsDataExportManager;
-import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
 import org.openmrs.module.reporting.ReportingConstants;
 import org.openmrs.module.reporting.ReportingException;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SetupMDSEvaluationReport extends EptsDataExportManager {
 
-  @Autowired private GenericCohortQueries genericCohortQueries;
   @Autowired private ListMDSEvaluationReportDataSet mdsEvaluationReportSetDataSet;
   @Autowired private SismaCodeDataSet sismaCodeDataSet;
 
@@ -63,12 +62,7 @@ public class SetupMDSEvaluationReport extends EptsDataExportManager {
         Mapped.mapStraightThrough(
             mdsEvaluationReportSetDataSet.constructDataset(this.getParameters())));
 
-    rd.setBaseCohortDefinition(
-        EptsReportUtils.map(
-            this.genericCohortQueries.generalSql(
-                "baseCohortQuery", BaseQueries.getBaseCohortQuery()),
-            "endDate=${endDate},location=${location}"));
-
+    rd.addDataSetDefinition("HF", mapStraightThrough(new LocationDataSetDefinition()));
     rd.addDataSetDefinition(
         "SC",
         Mapped.mapStraightThrough(this.sismaCodeDataSet.constructDataset(this.getParameters())));

@@ -12,6 +12,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.DSDQueriesInterf
 import org.openmrs.module.eptsreports.reporting.library.queries.ResumoMensalQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.mq.MQCategory15QueriesInterface;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.ReportType;
 import org.openmrs.module.eptsreports.reporting.utils.WomanState;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
@@ -623,7 +624,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "E", EptsReportUtils.map(mQCohortQueries.getPatientsWhoDiedEndRevisioDate(), mappings));
@@ -668,7 +670,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -722,7 +725,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -771,7 +775,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -810,7 +815,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "E", EptsReportUtils.map(mQCohortQueries.getPatientsWhoDiedEndRevisioDate(), mappings));
@@ -855,7 +861,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -910,7 +917,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -960,7 +968,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -999,7 +1008,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "E", EptsReportUtils.map(mQCohortQueries.getPatientsWhoDiedEndRevisioDate(), mappings));
@@ -1044,7 +1054,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -1099,7 +1110,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));
@@ -1149,7 +1161,8 @@ public class MQCategory15CohortQueries {
 
     definition.addSearch(
         "F",
-        EptsReportUtils.map(mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(), mappings));
+        EptsReportUtils.map(
+            mQCohortQueries.findPatientsWhoTransferedOutRF07Category7(ReportType.MQ), mappings));
 
     definition.addSearch(
         "CV", EptsReportUtils.map(this.findPatientsWhoHaveCVOverThan10000Category15(), mappings));

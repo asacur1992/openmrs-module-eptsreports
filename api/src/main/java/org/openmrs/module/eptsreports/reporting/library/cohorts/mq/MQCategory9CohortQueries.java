@@ -252,29 +252,6 @@ public class MQCategory9CohortQueries {
   }
 
   @DocumentedDefinition(
-      value = "findPatientsWhoReinitiatedTreatmentWihCD4Result33DaysAfterRequestCD4AndReinicio")
-  public CohortDefinition
-      findPatientsWhoReinitiatedTreatmentWihCD4Result33DaysAfterRequestCD4AndReinicio() {
-
-    final SqlCohortDefinition definition = new SqlCohortDefinition();
-
-    definition.setName(
-        "findPatientsWhoReinitiatedTreatmentWihCD4Result33DaysAfterRequestCD4AndReinicio");
-    definition.addParameter(new Parameter("startInclusionDate", "Start Date", Date.class));
-    definition.addParameter(new Parameter("endInclusionDate", "End Date", Date.class));
-    definition.addParameter(new Parameter("endRevisionDate", "End Revision Date", Date.class));
-    definition.addParameter(new Parameter("location", "Location", Location.class));
-
-    String query =
-        MQCategory9QueriesInterface.QUERY
-            .findPatientsWhoReinitiatedTreatmentWihCD4Result33DaysAfterRequestCD4AndReinicio;
-
-    definition.setQuery(query);
-
-    return definition;
-  }
-
-  @DocumentedDefinition(
       value = "findPatientsWhoReceivedCD4ResultBetweenReinitiatedConsultationAndEnRevisionDate")
   public CohortDefinition
       findPatientsWhoReceivedCD4ResultBetweenReinitiatedConsultationAndEnRevisionDate() {

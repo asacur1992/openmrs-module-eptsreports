@@ -44,7 +44,7 @@ public class ListOfPatientsElegibleToCD4RequestQueries {
       case C6:
         query =
             query
-                + " where final.criteria=6 and saidas.patient_id is null group by final.patient_id  ";
+                + "where final.criteria=6 and saidas.patient_id is null group by final.patient_id  ";
         break;
 
       default:

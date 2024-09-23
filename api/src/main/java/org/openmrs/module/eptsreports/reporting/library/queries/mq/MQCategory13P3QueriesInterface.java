@@ -143,7 +143,7 @@ public interface MQCategory13P3QueriesInterface {
                 + "inner join encounter e on e.patient_id=tx_new.patient_id "
                 + "inner join obs o on o.encounter_id=e.encounter_id "
                 + "where e.encounter_type=6 and e.voided=0 and o.voided=0 and "
-                + "e.encounter_datetime between date_add(tx_new.art_start_date, interval +6 MONTH) AND  date_add(tx_new.art_start_date, interval +9 MONTH) and "
+                + "e.encounter_datetime between date_add(tx_new.art_start_date, interval 198 DAY) AND  date_add(tx_new.art_start_date, interval 297 DAY) and "
                 + "o.concept_id in (856,1305) and e.location_id=:location "
                 + ") final";
 
@@ -167,7 +167,7 @@ public interface MQCategory13P3QueriesInterface {
                 + " inner join encounter e on e.patient_id = B1.patient_id "
                 + " inner join obs o on o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id IN (856,1305) "
                 + " where e.encounter_type = 6 and e.voided = 0 and e.location_id = :location "
-                + " and e.encounter_datetime between date_add(B1.data_linha23898, interval + 6 MONTH) AND  date_add(B1.data_linha23898, interval + 9 MONTH) "
+                + " and e.encounter_datetime between date_add(B1.data_linha23898, interval 198 DAY) AND  date_add(B1.data_linha23898, interval 297 DAY) "
                 + " ) final ";
 
     public static final String
@@ -191,7 +191,7 @@ public interface MQCategory13P3QueriesInterface {
                 + " inner join encounter e on e.patient_id = B2NEW.patient_id "
                 + " inner join obs o on o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id IN (856, 1305) "
                 + " where e.encounter_type = 6 and e.voided = 0 and e.location_id = :location "
-                + " and e.encounter_datetime between date_add(B2NEW.data_linha23898, interval + 6 MONTH) AND  date_add(B2NEW.data_linha23898, interval + 9 MONTH) ";
+                + " and e.encounter_datetime between date_add(B2NEW.data_linha23898, interval 198 DAY) AND  date_add(B2NEW.data_linha23898, interval 297 DAY) ";
 
     public static final String findAllPatientWhoAreDeadByEndOfRevisonPeriod =
         " select obito.patient_id from ( "
@@ -253,7 +253,7 @@ public interface MQCategory13P3QueriesInterface {
                 + " inner join encounter e on e.patient_id = tx_new.patient_id "
                 + " inner join obs o on o.encounter_id = e.encounter_id "
                 + " where e.encounter_type = 53 and e.voided = 0 and o.voided = 0 and "
-                + " o.obs_datetime between date_add(tx_new.art_start_date, interval +6 MONTH) AND  date_add(tx_new.art_start_date, interval +9 MONTH) and "
+                + " o.obs_datetime between date_add(tx_new.art_start_date, interval 198 DAY) AND  date_add(tx_new.art_start_date, interval 297 DAY) and "
                 + " o.concept_id = 856 AND o.value_numeric IS NOT NULL  and e.location_id = :location "
                 + " ) final ";
 
@@ -276,7 +276,7 @@ public interface MQCategory13P3QueriesInterface {
                 + " ) B1 "
                 + " inner join encounter e on e.patient_id = B1.patient_id and e.encounter_type = 53 and e.voided = 0 and e.location_id = :location "
                 + " inner join obs o on o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id = 856 AND o.value_numeric IS NOT NULL "
-                + " where o.obs_datetime between date_add(B1.data_linha23898, interval + 6 MONTH) AND  date_add(B1.data_linha23898, interval + 9 MONTH)) final ";
+                + " where o.obs_datetime between date_add(B1.data_linha23898, interval 198 DAY) AND  date_add(B1.data_linha23898, interval 297 DAY)) final ";
 
     public static final String
         findAllPatientsWhoHaveClinicalConsultationAndEncounterDateTimeBetweenSecondTherapheuticLineDateCategory13_3_L_Numerator =
@@ -298,7 +298,7 @@ public interface MQCategory13P3QueriesInterface {
                 + " ) B2NEW "
                 + " inner join encounter e on e.patient_id = B2NEW.patient_id AND e.encounter_type = 53 and e.voided = 0 and e.location_id = :location "
                 + " inner join obs o on o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id = 856 AND o.value_numeric IS NOT NULL "
-                + " where o.obs_datetime between date_add(B2NEW.data_linha23898, interval + 6 MONTH) AND  date_add(B2NEW.data_linha23898, interval + 9 MONTH) ";
+                + " where o.obs_datetime between date_add(B2NEW.data_linha23898, interval 198 DAY) AND  date_add(B2NEW.data_linha23898, interval 297 DAY) ";
 
     public static final String
         findAllPatientsWhoDroppedOutARTDuringTheFirstSixMonthsAfterInitiatedART =
@@ -585,5 +585,49 @@ public interface MQCategory13P3QueriesInterface {
             + "where o.concept_id in (6272,6273) and o.value_coded = 1706 "
             + "and o.obs_datetime = saida.data_estado and o.voided = 0 "
             + "group by saida.patient_id ";
+
+    public static final String
+        findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterInitiatedART =
+            "select final.patient_id from ( "
+                + "select tx_new.patient_id,tx_new.art_start_date as art_start_date from ( "
+                + "SELECT patient_id, MIN(art_start_date) art_start_date  FROM ( "
+                + "SELECT p.patient_id, MIN(value_datetime) art_start_date FROM patient p "
+                + "INNER JOIN encounter e ON p.patient_id=e.patient_id "
+                + "INNER JOIN obs o ON e.encounter_id=o.encounter_id "
+                + "WHERE p.voided=0 AND e.voided=0 AND o.voided=0 AND e.encounter_type=53 "
+                + "AND o.concept_id=1190 AND o.value_datetime is NOT NULL AND o.value_datetime<=:endInclusionDate  AND e.location_id=:location "
+                + "GROUP BY p.patient_id "
+                + ") art_start "
+                + "GROUP BY patient_id "
+                + ") tx_new "
+                + "inner join encounter e on e.patient_id=tx_new.patient_id "
+                + "inner join obs o on o.encounter_id=e.encounter_id "
+                + "where e.encounter_type in (6,53) and e.voided=0 and o.voided=0 and "
+                + "o.obs_datetime between date_add(tx_new.art_start_date, interval 198 DAY) AND  date_add(tx_new.art_start_date, interval 297 DAY) and "
+                + "o.concept_id in (856,1305) and e.location_id=:location "
+                + ") final";
+
+    public static final String
+        findPatientsWhoHaveViralLoadResultInFichaClinicaAndFichaResumoBetween6To9MonthsAfterSecondLineARTRegimen =
+            " select B2NEW.patient_id from ( "
+                + " select alternativa.patient_id, data_linha23898 "
+                + " from "
+                + " ( "
+                + " Select p.patient_id, max(obsLinha.obs_datetime) data_linha23898 "
+                + " from patient p "
+                + " inner join encounter e on p.patient_id = e.patient_id "
+                + " inner join obs obsLinha on obsLinha.encounter_id = e.encounter_id "
+                + " left join obs obsJustificacao on obsJustificacao.encounter_id = e.encounter_id and obsJustificacao.voided = 0 and "
+                + " obsJustificacao.concept_id = 1792 "
+                + " where p.voided = 0 and e.voided = 0 and e.encounter_type = 53 and obsLinha.concept_id = 21187 and obsLinha.voided = 0 and "
+                + " obsLinha.obs_datetime BETWEEN :startInclusionDate and :endInclusionDate and e.location_id = :location and "
+                + " (obsJustificacao.value_coded is null or (obsJustificacao.value_coded is not null and obsJustificacao.value_coded <> 1982)) "
+                + " group by p.patient_id "
+                + " ) alternativa "
+                + " ) B2NEW "
+                + " inner join encounter e on e.patient_id = B2NEW.patient_id "
+                + " inner join obs o on o.encounter_id = e.encounter_id and o.voided = 0 and o.concept_id IN (856, 1305) "
+                + " where e.encounter_type in (6,53) and e.voided = 0 and e.location_id = :location "
+                + " and o.obs_datetime between date_add(B2NEW.data_linha23898, interval 198 DAY) AND  date_add(B2NEW.data_linha23898, interval 297 DAY) ";
   }
 }

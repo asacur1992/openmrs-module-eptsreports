@@ -687,6 +687,31 @@ public class DSDCohortQueries {
     return definition;
   }
 
+  @DocumentedDefinition(value = "patientsWhoAreActiveOnArtAndInDSDDCP")
+  public CohortDefinition getDSDDCPAPE() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("DSD - Numerator 9");
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+    final String mappings = "endDate=${endDate},location=${location}";
+
+    definition.addSearch("IART", EptsReportUtils.map(this.getDSDDenominator3(), mappings));
+
+    definition.addSearch(
+        "DCP",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "DCP",
+                DSDQueriesInterface.QUERY.findPatientsWhoAreIncludedInDSDModel(
+                    DSDModeTypeLevel1.DCA_APE)),
+            mappings));
+
+    definition.setCompositionString("IART AND DCP");
+
+    return definition;
+  }
+
   @DocumentedDefinition(value = "patientsWhoAreActiveOnArtAndInDSDBM")
   public CohortDefinition getDSDNumerator10() {
     final CompositionCohortDefinition definition = new CompositionCohortDefinition();
@@ -1300,6 +1325,7 @@ public class DSDCohortQueries {
     definition.addSearch("DD", EptsReportUtils.map(this.getDSDTotalNumerator5(), mappings));
 
     definition.addSearch("DCP", EptsReportUtils.map(this.getDSDNumerator9(), mappings));
+    definition.addSearch("DCPAPE", EptsReportUtils.map(this.getDSDDCPAPE(), mappings));
 
     definition.addSearch("DCA", EptsReportUtils.map(this.getDSDTotalNumerator6(), mappings));
 
@@ -1326,7 +1352,7 @@ public class DSDCohortQueries {
     definition.addSearch("SMI", EptsReportUtils.map(this.getDSDNumerator18(), mappings));
 
     definition.setCompositionString(
-        "D3 AND (DB OR DT OR DS OR DA OR DD OR DCP OR DCP OR BM OR CM OR AF OR FR OR GAAC OR CA OR EH OR TB OR CT OR SAAJ OR SMI)");
+        "D3 AND (DB OR DT OR DS OR DA OR DD OR DCP OR DCPAPE OR DCP OR BM OR CM OR AF OR FR OR GAAC OR CA OR EH OR TB OR CT OR SAAJ OR SMI)");
 
     return definition;
   }

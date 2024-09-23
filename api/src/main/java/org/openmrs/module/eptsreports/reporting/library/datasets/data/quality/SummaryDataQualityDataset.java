@@ -186,14 +186,7 @@ public class SummaryDataQualityDataset extends BaseDataSet {
             eptsGeneralIndicator.getIndicator(
                 "The patient has been identified as abandoned but has an laboratory results(specimen collection date or report date) after the abandoned date",
                 EptsReportUtils.map(
-                    summaryDataQualityCohorts.getPatientsWithStatesAndEncountersEC11(
-                        hivMetadata.getARTProgram().getProgramId(),
-                        hivMetadata.getAbandonedWorkflowState().getProgramWorkflowStateId(),
-                        hivMetadata.getMisauLaboratorioEncounterType().getEncounterTypeId(),
-                        ENCONTER_TYPE_FSR,
-                        SAMPLE_COLLECTION_DATE,
-                        DATE_OF_APPLICATION_OF_LABORATORY_TESTS),
-                    mappings)),
+                    summaryDataQualityCohorts.getPatientsWithStatesAndEncountersEC11(), mappings)),
             mappings),
         "");
 

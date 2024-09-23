@@ -170,7 +170,7 @@ public interface MQCategory9QueriesInterface {
                 + "inner join obs obsCD4 on obsCD4.encounter_id=e.encounter_id  "
                 + "where firstClinica.encounter_datetime between  DATE_ADD(DATE_SUB(:endRevisionDate, INTERVAL 12 MONTH), INTERVAL 1 DAY) and DATE_SUB(:endRevisionDate, INTERVAL 9 MONTH)  "
                 + "and obsCD4.obs_datetime >= firstClinica.encounter_datetime and obsCD4.obs_datetime <=  DATE_ADD(firstClinica.encounter_datetime, INTERVAL 33 DAY)  "
-                + "and obsCD4.concept_id in(1695,730) and obsCD4.value_numeric is not null and obsCD4.voided=0  "
+                + "and obsCD4.concept_id in(1695,730,165515) and (obsCD4.value_numeric is not null or obsCD4.value_coded is not null) and obsCD4.voided=0  "
                 + "and obsCD4.location_id=:location and e.encounter_type=6 ";
 
     public static final String
@@ -190,8 +190,8 @@ public interface MQCategory9QueriesInterface {
                 + "inner join encounter e on firstClinica.patient_id=e.patient_id "
                 + "inner join obs obsCD4 on obsCD4.encounter_id=e.encounter_id "
                 + "where "
-                + "obsCD4.concept_id in(1695,730) "
-                + "and obsCD4.value_numeric is not null "
+                + "obsCD4.concept_id in(1695,730,165515) "
+                + "and (obsCD4.value_numeric is not null or obsCD4.value_coded is not null) "
                 + "and obsCD4.voided=0 "
                 + "and obsCD4.obs_datetime >=firstClinica.encounter_datetime "
                 + "and obsCD4.obs_datetime<=date_add(firstClinica.encounter_datetime, interval 33 day) "
@@ -235,29 +235,6 @@ public interface MQCategory9QueriesInterface {
                 + ") reinicio where DATEDIFF(:endRevisionDate, reinicio.data_reinicio) >= 33 ";
 
     public static final String
-        findPatientsWhoReinitiatedTreatmentWihCD4Result33DaysAfterRequestCD4AndReinicio =
-            "	select reinicio.patient_id from ( "
-                + "		select reinicio.patient_id, data_estado from ( "
-                + "	select p.patient_id, max(e.encounter_datetime) data_estado from patient p "
-                + "	inner join encounter e on p.patient_id=e.patient_id "
-                + "	inner join obs  o on e.encounter_id=o.encounter_id "
-                + "	where e.voided=0 and o.voided=0 and p.voided=0 and  e.encounter_type = 6 and o.concept_id = 6273 and o.value_coded = 1705 and e.location_id=:location "
-                + "	and e.encounter_datetime between :startInclusionDate and :endRevisiondate "
-                + "	group by p.patient_id "
-                + "	) reinicio "
-                + "	inner join encounter e on e.patient_id = reinicio.patient_id "
-                + "	inner join obs o on o.encounter_id = e.encounter_id "
-                + "	where o.voided = 0 and e.voided = 0 and e.location_id = :location "
-                + "	and e.encounter_type = 6 and e.encounter_datetime = reinicio.data_estado "
-                + "	and o.concept_id = 23722 and o.value_coded = 1695 "
-                + "	) reinicio "
-                + "	inner join encounter e on reinicio.patient_id=e.patient_id "
-                + "	inner join obs obsCD4 on obsCD4.encounter_id=e.encounter_id "
-                + "	and obsCD4.obs_datetime >= reinicio.data_estado and obsCD4.obs_datetime <=  DATE_ADD(reinicio.data_estado, INTERVAL 33 DAY) "
-                + "	and obsCD4.concept_id in(1695,730) and obsCD4.value_numeric is not null and obsCD4.voided=0 "
-                + "	and obsCD4.location_id=:location and e.encounter_type=6 ";
-
-    public static final String
         findPatientsWhoReceivedCD4ResultBetweenReinitiatedConsultationAndEnRevisionDate =
             "	select reinicio.patient_id from ( "
                 + "select p.patient_id, max(e.encounter_datetime) data_estado from patient p "
@@ -270,7 +247,7 @@ public interface MQCategory9QueriesInterface {
                 + "inner join encounter e on reinicio.patient_id=e.patient_id "
                 + "inner join obs obsCD4 on obsCD4.encounter_id=e.encounter_id "
                 + "and obsCD4.obs_datetime >= reinicio.data_estado and obsCD4.obs_datetime <= :endRevisionDate "
-                + "and obsCD4.concept_id in(1695,730) and obsCD4.value_numeric is not null and obsCD4.voided=0 "
+                + "and obsCD4.concept_id in(1695,730,165515) and (obsCD4.value_numeric is not null or obsCD4.value_coded is not null) and obsCD4.voided=0 "
                 + "and obsCD4.location_id=:location and e.encounter_type=6 ";
 
     public static final String
@@ -286,7 +263,7 @@ public interface MQCategory9QueriesInterface {
                 + "inner join encounter e on reinicio.patient_id=e.patient_id "
                 + "inner join obs obsCD4 on obsCD4.encounter_id=e.encounter_id "
                 + "and obsCD4.obs_datetime >= reinicio.data_estado and obsCD4.obs_datetime <= DATE_ADD(reinicio.data_estado, INTERVAL 33 DAY) "
-                + "and obsCD4.concept_id in(1695,730) and obsCD4.value_numeric is not null and obsCD4.voided=0 "
+                + "and obsCD4.concept_id in(1695,730,165515) and (obsCD4.value_numeric is not null or obsCD4.value_coded is not null) and obsCD4.voided=0 "
                 + "and obsCD4.location_id=:location and e.encounter_type=6 ";
   }
 }

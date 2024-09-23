@@ -94,7 +94,8 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
     this.addSection3(dataSetDefinition, mappingsPreviousPeriod);
     this.addSEction4(dataSetDefinition, mappingsPreviousPeriod);
     this.addSection5(dataSetDefinition, mappingsPreviousPeriod);
-    this.addSection6(dataSetDefinition, mappingsPreviousPeriod);
+    this.addSection6A(dataSetDefinition, mappingsPreviousPeriod);
+    this.addSection6B(dataSetDefinition, mappingsPreviousPeriod);
     this.addSection7(dataSetDefinition, mappingsPreviousPeriod);
     this.addSection8(dataSetDefinition, mappingsPreviousPeriod);
 
@@ -293,29 +294,105 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         EptsReportUtils.map(specimenSet, mappings),
         "diagnostictest=baciloscopia");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-SP-N",
+        "5. Smear Only (Previously on ART) ",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=baciloscopia");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-SP-P",
+        "Smear Only (Previously on ART)",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=baciloscopia");
+
+    // mWRD
     dataSetDefinition.addColumn(
         "TBD-SP-mWRD",
         " 5. Screened patients with mWRD MTB/RIF",
         EptsReportUtils.map(specimenSet, mappings),
         "diagnostictest=genexpert");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-MD-N",
+        "5. Screened patients with mWRD MTB/RIF (Previously on ART) ",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=genexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-MD-P",
+        "5.Screened patients with mWRD MTB/RIF (Previously on ART)",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=genexpert");
+
+    // TB LAM
     dataSetDefinition.addColumn(
         "TBD-SP-tblam",
         " 5. Screened patients with TB LAM",
         EptsReportUtils.map(specimenSet, mappings),
         "diagnostictest=tblam");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-TBL-N",
+        "5. TBL-SP-tblam (New on ART) ",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=tblam");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-TBL-P",
+        "Screened patients with TB LAM (Previously on ART)",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=tblam");
+
+    // Other
+
     dataSetDefinition.addColumn(
         "TBD-SP-other",
         " 5. Screened patients with Additional test other",
         EptsReportUtils.map(specimenSet, mappings),
         "diagnostictest=additonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-OD-N",
+        "5. Screened patients with Additional test other (New on ART) ",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=additonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-OD-P",
+        "Screened patients with Additional test other (Previously on ART)",
+        EptsReportUtils.map(specimenSet, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=additonalDiagnostic");
   }
 
-  private void addSection6(
-      final CohortIndicatorDataSetDefinition dataSetDefinition, final String mappings) {
 
-    final CohortIndicator positiveResults =
+  private void addSection6A(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+    CohortIndicator positiveResults =
+
         this.getIndicator(
             this.tb4MontlyCascadeCohortQuery.getDenominatorAndPositiveOrNegativeCohort(
                 this.tb4MontlyCascadeCohortQuery.getAllPositiveTestResults(),
@@ -328,30 +405,109 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         "");
 
     dataSetDefinition.addColumn(
-        "TBD-PR-mWRD",
-        " 6a.Screened patients with positive TB testing result - mWRD MTB/RIF",
-        EptsReportUtils.map(positiveResults, mappings),
-        "diagnostictest=genexpert|posetiveTestResult=positiveGenexpert");
-
-    dataSetDefinition.addColumn(
         "TBD-PR-baciloscopia",
-        "6a.Screened patients with positive TB testing result - Baciloscopia",
+        "6a.Screened patients with positive TB testing result -Total",
         EptsReportUtils.map(positiveResults, mappings),
-        "diagnostictest=baciloscopia|posetiveTestResult=positiveBaciloscopia");
+        "diagnostictest=baciloscopia");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PR-N",
+        "6a.Screened patients with positive TB testing result (New on ART) ",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=baciloscopia");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PR-P",
+        "6a.Screened patients with positive TB testing result (Previously on ART)",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=baciloscopia");
+
+    // mWRD
+    dataSetDefinition.addColumn(
+        "TBD-PR-mWRD",
+        " 6a. Screened patients with positive TB testing result mWRD MTB/RIF",
+        EptsReportUtils.map(positiveResults, mappings),
+        "diagnostictest=genexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRM-N",
+        "6a. Screened patients with positive TB testing result mWRD MTB/RIF (Previously on ART) ",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=genexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRM-P",
+        "6a.Screened patients with positive TB testing resultmWRD MTB/RIF (Previously on ART)",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=genexpert");
+
+    // TB LAM
+    dataSetDefinition.addColumn(
+        "TBD-PRL-tblam",
+        " 6a. Screened patients with positive TB testing result TB LAM",
+        EptsReportUtils.map(positiveResults, mappings),
+        "diagnostictest=tblam");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRL-N",
+        "6. Screened patients with positive TB testing result-tblam (New on ART) ",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=tblam");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRL-P",
+        "6a.Screened patients with positive TB testing result TB LAM (Previously on ART)",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=tblam");
+    // Other
 
     dataSetDefinition.addColumn(
-        "TBD-PR-tblam",
-        " 6a.Screened patients with positive TB testing result - TB LAM",
+        "TBD-PRO-other",
+        " 6a. Screened patients with positive TB testing result with Additional test other",
         EptsReportUtils.map(positiveResults, mappings),
-        "diagnostictest=tblam|posetiveTestResult=positiveTblam");
+        "diagnostictest=additonalDiagnostic");
 
-    dataSetDefinition.addColumn(
-        "TBD-PR-other",
-        "6a.Screened patients with positive TB testing result - Additional test other",
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRO-N",
+        "6a. Screened patients with positive TB testing result with Additional test other (New on ART) ",
         EptsReportUtils.map(positiveResults, mappings),
-        "diagnostictest=additonalDiagnostic|posetiveTestResult=positiveAdditonalDiagnostic");
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=additonalDiagnostic");
 
-    final CohortIndicator negativeResults =
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-PRO-P",
+        "6a.Screened patients with positive TB testing result with Additional test other (Previously on ART)",
+        EptsReportUtils.map(positiveResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=additonalDiagnostic");
+  }
+
+  private void addSection6B(CohortIndicatorDataSetDefinition dataSetDefinition, String mappings) {
+    CohortIndicator negativeResults =
+
         this.getIndicator(
             this.tb4MontlyCascadeCohortQuery.getDenominatorAndPositiveOrNegativeCohort(
                 this.tb4MontlyCascadeCohortQuery.getAllNegativeTestResults(),
@@ -359,15 +515,9 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
 
     dataSetDefinition.addColumn(
         "TBD-NR",
-        "6b.Screened patients with negative TB testing result -Total",
+        "6b.Screened patients with negative TB testing result -Total ",
         EptsReportUtils.map(negativeResults, mappings),
         "");
-
-    dataSetDefinition.addColumn(
-        "TBD-NR-mWRD",
-        " 6b.Screened patients with negative TB testing result - mWRD MTB/RIF",
-        EptsReportUtils.map(negativeResults, mappings),
-        "diagnostictest=genexpert|negativeTestResult=negativeGenexpert");
 
     dataSetDefinition.addColumn(
         "TBD-NR-baciloscopia",
@@ -375,17 +525,98 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         EptsReportUtils.map(negativeResults, mappings),
         "diagnostictest=baciloscopia|negativeTestResult=negativeBaciloscopia");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NR-N",
+        "6b.Screened patients with negative TB testing result (New on ART) ",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=baciloscopia|negativeTestResult=negativeBaciloscopia");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NR-P",
+        "6b.Screened patients with negative TB testing result (Previously on ART)",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=baciloscopia|negativeTestResult=negativeBaciloscopia");
+
+    // mWRD
+    dataSetDefinition.addColumn(
+        "TBD-NRM-mWRD",
+        " 6b.Screened patients with negative TB testing  result mWRD MTB/RIF",
+        EptsReportUtils.map(negativeResults, mappings),
+        "diagnostictest=genexpert|negativeTestResult=negativeGenexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRM-N",
+        "6b.Screened patients with negative TB testing result tmWRD MTB/RIF (Previously on ART) ",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=genexpert|negativeTestResult=negativeGenexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRM-P",
+        "6b.Screened patients with negative TB testing result mWRD MTB/RIF (Previously on ART)",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=genexpert|negativeTestResult=negativeGenexpert");
+
+    // TB LAM
     dataSetDefinition.addColumn(
         "TBD-NR-tblam",
-        "6b.Screened patients with negative TB testing result - TB LAM",
+        " 6b.Screened patients with negative TB testing result TB testing result TB LAM",
         EptsReportUtils.map(negativeResults, mappings),
         "diagnostictest=tblam|negativeTestResult=negativeTblam");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRL-N",
+        "6b.Screened patients with negative TB testing result-tblam (New on ART) ",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=tblam|negativeTestResult=negativeTblam");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRL-P",
+        "6b.Screened patients with negative TB testing result TB LAM (Previously on ART)",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=tblam|negativeTestResult=negativeTblam");
+    // Other
+
     dataSetDefinition.addColumn(
         "TBD-NR-other",
-        "6b.Screened patients with negative TB testing result - Additional test other",
+        " 6b.Screened patients with negative TB testing result with Additional test other",
         EptsReportUtils.map(negativeResults, mappings),
         "diagnostictest=additonalDiagnostic|negativeTestResult=negativeAdditonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRO-N",
+        "6b.Screened patients with negative TB testing result with Additional test other (New on ART) ",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=additonalDiagnostic|negativeTestResult=negativeAdditonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-NRO-P",
+        "6b.Screened patients with negative TB testing result with Additional test other (Previously on ART)",
+        EptsReportUtils.map(negativeResults, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=additonalDiagnostic|negativeTestResult=negativeAdditonalDiagnostic");
   }
 
   private void addSection7(
@@ -395,15 +626,9 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
 
     dataSetDefinition.addColumn(
         "TBD-STB",
-        "7. Screened patients with pos TB testing result who initiated treatment -Total",
+        "7. Screened patients with pos TB testing result who initiated treatment -Total ",
         EptsReportUtils.map(startedTBTreatment, mappings),
         "");
-
-    dataSetDefinition.addColumn(
-        "TBD-STB-mWRD",
-        " 7. Screened patients with pos TB testing result who initiated treatment - mWRD MTB/RIF",
-        EptsReportUtils.map(startedTBTreatment, mappings),
-        "diagnostictest=genexpert");
 
     dataSetDefinition.addColumn(
         "TBD-STB-baciloscopia",
@@ -411,17 +636,98 @@ public class TB4MontlyCascadeReportDataSet extends BaseDataSet {
         EptsReportUtils.map(startedTBTreatment, mappings),
         "diagnostictest=baciloscopia");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STB-N",
+        "7. Screened patients with pos TB testing result who initiated treatment (New on ART) ",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=baciloscopia");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STB-P",
+        "7. Screened patients with pos TB testing result who initiated treatment (Previously on ART)",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=baciloscopia");
+
+    // mWRD
     dataSetDefinition.addColumn(
-        "TBD-STB-tblam",
-        "7. Screened patients with pos TB testing result who initiated treatment - TB LAM",
+        "TBD-STB-mWRD",
+        " 7. Screened patients with pos TB testing result who initiated treatment result mWRD MTB/RIF",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        "diagnostictest=genexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBM-N",
+        "7. Screened patients with pos TB testing result who initiated treatment tmWRD MTB/RIF (Previously on ART) ",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=genexpert");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBM-P",
+        "7. Screened patients with pos TB testing result who initiated treatment mWRD MTB/RIF (Previously on ART)",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=genexpert");
+
+    // TB LAM
+    dataSetDefinition.addColumn(
+        "TBD-STBL-tblam",
+        " 7. Screened patients with pos TB testing result who initiated treatment result TB LAM",
         EptsReportUtils.map(startedTBTreatment, mappings),
         "diagnostictest=tblam");
 
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBL-N",
+        "7. Screened patients with pos TB testing result who initiated treatment testing result-tblam (New on ART) ",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=tblam");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBL-P",
+        "7. Screened patients with pos TB testing result who initiated treatment result TB LAM (Previously on ART)",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=tblam");
+    // Other
+
     dataSetDefinition.addColumn(
-        "TBD-STB-other",
-        "7. Screened patients with pos TB testing result who initiated treatment  - Additional test other",
+        "TBD-STBO-other",
+        " 7. Screened patients with pos TB testing result who initiated treatment result with Additional test other",
         EptsReportUtils.map(startedTBTreatment, mappings),
         "diagnostictest=additonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBO-N",
+        "7. Screened patients with pos TB testing result who initiated treatment result with Additional test other (New on ART) ",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrNewlyOnArt|diagnostictest=additonalDiagnostic");
+
+    this.addRow(
+        dataSetDefinition,
+        "TBD-STBO-P",
+        "7. Screened patients with pos TB testing result who initiated treatment with Additional test other (Previously on ART)",
+        EptsReportUtils.map(startedTBTreatment, mappings),
+        this.getColumnsForAgeDesaggregation(),
+        mappings,
+        "artStartState=txcurrPreviouslyOnArt|diagnostictest=additonalDiagnostic");
   }
 
   private void addSection8(

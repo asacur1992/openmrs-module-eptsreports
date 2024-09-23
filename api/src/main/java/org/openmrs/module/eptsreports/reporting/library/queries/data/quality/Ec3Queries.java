@@ -20,17 +20,7 @@ public class Ec3Queries {
    *
    * @return String
    */
-  public static String getEc3CombinedQuery(
-      int programId,
-      int stateId,
-      int encounterType,
-      int stateOfStayPriorArtPatient,
-      int stateOfStayArtPatient,
-      int patientHasDiedConceptUuid,
-      int masterCardEncounterType,
-      int sTarvAdultoSeguimentoEncounterTypeUuid,
-      int masterCardDrugPickupEncounterTypeUuid,
-      int preArtPickupDate) {
+  public static String getEc3CombinedQuery() {
     String query =
         "SELECT pe.person_id As patient_id, "
             + " pid.identifier AS NID, "
@@ -53,12 +43,10 @@ public class Ec3Queries {
             + " DATE_FORMAT(deadPrograma.death_date,'%d-%m-%Y') As death_date_program, "
             + " DATE_FORMAT(deadFichaResumo.death_date,'%d-%m-%Y') As death_date_resumo, "
             + " DATE_FORMAT(deadFichaClinica.death_date,'%d-%m-%Y') As death_date_clinica, "
+            + "  DATE_FORMAT(deadHomeVisitCard.death_date,'%d-%m-%Y') As death_date_home_vc, "
             + " IF(pe.death_date<fila.encounter_datetime OR deadPrograma.death_date<fila.encounter_datetime OR deadFichaResumo.death_date<fila.encounter_datetime OR deadFichaClinica.death_date<fila.encounter_datetime,DATE_FORMAT(fila.encounter_datetime, '%d-%m-%Y'),'') AS encounter_date_fila, "
-            + " IF(pe.death_date<fila.date_created OR deadPrograma.death_date<fila.date_created OR deadFichaResumo.death_date<fila.date_created OR deadFichaClinica.death_date<fila.date_created,DATE_FORMAT(fila.date_created, '%d-%m-%Y'),'') AS encounter_date_created_fila, "
-            + " IF(pe.death_date<recepcao.encounter_datetime OR deadPrograma.death_date<recepcao.encounter_datetime OR deadFichaResumo.death_date<recepcao.encounter_datetime OR deadFichaClinica.death_date<recepcao.encounter_datetime,DATE_FORMAT(recepcao.encounter_datetime, '%d-%m-%Y'),'') AS encounter_date_recepcao, "
-            + " IF(pe.death_date<recepcao.date_created OR deadPrograma.death_date<recepcao.date_created OR deadFichaResumo.death_date<recepcao.date_created OR deadFichaClinica.death_date<recepcao.date_created,DATE_FORMAT(recepcao.date_created, '%d-%m-%Y'),'') AS encounter_date_created_recepcao, "
-            + " l.name AS location_name_fila, "
-            + " recepcao.location_name AS location_name_recepcao "
+            + " IF(pe.death_date<fila.date_created OR deadPrograma.death_date<fila.date_created OR deadFichaResumo.death_date<fila.date_created OR deadFichaClinica.death_date<fila.date_created OR deadHomeVisitCard.death_date<fila.date_created,DATE_FORMAT(fila.date_created, '%d-%m-%Y'),'') AS encounter_date_created_fila, "
+            + " l.name AS location_name_fila "
             + " FROM "
             + " person pe "
             + " left join person peObito on pe.person_id = peObito.person_id and peObito.voided = 0 and peObito.death_date IS NOT NULL "
@@ -68,8 +56,7 @@ public class Ec3Queries {
             + " FROM patient p "
             + " INNER JOIN patient_program pg ON p.patient_id = pg.patient_id "
             + " INNER JOIN patient_state ps ON pg.patient_program_id = ps.patient_program_id "
-            + " WHERE p.voided = 0 AND pg.program_id = "
-            + programId // 2
+            + " WHERE p.voided = 0 AND pg.program_id = 2 "
             + " AND pg.voided = 0 "
             + " AND ps.voided = 0 "
             + " AND ps.state = 10 "
@@ -83,14 +70,11 @@ public class Ec3Queries {
             + " FROM patient p "
             + " INNER JOIN encounter e ON p.patient_id = e.patient_id "
             + " INNER JOIN obs o ON e.encounter_id = o.encounter_id "
-            + " WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = "
-            + stateOfStayPriorArtPatient // 6272
-            + " AND o.value_coded = "
-            + patientHasDiedConceptUuid // 1366
-            + " AND e.encounter_type = "
-            + masterCardEncounterType // 53
+            + " WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 6272 "
+            + " AND o.value_coded = 1366 "
+            + " AND e.encounter_type = 53 "
             + " AND e.location_id IN (:location) "
-            + " AND o.obs_datetime <= :endDate"
+            + " AND o.obs_datetime <= :endDate "
             + " ) deadFichaResumo on pe.person_id = deadFichaResumo.patient_id "
             + " left join "
             + " ( "
@@ -98,15 +82,23 @@ public class Ec3Queries {
             + " FROM patient p "
             + " INNER JOIN encounter e ON p.patient_id = e.patient_id "
             + " INNER JOIN obs o ON e.encounter_id = o.encounter_id "
-            + " WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = "
-            + stateOfStayArtPatient // 6273
-            + " AND value_coded = "
-            + patientHasDiedConceptUuid // 1366
-            + " AND e.encounter_type = "
-            + sTarvAdultoSeguimentoEncounterTypeUuid // 6
+            + " WHERE p.voided = 0 AND e.voided = 0 AND o.voided = 0 AND o.concept_id = 6273 "
+            + " AND value_coded = 1366 "
+            + " AND e.encounter_type = 6 "
             + " AND e.location_id IN (:location) "
-            + " AND o.obs_datetime <= :endDate"
+            + " AND o.obs_datetime <= :endDate "
             + " ) deadFichaClinica on pe.person_id = deadFichaClinica.patient_id "
+            + "  left join "
+            + " ( "
+            + "	select p.patient_id, "
+            + "		max(e.encounter_datetime) death_date "
+            + "	from patient p "
+            + "		inner join encounter e on p.patient_id = e.patient_id "
+            + "		inner join obs o on o.encounter_id = e.encounter_id "
+            + "	where e.voided = 0 and p.voided = 0 and e.encounter_datetime <=:endDate and e.encounter_type = 21 "
+            + "		and o.voided = 0 and o.concept_id in (2031,23944,23945) and o.value_coded = 1366 and e.location_id =:location "
+            + "		group by p.patient_id "
+            + " ) deadHomeVisitCard on pe.person_id = deadHomeVisitCard.patient_id "
             + " left join "
             + " ( select pn1.* "
             + " from person_name pn1 "
@@ -138,35 +130,18 @@ public class Ec3Queries {
             + " from patient p "
             + " inner join encounter e on p.patient_id = e.patient_id "
             + " inner join location l on l.location_id = e.location_id "
-            + " where 	p.voided = 0 and e.voided = 0 and e.encounter_type = "
-            + encounterType // 18
+            + " where 	p.voided = 0 and e.voided = 0 and e.encounter_type = 18 "
             + " and e.location_id IN (:location) "
-            + " AND e.encounter_datetime between :startDate AND :endDate"
+            + " AND e.encounter_datetime between :startDate AND :endDate "
             + " ) fila 	on fila.patient_id = pe.person_id "
-            + " left join "
-            + " ( "
-            + " SELECT 	p.patient_id, o.value_datetime encounter_datetime, l.name location_name, e.date_created "
-            + " FROM 	patient p "
-            + " INNER JOIN encounter e on p.patient_id = e.patient_id "
-            + " inner join obs o on e.encounter_id = o.encounter_id "
-            + " inner join location l on l.location_id = e.location_id "
-            + " where 	p.voided = 0 and e.voided = 0 and o.voided = 0 and e.encounter_type = "
-            + masterCardDrugPickupEncounterTypeUuid // 52
-            + " AND o.concept_id = "
-            + preArtPickupDate // 23866
-            + " and o.value_datetime is not null and e.location_id IN (:location) "
-            + " AND o.value_datetime between :startDate AND :endDate"
-            + " ) recepcao	on recepcao.patient_id = pe.person_id "
-            + " left join  patient_program pg ON pe.person_id = pg.patient_id and pg.program_id = "
-            + programId // 2
+            + " left join  patient_program pg ON pe.person_id = pg.patient_id and pg.program_id = 2 "
             + " and pg.location_id IN (:location) "
             + "	LEFT JOIN ( "
             + "	SELECT pg.patient_id, pg.date_enrolled, ps.state, max(ps.start_date) AS start_date  FROM patient_program pg "
             + "	INNER JOIN patient_state ps ON pg.patient_program_id = ps.patient_program_id "
             + "	AND ps.start_date IS NOT NULL "
             + "	AND ps.end_date IS NULL "
-            + "	AND pg.program_id = "
-            + programId
+            + "	AND pg.program_id = 2 "
             + "	AND pg.voided = 0 "
             + "	AND ps.voided = 0 "
             + "	AND pg.location_id  in (:location) "
@@ -177,7 +152,8 @@ public class Ec3Queries {
             + " peObito.person_id is not null or "
             + " deadPrograma.patient_id is not null or "
             + " deadFichaResumo.patient_id is not null or "
-            + " deadFichaClinica.patient_id is not null "
+            + " deadFichaClinica.patient_id is not null or "
+            + " deadHomeVisitCard.patient_id is not null "
             + " ) and "
             + " ( "
             + " ( "
@@ -186,15 +162,9 @@ public class Ec3Queries {
             + " fila.encounter_datetime>deadFichaResumo.death_date or "
             + " fila.encounter_datetime>deadFichaClinica.death_date "
             + " ) "
-            + " OR "
-            + " ( "
-            + " recepcao.encounter_datetime>peObito.death_date or "
-            + " recepcao.encounter_datetime>deadPrograma.death_date or "
-            + " recepcao.encounter_datetime>deadFichaResumo.death_date or "
-            + " recepcao.encounter_datetime>deadFichaClinica.death_date "
             + " ) "
-            + " ) "
-            + " GROUP BY pe.person_id;";
+            + " GROUP BY pe.person_id ";
+
     return query;
   }
 }

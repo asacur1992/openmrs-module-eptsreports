@@ -25,6 +25,8 @@ public class ResumoMensalQueries {
   private static final String TR_OUT = "TROUT_MISAU/FIND_PATIENTS_WHO_ARE_TRANSFERRED_OUT.sql";
   private static final String B12 = "RMB12/PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART_B12.sql";
   private static final String B13 = "RMB13/PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART_B13.sql";
+  private static final String B13_FOR_IIT =
+      "RMB13/PATIENTS_WHO_ARE_CURRENTLY_ENROLLED_ON_ART_B13_FOR_IIT_CALCULATION.sql";
   private static final String FIND_SUSPEND_DIEND_TROUT =
       "RM/FIND_PATIENTS_WHO_ARE_SUSPEND_DIED_TRANSFERRED_OUT.sql";
 
@@ -737,6 +739,11 @@ public class ResumoMensalQueries {
   @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   public static String findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13() {
     return EptsQuerysUtils.loadQuery(ResumoMensalQueries.B13);
+  }
+
+  @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+  public static String findPatientsWhoAreCurrentlyEnrolledOnArtMOHB13ForIITCalculation() {
+    return EptsQuerysUtils.loadQuery(B13_FOR_IIT);
   }
 
   public static String findPatientWhoHaveTbSymthomsC1() {
