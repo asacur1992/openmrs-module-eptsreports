@@ -27,7 +27,7 @@ public class SetupExpectedPatientsPrEP extends EptsDataExportManager {
 
   @Override
   public String getName() {
-    return "LISTA DE PACIENTES ESPERADOS DE PREP NUM DETERMINADO PERÍODO - v1.0.0";
+    return "LISTA DE PACIENTES ESPERADOS DE PREP NUM DETERMINADO PERÍODO - v1.1.0";
   }
 
   @Override
