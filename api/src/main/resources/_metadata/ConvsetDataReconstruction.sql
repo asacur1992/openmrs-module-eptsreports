@@ -4,7 +4,7 @@
 
 
 DROP PROCEDURE IF EXISTS `ConvsetDataReconstruction`;
-DELIMITER ;;
+#
 CREATE DEFINER=`root`@`localhost` PROCEDURE ConvsetDataReconstruction()
     READS SQL DATA
 BEGIN
@@ -209,5 +209,6 @@ BEGIN
 			SET no_info2 = 0;
 		END;
 	
-END;;
-DELIMITER ;
+END
+
+#
