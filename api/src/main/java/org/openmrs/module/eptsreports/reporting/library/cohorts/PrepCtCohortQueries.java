@@ -19,6 +19,7 @@ import org.openmrs.module.eptsreports.reporting.library.queries.PrepCtQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.PrepReasonInterruptionType;
 import org.openmrs.module.eptsreports.reporting.library.queries.ReasonsOfPrepInterruptionQuery;
 import org.openmrs.module.eptsreports.reporting.utils.EptsReportUtils;
+import org.openmrs.module.eptsreports.reporting.utils.PrepNewKeyPopType;
 import org.openmrs.module.reporting.cohort.definition.CohortDefinition;
 import org.openmrs.module.reporting.cohort.definition.CompositionCohortDefinition;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
@@ -40,6 +41,7 @@ public class PrepCtCohortQueries {
    * @return CompositionQuery
    */
   public CohortDefinition getClientsNewlyEnrolledInPrep() {
+
     final CompositionCohortDefinition prepCtCompositionCohort = new CompositionCohortDefinition();
 
     prepCtCompositionCohort.setName("PREP CT");
@@ -366,5 +368,32 @@ public class PrepCtCohortQueries {
     prepCtCompositionCohort.setCompositionString("START-PREP AND OTHER");
 
     return prepCtCompositionCohort;
+  }
+
+  // PREP CT ICAP SubPopulação
+  public CohortDefinition getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType keyPop) {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+
+    definition.setName("PREP CT Subpopulation");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
+
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+
+    definition.addSearch(
+        "ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+
+    definition.addSearch(
+        "SECTOR",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPrEPNewBySector",
+                PrepCtQueries.QUERY.findClientsNewlyEnrolledInPrepBySubpopulation(keyPop)),
+            mappings));
+
+    definition.setCompositionString("ENROLLED-IN-PREP AND SECTOR");
+
+    return definition;
   }
 }
