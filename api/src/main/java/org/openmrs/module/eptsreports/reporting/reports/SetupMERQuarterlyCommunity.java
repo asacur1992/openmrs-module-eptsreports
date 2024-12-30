@@ -43,41 +43,29 @@ import org.springframework.stereotype.Component;
 @Component
 public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
-	@Autowired
-	private TxPvlsCommunityDataset txPvlsCommunityDataset;
+	@Autowired private TxPvlsCommunityDataset txPvlsCommunityDataset;
 
-	@Autowired
-	private TxNewCommunityDataset txNewCommunityDataset;
+	@Autowired private TxNewCommunityDataset txNewCommunityDataset;
 
-	@Autowired
-	private TxCurrCommunityDataset txCurrCommunityDataset;
+	@Autowired private TxCurrCommunityDataset txCurrCommunityDataset;
 
-	@Autowired
-	private TxRttCommunityDataset txRttCommunityDataset;
+	@Autowired private TxRttCommunityDataset txRttCommunityDataset;
 
-	@Autowired
-	private TxMlCommunityDataset txMlCommunityDataset;
+	@Autowired private TxMlCommunityDataset txMlCommunityDataset;
 
-	@Autowired
-	private TRFINCommunityDataset tRFINCommunityDataset;
+	@Autowired private TRFINCommunityDataset tRFINCommunityDataset;
 
-	@Autowired
-	private PrepNewCommunityDataset prepNewCommunityDataset;
+	@Autowired private PrepNewCommunityDataset prepNewCommunityDataset;
 
-	@Autowired
-	private PrepCtCommunityDataset prepCtCommunityDataset;
+	@Autowired private PrepCtCommunityDataset prepCtCommunityDataset;
 
-	@Autowired
-	private PMTCTEIDCommunityDataSet pmtcteidDataSet;
+	@Autowired private PMTCTEIDCommunityDataSet pmtcteidDataSet;
 
-	@Autowired
-	private PMTCTHEICommunityDataSet pmtctheiDataSet;
+	@Autowired private PMTCTHEICommunityDataSet pmtctheiDataSet;
 
-	@Autowired
-	protected GenericCohortQueries genericCohortQueries;
+	@Autowired protected GenericCohortQueries genericCohortQueries;
 
-	@Autowired
-	private DatimCodeDataSet datimCodeDataSet;
+	@Autowired private DatimCodeDataSet datimCodeDataSet;
 
 	@Override
 	public String getVersion() {
@@ -96,7 +84,7 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 
 	@Override
 	public String getName() {
-		return "PEPFAR MER 2.7 Quarterly - Comunidade";
+		return "PEPFAR MER 2.8 Quarterly - Comunidade";
 	}
 
 	@Override
@@ -160,12 +148,13 @@ public class SetupMERQuarterlyCommunity extends EptsDataExportManager {
 	public List<ReportDesign> constructReportDesigns(final ReportDefinition reportDefinition) {
 		ReportDesign reportDesign = null;
 		try {
-			reportDesign = this.createXlsReportDesign(
-					reportDefinition,
-					"PEPFAR_MER_2.8_Quarterly.xls",
-					"PEPFAR MER 2.8 Quarterly",
-					this.getExcelDesignUuid(),
-					null);
+			reportDesign =
+					this.createXlsReportDesign(
+							reportDefinition,
+							"PEPFAR_MER_2.8_Quarterly.xls",
+							"PEPFAR MER 2.8 Quarterly",
+							this.getExcelDesignUuid(),
+							null);
 			final Properties props = new Properties();
 			props.put("sortWeight", "5000");
 			reportDesign.setProperties(props);
