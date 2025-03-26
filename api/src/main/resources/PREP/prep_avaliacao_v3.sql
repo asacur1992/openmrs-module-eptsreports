@@ -1,4 +1,5 @@
 SELECT pa.patient_id,
+pid.identifier AS _NID,
 	
     (SELECT 
 		CASE
@@ -1173,7 +1174,19 @@ SELECT pa.patient_id,
     
 FROM patient pa
 INNER JOIN person pe on pe.person_id = pa.patient_id
-
+LEFT JOIN 
+           	(	select pid1.*
+           		from patient_identifier pid1
+           		inner join 
+           			(
+           				select patient_id,min(patient_identifier_id) id 
+           				from patient_identifier
+           				where voided=0
+           				group by patient_id
+           			) pid2
+           		where pid1.patient_id=pid2.patient_id and pid1.patient_identifier_id=pid2.id
+           	) pid on pid.patient_id=pa.patient_id
+           	
 where pa.patient_id IN (
 	-- Pacientes que Pertencem ao grupo de analise
 	SELECT enc.patient_id FROM encounter enc 
