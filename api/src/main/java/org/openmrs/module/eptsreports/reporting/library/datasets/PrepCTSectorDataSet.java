@@ -26,169 +26,172 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrepCTSectorDataSet extends BaseDataSet {
 
-	@Autowired
-	private EptsGeneralIndicator eptsGeneralIndicator;
+  @Autowired private EptsGeneralIndicator eptsGeneralIndicator;
 
-	@Autowired
-	private PrepCtCohortQueries prepCT;
+  @Autowired private PrepCtCohortQueries prepCT;
 
-	/**
-	 * @param nomeSector
-	 * @param conceitokeypop
-	 * @return
-	 */
-	public DataSetDefinition constructDatset() {
-		final CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
-		definition.setName("PrEP CT Data Set and Key Population");
-		definition.addParameters(this.getParameters());
+  /**
+   * @param nomeSector
+   * @param conceitokeypop
+   * @return
+   */
+  public DataSetDefinition constructDatset() {
+    final CohortIndicatorDataSetDefinition definition = new CohortIndicatorDataSetDefinition();
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+    definition.setName("PrEP CT Data Set and Key Population");
+    definition.addParameters(this.getParameters());
 
-		definition.addColumn(
-				"MG",
-				"PrEP_CT_MG",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_MG",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.PREGNANT),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "MG",
+        "PrEP_CT_MG",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_MG",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.PREGNANT),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"ML",
-				"PrEP_CT_ML",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_ML",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.LACTATION),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "ML",
+        "PrEP_CT_ML",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_ML",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.LACTATION),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"AJ",
-				"PrEP_CT_AJ",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_AJ",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(
-												PrepNewKeyPopType.ADOLESCENTS_YOUTH_RISK),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "AJ",
+        "PrEP_CT_AJ",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_AJ",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.ADOLESCENTS_YOUTH_RISK),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"CS",
-				"PrEP_CT_CS",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_CS",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(
-												PrepNewKeyPopType.CASAIS_SERODISCORDANTE),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "CS",
+        "PrEP_CT_CS",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_CS",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.CASAIS_SERODISCORDANTE),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"HM",
-				"PrEP_CT_HM",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_HM",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.MILITARY),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "HM",
+        "PrEP_CT_HM",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_HM",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.MILITARY),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"HMO",
-				"PrEP_CT_HMO",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_HMO",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.MINER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "HMO",
+        "PrEP_CT_HMO",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_HMO",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.MINER),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"HC",
-				"PrEP_CT_HC",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_HC",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.DRIVER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "HC",
+        "PrEP_CT_HC",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_HC",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.DRIVER),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"RE",
-				"PrEP_CT_RE",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_RE",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.PRISIONER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "RE",
+        "PrEP_CT_RE",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_RE",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.PRISIONER),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"HSH",
-				"PrEP_CT_HSH",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_HSH",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.HOMOSEXUAL),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "HSH",
+        "PrEP_CT_HSH",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_HSH",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.HOMOSEXUAL),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"HT",
-				"PrEP_CT_HT",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_HT",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.TRANSGENDER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "HT",
+        "PrEP_CT_HT",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_HT",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.TRANSGENDER),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"TS",
-				"PrEP_CT_TS",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_TS",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.SEXWORKER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "TS",
+        "PrEP_CT_TS",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_TS",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(
+                        PrepNewKeyPopType.SEXWORKER),
+                    mappings)),
+            mappings),
+        "");
 
-		definition.addColumn(
-				"PID",
-				"PrEP_CT_PID",
-				EptsReportUtils.map(
-						this.eptsGeneralIndicator.getIndicator(
-								"PrEP_CT_PID",
-								EptsReportUtils.map(
-										this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.DRUGUSER),
-										mappings)),
-						mappings),
-				"");
+    definition.addColumn(
+        "PID",
+        "PrEP_CT_PID",
+        EptsReportUtils.map(
+            this.eptsGeneralIndicator.getIndicator(
+                "PrEP_CT_PID",
+                EptsReportUtils.map(
+                    this.prepCT.getClientsEnrolledInPrepBySubpopulation(PrepNewKeyPopType.DRUGUSER),
+                    mappings)),
+            mappings),
+        "");
 
-		return definition;
-	}
+    return definition;
+  }
 }

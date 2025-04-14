@@ -14,7 +14,6 @@
 package org.openmrs.module.eptsreports.reporting.library.cohorts;
 
 import java.util.Date;
-
 import org.openmrs.Location;
 import org.openmrs.module.eptsreports.reporting.library.queries.PrepNewQueries;
 import org.openmrs.module.eptsreports.reporting.library.queries.PrepNewStartingSectorQueries;
@@ -37,317 +36,315 @@ import org.springframework.stereotype.Component;
 @Component
 public class PrepNewCohortQueries {
 
-	@Autowired
-	private GenericCohortQueries genericCohorts;
-
-	@DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByOralPrepType")
-	public CohortDefinition findClientsNewlyEnrolledInPrepByOralPrepType() {
-
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
-		definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "Location", Location.class));
+  @Autowired private GenericCohortQueries genericCohorts;
+
+  @DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByOralPrepType")
+  public CohortDefinition findClientsNewlyEnrolledInPrepByOralPrepType() {
 
-		final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByOralPrepType;
-		definition.setQuery(query);
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
 
-		return definition;
-	}
+    final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByOralPrepType;
+    definition.setQuery(query);
 
-	@DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByInjectablePrepType")
-	public CohortDefinition findClientsNewlyEnrolledInPrepByInjectablePrepType() {
+    return definition;
+  }
 
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
-		definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "Location", Location.class));
-
-		final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByInjectablePrepType;
-		definition.setQuery(query);
-
-		return definition;
-	}
+  @DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByInjectablePrepType")
+  public CohortDefinition findClientsNewlyEnrolledInPrepByInjectablePrepType() {
 
-	@DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByOtherPrepType")
-	public CohortDefinition findClientsNewlyEnrolledInPrepByOtherPrepType() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
+
+    final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByInjectablePrepType;
+    definition.setQuery(query);
 
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
-		definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "Location", Location.class));
+    return definition;
+  }
 
-		final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByOtherPrepType;
-		definition.setQuery(query);
+  @DocumentedDefinition(value = "findClientsNewlyEnrolledInPrepByOtherPrepType")
+  public CohortDefinition findClientsNewlyEnrolledInPrepByOtherPrepType() {
 
-		return definition;
-	}
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setName("findClientsNewlyEnrolledInPrepByOralPrepType");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "Location", Location.class));
 
-	public CohortDefinition getClientsNewlyEnrolledInPrep() {
-		final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
+    final String query = PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrepByOtherPrepType;
+    definition.setQuery(query);
 
-		txNewCompositionCohort.setName("PREP NEW");
-		txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
-		txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition getClientsNewlyEnrolledInPrep() {
+    final CompositionCohortDefinition txNewCompositionCohort = new CompositionCohortDefinition();
 
-		txNewCompositionCohort.addSearch(
-				"START-PREP",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findClientsNewlyEnrolledInPrep",
-								PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrep),
-						mappings));
+    txNewCompositionCohort.setName("PREP NEW");
+    txNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    txNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
 
-		txNewCompositionCohort.addSearch(
-				"TRANSFERED-IN",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findClientsWhoWhereTransferredIn",
-								PrepNewQueries.QUERY.findClientsWhoWhereTransferredIn),
-						mappings));
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		txNewCompositionCohort.setCompositionString("START-PREP NOT TRANSFERED-IN ");
+    txNewCompositionCohort.addSearch(
+        "START-PREP",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findClientsNewlyEnrolledInPrep",
+                PrepNewQueries.QUERY.findClientsNewlyEnrolledInPrep),
+            mappings));
 
-		return txNewCompositionCohort;
-	}
+    txNewCompositionCohort.addSearch(
+        "TRANSFERED-IN",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findClientsWhoWhereTransferredIn",
+                PrepNewQueries.QUERY.findClientsWhoWhereTransferredIn),
+            mappings));
 
-	public CohortDefinition getClientsWithPregnancyStatusDuringReportingPeriod() {
-		final CompositionCohortDefinition prepNewCompositionCohort = new CompositionCohortDefinition();
+    txNewCompositionCohort.setCompositionString("START-PREP NOT TRANSFERED-IN ");
 
-		prepNewCompositionCohort.setName("PREGNANT");
-		prepNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		prepNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
-		prepNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+    return txNewCompositionCohort;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition getClientsWithPregnancyStatusDuringReportingPeriod() {
+    final CompositionCohortDefinition prepNewCompositionCohort = new CompositionCohortDefinition();
 
-		prepNewCompositionCohort.addSearch(
-				"START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    prepNewCompositionCohort.setName("PREGNANT");
+    prepNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    prepNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    prepNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
 
-		prepNewCompositionCohort.addSearch(
-				"PREGNANT",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findClientsWithPregnancyStatusDuringReportingPeriod",
-								PrepPregnantBreasftfeedingQueries.findPatientsWhoArePregnantOrBreastfeeding(
-										PregnantOrBreastfeedingWomen.PREGNANTWOMEN)),
-						mappings));
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		prepNewCompositionCohort.setCompositionString("START-PREP AND PREGNANT");
+    prepNewCompositionCohort.addSearch(
+        "START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
 
-		return prepNewCompositionCohort;
-	}
+    prepNewCompositionCohort.addSearch(
+        "PREGNANT",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findClientsWithPregnancyStatusDuringReportingPeriod",
+                PrepPregnantBreasftfeedingQueries.findPatientsWhoArePregnantOrBreastfeeding(
+                    PregnantOrBreastfeedingWomen.PREGNANTWOMEN)),
+            mappings));
 
-	public CohortDefinition getClientsWithBreastfeedingStatusDuringReportingPeriod() {
-		final CompositionCohortDefinition prepNewCompositionCohort = new CompositionCohortDefinition();
+    prepNewCompositionCohort.setCompositionString("START-PREP AND PREGNANT");
 
-		prepNewCompositionCohort.setName("BREASTFEEDING");
-		prepNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		prepNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
-		prepNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
+    return prepNewCompositionCohort;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition getClientsWithBreastfeedingStatusDuringReportingPeriod() {
+    final CompositionCohortDefinition prepNewCompositionCohort = new CompositionCohortDefinition();
 
-		prepNewCompositionCohort.addSearch(
-				"START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    prepNewCompositionCohort.setName("BREASTFEEDING");
+    prepNewCompositionCohort.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    prepNewCompositionCohort.addParameter(new Parameter("endDate", "End Date", Date.class));
+    prepNewCompositionCohort.addParameter(new Parameter("location", "location", Location.class));
 
-		prepNewCompositionCohort.addSearch(
-				"BREASTFEEDING",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findClientsWithBreastfeedingStatusDuringReportingPeriod",
-								PrepPregnantBreasftfeedingQueries.findPatientsWhoArePregnantOrBreastfeeding(
-										PregnantOrBreastfeedingWomen.BREASTFEEDINGWOMEN)),
-						mappings));
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		prepNewCompositionCohort.setCompositionString("START-PREP AND BREASTFEEDING");
+    prepNewCompositionCohort.addSearch(
+        "START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
 
-		return prepNewCompositionCohort;
-	}
+    prepNewCompositionCohort.addSearch(
+        "BREASTFEEDING",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findClientsWithBreastfeedingStatusDuringReportingPeriod",
+                PrepPregnantBreasftfeedingQueries.findPatientsWhoArePregnantOrBreastfeeding(
+                    PregnantOrBreastfeedingWomen.BREASTFEEDINGWOMEN)),
+            mappings));
 
-	public CohortDefinition findClientsNewlyEnrolledInPrepByOralPrepTypeDissagragation() {
+    prepNewCompositionCohort.setCompositionString("START-PREP AND BREASTFEEDING");
 
-		final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-		definition.setName("Number Of Patients Transferred In From Other Health Facilities");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return prepNewCompositionCohort;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition findClientsNewlyEnrolledInPrepByOralPrepTypeDissagragation() {
 
-		definition.addSearch(
-				"START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
-		definition.addSearch(
-				"PREP-ORAL",
-				EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByOralPrepType(), mappings));
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setName("Number Of Patients Transferred In From Other Health Facilities");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-		definition.setCompositionString("START-PREP AND PREP-ORAL");
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		return definition;
-	}
+    definition.addSearch(
+        "START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    definition.addSearch(
+        "PREP-ORAL",
+        EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByOralPrepType(), mappings));
 
-	public CohortDefinition findClientsNewlyEnrolledInPrepByInjectablePrepTypeDissagragation() {
+    definition.setCompositionString("START-PREP AND PREP-ORAL");
 
-		final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-		definition.setName("Number Of Patients Transferred In From Other Health Facilities");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition findClientsNewlyEnrolledInPrepByInjectablePrepTypeDissagragation() {
 
-		definition.addSearch(
-				"START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
-		definition.addSearch(
-				"PREP-INJECTABLE",
-				EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByInjectablePrepType(), mappings));
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setName("Number Of Patients Transferred In From Other Health Facilities");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-		definition.setCompositionString("START-PREP AND PREP-INJECTABLE");
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		return definition;
-	}
+    definition.addSearch(
+        "START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    definition.addSearch(
+        "PREP-INJECTABLE",
+        EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByInjectablePrepType(), mappings));
 
-	public CohortDefinition findClientsNewlyEnrolledInPrepByOtherPrepTypeDissagragation() {
+    definition.setCompositionString("START-PREP AND PREP-INJECTABLE");
 
-		final CompositionCohortDefinition definition = new CompositionCohortDefinition();
-		definition.setName("Number Of Patients Transferred In From Other Health Facilities");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition findClientsNewlyEnrolledInPrepByOtherPrepTypeDissagragation() {
 
-		definition.addSearch(
-				"START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
-		definition.addSearch(
-				"PREP-OTHER",
-				EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByOtherPrepType(), mappings));
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setName("Number Of Patients Transferred In From Other Health Facilities");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-		definition.setCompositionString("START-PREP AND PREP-OTHER");
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		return definition;
-	}
+    definition.addSearch(
+        "START-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    definition.addSearch(
+        "PREP-OTHER",
+        EptsReportUtils.map(this.findClientsNewlyEnrolledInPrepByOtherPrepType(), mappings));
 
-	public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(
-			final Integer sectorElegibilidade, final PrepNewEligibilidadeSectorType keyPop) {
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setCompositionString("START-PREP AND PREP-OTHER");
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		definition.setQuery(
-				PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
-						sectorElegibilidade, keyPop));
+  public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(
+      final Integer sectorElegibilidade, final PrepNewEligibilidadeSectorType keyPop) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-		return definition;
-	}
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-	// SubPopulation
-	public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(
-			final Integer sectorElegibilidade) {
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade, keyPop));
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		definition.setQuery(
-				PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
-						sectorElegibilidade));
+  // SubPopulation
+  public CohortDefinition getSectorClientsNewlyEnrolledbyEligibility(
+      final Integer sectorElegibilidade) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-		return definition;
-	}
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-	public CohortDefinition getCommnunityClientsNewlyEnrolledInPrep() {
-		final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepbyEligibility(
+            sectorElegibilidade));
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition getCommnunityClientsNewlyEnrolledInPrep() {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
-		definition.addSearch(
-				"ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-		definition.addSearch(
-				"COMMUNITY-DISPENSATION",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findCommunityPatientsDispensation",
-								TxNewQueries.QUERY.findPatientsInComunnityDispensation),
-						mappings));
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		definition.setCompositionString("ENROLLED-IN-PREP AND COMMUNITY-DISPENSATION");
+    definition.addSearch(
+        "ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
 
-		return definition;
-	}
+    definition.addSearch(
+        "COMMUNITY-DISPENSATION",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findCommunityPatientsDispensation",
+                TxNewQueries.QUERY.findPatientsInComunnityDispensation),
+            mappings));
 
-	public CohortDefinition getSectorClientsNewlyEnrolledInPrepSeroDescordante() {
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setCompositionString("ENROLLED-IN-PREP AND COMMUNITY-DISPENSATION");
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		definition.setQuery(
-				PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepSeroDescordante());
+  public CohortDefinition getSectorClientsNewlyEnrolledInPrepSeroDescordante() {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-		return definition;
-	}
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-	public CohortDefinition getSectorClientsNewlybyEnrollmentStatus(
-			final Integer sectorElegibilidade, final PrepNewEnrollemntStatus keyPop) {
-		final SqlCohortDefinition definition = new SqlCohortDefinition();
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepSeroDescordante());
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		definition.setQuery(
-				PrepNewStartingSectorQueries.QUERY.findClientsbyEnrollmentStatus(
-						sectorElegibilidade, keyPop));
+  public CohortDefinition getSectorClientsNewlybyEnrollmentStatus(
+      final Integer sectorElegibilidade, final PrepNewEnrollemntStatus keyPop) {
+    final SqlCohortDefinition definition = new SqlCohortDefinition();
 
-		return definition;
-	}
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-	public CohortDefinition getSectorClientsNewlyEnrolledInPrep(
-			final Integer sector, final Integer conceitoKeyPop, final PrepNewKeyPopType keyPop) {
-		final CompositionCohortDefinition definition = new CompositionCohortDefinition();
+    definition.setQuery(
+        PrepNewStartingSectorQueries.QUERY.findClientsbyEnrollmentStatus(
+            sectorElegibilidade, keyPop));
 
-		definition.setName("PREP NEW");
-		definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
-		definition.addParameter(new Parameter("endDate", "End Date", Date.class));
-		definition.addParameter(new Parameter("location", "location", Location.class));
+    return definition;
+  }
 
-		final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
+  public CohortDefinition getSectorClientsNewlyEnrolledInPrep(
+      final Integer sector, final Integer conceitoKeyPop, final PrepNewKeyPopType keyPop) {
+    final CompositionCohortDefinition definition = new CompositionCohortDefinition();
 
-		definition.addSearch(
-				"ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
+    definition.setName("PREP NEW");
+    definition.addParameter(new Parameter("startDate", "Start Date", Date.class));
+    definition.addParameter(new Parameter("endDate", "End Date", Date.class));
+    definition.addParameter(new Parameter("location", "location", Location.class));
 
-		definition.addSearch(
-				"SECTOR",
-				EptsReportUtils.map(
-						this.genericCohorts.generalSql(
-								"findPrEPNewBySector",
-								PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepAtCPN(
-										sector, conceitoKeyPop, keyPop)),
-						mappings));
+    final String mappings = "startDate=${startDate},endDate=${endDate},location=${location}";
 
-		definition.setCompositionString("ENROLLED-IN-PREP AND SECTOR");
+    definition.addSearch(
+        "ENROLLED-IN-PREP", EptsReportUtils.map(this.getClientsNewlyEnrolledInPrep(), mappings));
 
-		return definition;
-	}
+    definition.addSearch(
+        "SECTOR",
+        EptsReportUtils.map(
+            this.genericCohorts.generalSql(
+                "findPrEPNewBySector",
+                PrepNewStartingSectorQueries.QUERY.findClientsNewlyEnrolledInPrepAtCPN(
+                    sector, conceitoKeyPop, keyPop)),
+            mappings));
 
+    definition.setCompositionString("ENROLLED-IN-PREP AND SECTOR");
+
+    return definition;
+  }
 }
