@@ -105,6 +105,7 @@ public class SetupTB4Report extends EptsDataExportManager {
     return Arrays.asList(reportDesign);
   }
 
+  @Override
   public List<Parameter> getParameters() {
     List<Parameter> parameters = new ArrayList<Parameter>();
     parameters.add(ReportingConstants.END_DATE_PARAMETER);
